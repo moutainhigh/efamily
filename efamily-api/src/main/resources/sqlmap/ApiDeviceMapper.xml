@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlDevice">
+ 
+    <select id="getListByCustomerIdAndStatusAndTime" parameterType="hashmap" resultMap="EjlDeviceResult"  flushCache="false">
+        SELECT <include refid="ejlDeviceColumns" />
+		FROM
+			EJL_DEVICE
+		WHERE
+			STATUS = #{status}
+		AND UPDATE_TIME  <![CDATA[>]]> #{time}
+		AND CODE IN (
+			SELECT
+				a.imei
+			FROM
+				ef_qrcode a
+			INNER JOIN ef_customer b
+			WHERE
+				a.customer_number = b.number
+			AND b.id = #{customerId}
+		)
+		ORDER BY
+			UPDATE_TIME ASC
+    </select>
+</mapper>

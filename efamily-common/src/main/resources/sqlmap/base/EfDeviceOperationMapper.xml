@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfDeviceOperation">
+	<resultMap id="EfDeviceOperationResult" type="com.winterframework.efamily.entity.EfDeviceOperation">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfDeviceOperationColumns">
+       	id as id,
+       	user_id as userId,
+       	device_id as deviceId,
+       	code as code,
+       	status as status,
+       	time as time,
+       	remark as remark,
+       	creator_id as creatorId,
+       	create_time as createTime,
+       	updator_id as updatorId,
+       	update_time as updateTime
+	</sql>
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" parameterType="com.winterframework.efamily.entity.EfDeviceOperation" 
+		useGeneratedKeys="true" keyProperty="id" 
+	 flushCache="true">
+        INSERT INTO
+        ef_device_operation (
+        	user_id,
+        	device_id ,
+        	code,
+        	status,
+        	time,
+        	remark ,
+        	creator_id ,
+        	create_time  
+        ) VALUES (
+			#{userId,javaType=long,jdbcType=DECIMAL} ,
+        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+        	#{code,javaType=integer,jdbcType=INTEGER} ,
+        	#{status,javaType=integer,jdbcType=INTEGER} ,
+        	#{time,javaType=long,jdbcType=DECIMAL} ,
+        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+        )
+	</insert>
+    
+	<update id="update" parameterType="com.winterframework.efamily.entity.EfDeviceOperation">
+        UPDATE ef_device_operation SET
+	        user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+	        device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        code = #{code,javaType=integer,jdbcType=INTEGER} ,
+	        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+	        time = #{time,javaType=long,jdbcType=DECIMAL} ,
+	        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+	        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+        WHERE 
+	        id = #{id} 
+	</update>
+   <delete id="delete" parameterType="java.lang.Long">
+        delete from ef_device_operation where
+	        id = #{id} 
+    </delete>   
+    <select id="getById" parameterType="long" resultMap="EfDeviceOperationResult" flushCache="false">
+		select <include refid="EfDeviceOperationColumns" />
+		    from ef_device_operation 
+	        where 
+	        id = #{id} 
+	</select>	
+	<select id="getByIds" parameterType="list"  resultMap="EfDeviceOperationResult" flushCache="false">
+		select <include refid="EfDeviceOperationColumns" />
+		    from ef_device_operation 
+	        where id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+               #{item}
+               </foreach>					
+	</select>	
+ 
+	<select id="getAll" resultMap="EfDeviceOperationResult"  flushCache="false">
+    	select <include refid="EfDeviceOperationColumns" />
+	    from ef_device_operation 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+    
+    <select id="getByUserIdAndDeviceId" resultMap="EfDeviceOperationResult">
+    	select <include refid="EfDeviceOperationColumns" />
+	    from ef_device_operation 
+		where user_id=#{userId} device_id = #{deviceId}
+    </select>
+    <select id="getByUserIdAndDeviceIdAndCodeAndStatusAndTime" resultMap="EfDeviceOperationResult">
+    	select <include refid="EfDeviceOperationColumns" />
+	    from ef_device_operation 
+		where user_id=#{userId} and device_id = #{deviceId}
+			and code=#{code} and status=#{status} and time=#{time}
+    </select>
+    <select id="getLastOneByUserIdAndDeviceIdAndCodeAndTime" resultMap="EfDeviceOperationResult">
+    	select <include refid="EfDeviceOperationColumns" />
+	    from (
+	    select * 
+	    from ef_device_operation 
+		where user_id=#{userId} and device_id = #{deviceId}
+			and code=#{code} and time>#{time} 
+		order by time desc limit 1) a
+    </select>
+</mapper>

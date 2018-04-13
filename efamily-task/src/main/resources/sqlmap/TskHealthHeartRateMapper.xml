@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlHealthHeartRate">
+	<resultMap id="deviceMap" type="hashmap" >
+	  <result property="userId" column="user_id" javaType="long" jdbcType="DECIMAL"/>
+	  <result property="deviceId" column="device_id" javaType="long" jdbcType="DECIMAL"/>
+	</resultMap>
+	
+	<select id="getLastestUserIdDeviceIdListByCreateTime" resultMap="deviceMap">
+    	select distinct user_id,device_id
+		FROM ejl_health_heart_rate
+		WHERE create_time between #{fromTime} and #{toTime}
+    </select> 
+    
+    <select id="getSortListByUserIdAndDeviceIdAndSpanAndCreateTime" resultMap="EjlHealthHeartRateResult" flushCache="false">
+    	select <include refid="ejlHealthHeartRateColumns"/>
+		FROM ejl_health_heart_rate
+		WHERE user_id=#{userId} and device_id=#{deviceId} 
+		and (1>1 
+		<if test="@Ognl@isNotEmpty(low)">
+			or rate<![CDATA[<]]>#{low} 
+		</if>
+		<if test="@Ognl@isNotEmpty(high)">
+			or rate<![CDATA[>]]>#{high} 
+		</if>
+			)
+		and create_time between #{fromTime} and #{toTime}
+		order by to_time asc
+    </select> 
+    <select id="getNoticeUserHeartRate" resultMap="EjlHealthHeartRateResult"  flushCache="false">
+    	select 
+    	        s.ID as id,
+	        	s.USER_ID as userId,
+	        	s.create_time as createTime,
+	        	s.RATE as rate,
+	        	s.TIME_SPAN as timeSpan,
+	        	s.DEVICE_id as deviceId,
+	        	s.FROM_TIME as fromTime,
+	        	s.TO_TIME as toTime
+	   from EJL_HEALTH_HEART_RATE s where s.USER_ID=#{userId}
+	    <if test="@Ognl@isNotEmpty(startTime)">
+	       <![CDATA[  and s.FROM_TIME>#{startTime}]]>
+	    </if>
+	    <if test="@Ognl@isNotEmpty(toTime)">
+	       <![CDATA[  and s.TO_TIME<#{toTime}]]>
+	    </if>
+	    and (1>1
+	    <if test="@Ognl@isNotEmpty(gtValue)">
+	     or s.RATE>#{gtValue}
+	    </if>
+	    <if test="@Ognl@isNotEmpty(ltValue)">
+	    <![CDATA[ or s.RATE<#{ltValue}]]>
+	    </if>
+	    )
+	      order by s.FROM_TIME asc
+    </select>
+    
+  
+</mapper>

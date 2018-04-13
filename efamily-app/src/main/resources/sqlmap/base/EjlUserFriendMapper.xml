@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlUserFriend">
+		
+		<update id="updateByUserIdAndFriendId" parameterType="com.winterframework.efamily.entity.EjlUserFriend">
+	        UPDATE EJL_USER_FRIEND SET
+		       <if test="@Ognl@isNotEmpty(friendId)">
+					 FRIEND_ID = #{friendId,javaType=long,jdbcType=DECIMAL} ,
+				</if>
+		       <if test="@Ognl@isNotEmpty(source)">
+					 SOURCE = #{source,javaType=long,jdbcType=DECIMAL} ,
+				</if>
+		       <if test="@Ognl@isNotEmpty(status)">
+					 STATUS = #{status,javaType=long,jdbcType=DECIMAL} ,
+				</if>
+				REMARK_NAME =  #{remarkName,javaType=string,jdbcType=VARCHAR} ,
+				<if test="@Ognl@isNotEmpty(updateTime)">
+					update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="@Ognl@isNotEmpty(userId)">
+					 USER_ID = #{userId,javaType=long,jdbcType=DECIMAL}
+				</if>
+	        WHERE 
+		        USER_ID = #{userId} and  FRIEND_ID =#{friendId}
+		</update>
+	
+</mapper>

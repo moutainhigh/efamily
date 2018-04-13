@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+  "http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+<configuration>
+	<typeHandlers>
+		<typeHandler javaType="boolean" jdbcType="VARCHAR"
+			handler="com.winterframework.orm.dal.ibatis3.type.YesNoTypeHandler" />
+		<typeHandler handler="org.apache.ibatis.type.DateTypeHandler"
+			javaType="java.util.Date" jdbcType="TIMESTAMP" />
+	</typeHandlers>
+
+
+	<plugins>
+		<plugin interceptor="com.winterframework.orm.page.plugin.OffsetLimitInterceptor">
+			<property name="dialectClass"
+				value="com.winterframework.orm.dialect.OracleDialect" />
+		</plugin>
+	</plugins>
+	<mappers>
+    	<mapper resource="sqlmap/base/OrgComUserMapper.xml" />  
+	    <mapper resource="sqlmap/base/EjlComHealthHeartRateMapper.xml" />
+
+        <mapper resource="sqlmap/base/OrgComFenceMapper.xml"/> 
+        
+	    <mapper resource="sqlmap/base/EjlComLocationMapper.xml"/>
+		<mapper resource="sqlmap/base/EjlComUserDeviceMapper.xml"/>
+		<mapper resource="sqlmap/base/EjlComDeviceMapper.xml"/>
+		<mapper resource="sqlmap/base/EjlComUserMapper.xml"/> 
+		<mapper resource="sqlmap/base/EjlComLocationMapper.xml" />
+        <mapper resource="sqlmap/base/EjlComUserBarrierMapper.xml"/>
+        <mapper resource="sqlmap/base/EjlComUserFenceMapper.xml"/>     
+
+		<mapper resource="sqlmap/base/EfDeviceAlarmLastMapper.xml" />		
+		<mapper resource="sqlmap/base/EfComLocationSemiMapper.xml"   />
+
+		<mapper resource="sqlmap/base/OrgComEmployeeMapper.xml"   />
+		<mapper resource="sqlmap/base/OrgComEmployeeUrlMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComFamilyUserMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComHealthBloodPressureMapper.xml"   />
+		<mapper resource="sqlmap/base/OrgComEmployeeAuthMapper.xml"   />
+		
+        <mapper resource="sqlmap/base/OrgComResourceMapper.xml"/> 
+        <mapper resource="sqlmap/base/OrgComRoleMapper.xml"/>         		
+        <mapper resource="sqlmap/base/OrgComRoleUrlMapper.xml"/>         		
+        <mapper resource="sqlmap/base/OrgComUrlMapper.xml"/>         		
+        <mapper resource="sqlmap/base/OrgComUserFamilyDiseaseMapper.xml"/>         		
+        <mapper resource="sqlmap/base/OrgComUserHealthyFileMapper.xml"/> 
+        <mapper resource="sqlmap/base/EfComOrgDeviceMapper.xml"/>        
+        <mapper resource="sqlmap/base/QrcodeMapper.xml"/>        
+        <mapper resource="sqlmap/base/EjlComDeviceAddressListMapper.xml"/>        
+        <mapper resource="sqlmap/base/EjlComDeviceParmConfigMapper.xml"/>        
+        <mapper resource="sqlmap/base/EfComOrgMapper.xml"/>        
+		<mapper resource="sqlmap/base/TestMapper.xml" />
+	</mappers>
+
+</configuration>

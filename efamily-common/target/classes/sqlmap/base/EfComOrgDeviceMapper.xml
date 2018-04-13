@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfOrgDevice">
+	<resultMap id="EfOrgDeviceResult" type="com.winterframework.efamily.entity.EfOrgDevice">
+	</resultMap>
+	<resultMap id="OrgUnbindDeviceBaseInfoResult" type="com.winterframework.efamily.entity.OrgUnbindDeviceBaseInfo">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="efOrgDeviceColumns">
+	    <![CDATA[
+	        	id as id,
+	        	org_id as orgId,
+	        	imei as imei,
+	        	status as status,
+	        	phone as phone,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	devicePhone as devicePhone,
+	        	name as name,
+	        	sex as sex,
+	        	age as age,
+	        	height as height,
+	        	weight as weight,
+	        	guardianRelation as guardianRelation
+	    ]]>
+	</sql>
+	<sql id="efOrgDeviceColumnsAlias">
+	    <![CDATA[
+	        	od.id as id,
+	        	od.org_id as orgId,
+	        	od.imei as imei,
+	        	od.status as status,
+	        	od.phone as phone,
+	        	od.remark as remark,
+	        	od.creator_id as creatorId,
+	        	od.create_time as createTime,
+	        	od.updator_id as updatorId,
+	        	od.update_time as updateTime,
+	        	od.devicePhone as devicePhone,
+	        	od.name as name,
+	        	od.sex as sex,
+	        	od.age as age,
+	        	od.height as height,
+	        	od.weight as weight,
+	        	od.guardianRelation as guardianRelation
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EfOrgDevice" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ef_org_device (
+	        	org_id ,
+	        	imei ,
+	        	status ,
+	        	phone,
+	        	remark ,
+	        	creator_id ,
+	        	create_time,
+	        	devicePhone ,
+	        	name ,
+	        	sex ,
+	        	age ,
+	        	height ,
+	        	weight ,
+	        	guardianRelation 
+	        ) VALUES (
+	        	#{orgId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{imei,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{phone,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP},
+	        	#{devicePhone,javaType=string,jdbcType=VARCHAR} ,
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{sex,javaType=long,jdbcType=DECIMAL} ,
+	        	#{age,javaType=long,jdbcType=DECIMAL} ,
+	        	#{height,javaType=long,jdbcType=DECIMAL} ,
+	        	#{weight,javaType=double,jdbcType=DECIMAL} ,
+	        	#{guardianRelation,javaType=integer,jdbcType=INTEGER}
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EfOrgDevice">
+	    <![CDATA[
+	        UPDATE ef_org_device SET
+		        org_id = #{orgId,javaType=long,jdbcType=DECIMAL} ,
+		        imei = #{imei,javaType=string,jdbcType=VARCHAR} ,
+		        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+		        phone = #{phone,javaType=string,jdbcType=VARCHAR} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        devicePhone = #{devicePhone,javaType=string,jdbcType=VARCHAR} ,
+	        	name = #{name,javaType=string,jdbcType=VARCHAR} ,
+	        	sex = #{sex,javaType=long,jdbcType=DECIMAL} ,
+	        	age = #{age,javaType=long,jdbcType=DECIMAL} ,
+	        	height = #{height,javaType=long,jdbcType=DECIMAL} ,
+	        	weight = #{weight,javaType=double,jdbcType=DECIMAL} ,
+	        	guardianRelation = #{guardianRelation,javaType=integer,jdbcType=INTEGER}
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ef_org_device where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfOrgDeviceResult" flushCache="false">
+			select <include refid="efOrgDeviceColumns" />
+		    <![CDATA[
+			    from ef_org_device 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EfOrgDeviceResult" flushCache="false">
+			select <include refid="efOrgDeviceColumns" />
+			    from ef_org_device 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="efOrgDeviceDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(orgId)">
+				and org_id = #{orgId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imei)">
+				and imei = #{imei}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+			<if test="@Ognl@isNotEmpty(phone)">
+				and phone = #{phone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EfOrgDeviceResult"  flushCache="false">
+    	select <include refid="efOrgDeviceColumns" />
+	    from ef_org_device 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ef_org_device 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ef_org_device 
+		<include refid="efOrgDeviceDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EfOrgDeviceResult">
+    	select <include refid="efOrgDeviceColumns" />
+	    from ef_org_device 
+		<include refid="efOrgDeviceDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EfOrgDeviceResult">
+    	select <include refid="efOrgDeviceColumns" />
+	    from ef_org_device 
+		<include refid="efOrgDeviceDynamicWhere"/>
+    </select>
+	<select id="getByImei" resultMap="EfOrgDeviceResult">
+    	select <include refid="efOrgDeviceColumns" />
+	    from ef_org_device 
+	    where imei=#{imei}
+    </select>
+	<select id="getByDeviceId" resultMap="EfOrgDeviceResult">
+    	select <include refid="efOrgDeviceColumnsAlias" />
+	    from ef_org_device od 
+	     inner join ejl_device d on od.imei=d.code
+	    where d.id=#{deviceId}
+    </select>
+	
+	<select id="getOrgUnbindDeviceBaseInfo" resultMap="OrgUnbindDeviceBaseInfoResult">
+    	select   
+    	    eod.id as orgDeviceId,
+			eod.status as status,
+			eod.imei as imei,
+			1 as type
+	    from ef_org_device eod
+        where
+        eod.org_id=#{orgId} and eod.status=0
+        <if test="@Ognl@isNotEmpty(imei)">
+		and eod.imei like CONCAT('%',#{imei},'%') 
+		</if>
+        order by id asc
+        limit #{start},#{pagesize}
+    </select>
+	
+	
+	
+</mapper>

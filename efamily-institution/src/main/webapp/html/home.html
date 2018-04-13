@@ -1,0 +1,150 @@
+<header>
+    <div class="reg_adr">
+        <select id="s_province" name="s_province"></select>
+        <select id="s_city" name="s_city"></select>
+        <select id="s_county" name="s_county" display="none"></select>
+        <select id="s_place" name="s_place">
+            <option value="养老院选择">养老院选择</option>
+        </select>
+    </div>
+</header>
+<section class="map">
+    <header class="H_z">
+        <div><a href="index.html">主页</a></div>
+        <p>基本信息</p>
+    </header>
+    <article class="mapLeft">
+        <div>
+            <input id="inputId" type="text" placeholder="&nbsp;&nbsp;会员姓名">
+            <img class="fa" src="img/icon_search_nor.png" alt="">
+        </div>
+        <table id="T_showLis" cellspacing="0">
+            <!--
+                        <tr class="V_lis">
+                            <td class="td_lis">李老八</td>
+                            <td>aaa</td>
+                            <td>123</td>
+                        </tr>
+-->
+        </table>
+    </article>
+    <article class="detailLeft">
+        <section class="S_P1">
+            <div class="D_P1Top">
+                <span class="tianChong"></span>
+                <div class="L_L"><img src="img/icon_touxiang.jpg" alt=""></div>
+                <div class="R_R">
+                    <p>姓名：<span class="D_name"></span></p>
+                    <p>性别：<span id="sex"></span></p>
+                    <p>出生日期：<span id="birthday"></span></p>
+                    <p>身份证号：<span>1575492667521943192</span></p>
+                </div>
+            </div>
+            <div class="D_P1Down">
+                <p>手机号：<span id="phoneNumber"></span></p>
+                <p>居住地址：<span id="liveAddress"></span></p>
+                <p>紧急联系人：<span id="emergencyContact"></span></p>
+                <p>与紧急联系人关系：<span id="emeContactRel"></span></p>
+                <p>紧急联系人手机号：<span class="D_tell"></span></p>
+                <p>饮食禁忌：<span class="D_detail"></span></p>
+                <p class="C_green">查看更多</p>
+            </div>
+        </section>
+        <section class="S_P2">
+            <span>健康记录查询</span>
+            <div id="datePicker_demo1">
+                <input type="text" name="date" id="date_demo1" value="" class="gri_date" style="float:left" />
+            </div>
+            <p>
+                <img src="img/icon_search_nor.png" alt="">
+            </p>
+        </section>
+        <section class="S_P3">
+            <div id="head_tab">
+                <div class="tab_top1">心率历史记录</div>
+                <div class="tab_top2">血压历史记录</div>
+                <div class="tab_top3">血糖历史记录</div>
+            </div>
+            <div id="head_show">
+                <div class="show_data">
+                    <p class="P_top">09-21</p>
+                    <p class="P_num">
+                        <span>21:00</span>
+                        <span class="P_rightSpan"><span class="pianGao">偏高</span>129 bmp</span>
+                    </p>
+                    <p class="P_num">
+                        <span>21:00</span>
+                        <span class="P_rightSpan"><span class="pianGao">偏高</span>129 bmp</span>
+                    </p>
+                    <p class="P_num">
+                        <span>21:00</span>
+                        <span class="P_rightSpan"><span class="pianGao">偏高</span>129 bmp</span>
+                </div>
+                <div class="show_data">
+                    <p class="P_top">09-21</p>
+                    <p class="P_num">
+                        <span>21:00</span>
+                        <span class="P_rightSpan"><span class="pianDi">偏低</span>129 bmp</span>
+                    </p>
+                    <p class="P_num">
+                        <span>21:00</span>
+                        <span class="P_rightSpan"><span class="pianDi">偏低</span>129 bmp</span>
+                    </p>
+                    <p class="P_num">
+                        <span>21:00</span>
+                        <span class="P_rightSpan"><span class="pianDi">偏低</span>129 bmp</span>
+                </div>
+                <div class="show_data">
+                    <p class="P_top">09-21</p>
+                    <p class="P_num">
+                        <span>21:00</span>
+                        <span class="P_rightSpan"><span class="pianDi">偏低</span>129 bmp</span>
+                    </p>
+                    <p class="P_num">
+                        <span>21:00</span>
+                        <span class="P_rightSpan"><span class="pianDi">偏低</span>129 bmp</span>
+                    </p>
+                    <p class="P_num">
+                        <span>21:00</span>
+                        <span class="P_rightSpan"><span class="pianDi">偏低</span>129 bmp</span>
+                </div>
+            </div>
+        </section>
+    </article>
+    <article class="mapRight">
+        <div id="container"></div>
+        <div id="panel"></div>
+        <div class="button-group">
+            <input type="button" class="button" value="开始动画" id="start" />
+            <input type="button" class="button" value="停止动画" id="stop" />
+        </div>
+        <div class="hover_guiji">
+            <div class="left_hover">
+                <img src="img/icon_shishiwz_hover.png" alt="">
+                <span>实时位置</span>
+            </div>
+            <div class="right_hover">
+                <img src="img/icon_lsgj_hover.png" alt="">
+                <span>轨迹</span>
+                <img src="img/kit_xlsj.png" alt="">
+            </div>
+            <div class="show_guiji">
+                <div class="right_oth1">
+                    <span>3小时轨迹</span>
+                </div>
+                <div class="right_oth2">
+                    <span>6小时轨迹</span>
+                </div>
+                <div class="right_oth3">
+                    <span>12小时轨迹</span>
+                </div>
+            </div>
+        </div>
+        <div class="show_place">
+            <p class="place_start">开始</p>
+            <p class="zhankai">共0个位置</p>
+            <!--<p class="place_nor">中途地点中途地点中途地点</p>-->
+            <p class="place_end">结束</p>
+        </div>
+    </article>
+</section>

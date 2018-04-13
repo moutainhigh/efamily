@@ -1,0 +1,61 @@
+package com.winterframework.efamily.notification.service.impl;
+
+import java.text.MessageFormat;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.winterframework.efamily.base.enums.StatusCode;
+import com.winterframework.efamily.base.exception.BizException;
+import com.winterframework.efamily.base.model.Context;
+import com.winterframework.efamily.base.model.Response;
+import com.winterframework.efamily.dto.notification.NotificationInner;
+import com.winterframework.efamily.notification.enums.PushStatus;
+import com.winterframework.efamily.notification.exception.NotificationException;
+import com.winterframework.efamily.notification.service.ICcontrolService;
+import com.winterframework.efamily.notification.service.IConnectService;
+import com.winterframework.efamily.utils.HttpUtil;
+import com.winterframework.modules.spring.exetend.PropertyConfig;
+
+@Service("connectServiceImpl")
+public class ConnectServiceImpl implements IConnectService{
+	private static final Logger log= LoggerFactory.getLogger(ConnectServiceImpl.class);
+	@PropertyConfig("server.url.connect")
+	private String serverUrl;
+	@PropertyConfig("connect.server.push")
+	private String urlPath;
+	@Resource(name="httpUtil")
+	protected HttpUtil httpUtil;
+	@Resource(name="ccontrolServiceImpl")
+	protected ICcontrolService ccontrolService;
+	
+	
+	@Override
+	public PushStatus push(NotificationInner notificationInner)
+			throws NotificationException {
+		Long userId=notificationInner.getUserId();
+		Long deviceId=notificationInner.getDeviceId();
+		String serverIp=ccontrolService.getServer(userId, deviceId);
+		if(null==serverIp){
+			log.error("get server failed.userId="+userId+" deviceId="+deviceId);
+			return PushStatus.FAILED;
+		}
+		String connectServerUrl=MessageFormat.format(serverUrl, new Object[]{serverIp});
+		try{
+			Response<String> res=httpUtil.http(connectServerUrl, urlPath, new Context(), notificationInner, String.class);
+			if(res.getStatus().getCode()==StatusCode.OK.getValue()){
+				return PushStatus.SUCCESS;
+			}else if(res.getStatus().getCode()==StatusCode.OFF_LINE.getValue()){
+				return PushStatus.OFFLINE;
+			}else{
+				return PushStatus.FAILED;
+			}
+		}catch(BizException e){
+			log.error("push error.userId="+userId+" deviceId="+deviceId);
+			return PushStatus.FAILED;
+		}
+	}
+}

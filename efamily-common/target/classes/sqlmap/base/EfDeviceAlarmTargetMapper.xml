@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfDeviceAlarmTarget">
+	<resultMap id="EfDeviceAlarmTargetResult" type="com.winterframework.efamily.entity.EfDeviceAlarmTarget">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfDeviceAlarmTargetColumns">
+       	id as id,
+       	alarm_id as alarmId,
+       	alarm_type as alarmType,
+       	target_id as targetId,
+       	is_customer as isCustomer,
+       	value as value,
+       	status as status,
+       	remark as remark,
+       	creator_id as creatorId,
+       	create_time as createTime,
+       	updator_id as updatorId,
+       	update_time as updateTime
+	</sql>
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" parameterType="com.winterframework.efamily.entity.EfDeviceAlarmTarget" 
+		useGeneratedKeys="true" keyProperty="id" 
+	 flushCache="true">
+        INSERT INTO
+        ef_device_alarm_target (
+        	alarm_id,
+        	alarm_type,
+        	target_id ,
+        	is_customer,
+       		value,
+        	status,
+        	remark ,
+        	creator_id ,
+        	create_time  
+        ) VALUES (
+			#{alarmId,javaType=long,jdbcType=DECIMAL} ,
+        	#{alarmType,javaType=integer,jdbcType=INTEGER} ,
+        	#{targetId,javaType=long,jdbcType=DECIMAL} ,
+        	#{isCustomer,javaType=integer,jdbcType=INTEGER} ,
+        	#{value,javaType=string,jdbcType=VARCHAR} ,
+        	#{status,javaType=integer,jdbcType=INTEGER} ,
+        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+        )
+	</insert>
+    
+	<update id="update" parameterType="com.winterframework.efamily.entity.EfDeviceAlarmTarget">
+        UPDATE ef_device_alarm_target SET
+	        alarm_id = #{alarmId,javaType=long,jdbcType=DECIMAL} ,
+	        alarm_type = #{alarmType,javaType=integer,jdbcType=INTEGER} ,
+	        target_id = #{targetId,javaType=long,jdbcType=DECIMAL} ,
+	        is_customer = #{isCustomer,javaType=integer,jdbcType=INTEGER} ,
+	        value = #{value,javaType=string,jdbcType=VARCHAR} ,
+	        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+	        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+	        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+        WHERE 
+	        id = #{id} 
+	</update>
+   <delete id="delete" parameterType="java.lang.Long">
+        delete from ef_device_alarm_target where
+	        id = #{id} 
+    </delete>   
+    <select id="getById" parameterType="long" resultMap="EfDeviceAlarmTargetResult" flushCache="false">
+		select <include refid="EfDeviceAlarmTargetColumns" />
+		    from ef_device_alarm_target 
+	        where 
+	        id = #{id} 
+	</select>	
+	<select id="getByIds" parameterType="list"  resultMap="EfDeviceAlarmTargetResult" flushCache="false">
+		select <include refid="EfDeviceAlarmTargetColumns" />
+		    from ef_device_alarm_target 
+	        where id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+               #{item}
+               </foreach>					
+	</select>	
+ 
+	<select id="getAll" resultMap="EfDeviceAlarmTargetResult"  flushCache="false">
+    	select <include refid="EfDeviceAlarmTargetColumns" />
+	    from ef_device_alarm_target
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+    <select id="getByStatus" resultMap="EfDeviceAlarmTargetResult">
+    	select <include refid="EfDeviceAlarmTargetColumns" />
+	    from ef_device_alarm_target 
+		where status=#{status}
+    </select>
+</mapper>

@@ -1,0 +1,1106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/context
+	    http://www.springframework.org/schema/context/spring-context.xsd">
+	<!-- 奖期自动生成任务开始 -->
+	<!-- 定义任务 -->
+	 <bean id="noticeDisposableTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="noticeDisposableSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="noticeDisposableTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="noticeDisposableTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	
+	
+	
+	<bean id="noticeRepeatTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="noticeRepeatSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+	
+	<bean id="queryLocationTriggerNoticeTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="targetObject" value="queryLocationTriggerNoticeSchedule"/>
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="noticeRepeatTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="noticeRepeatTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="queryLocationTriggerNoticeTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="queryLocationTriggerNoticeTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/1 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="noticeDeviceTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="noticeDeviceSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="noticeDeviceTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="noticeDeviceTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="noticeDisposableSchedule" class="com.winterframework.efamily.service.schedule.NoticeDisposableTask"></bean>
+	
+	<bean id="noticeRepeatSchedule" class="com.winterframework.efamily.service.schedule.NoticeRepeatTask"></bean>
+	
+	<bean id="queryLocationTriggerNoticeSchedule" class="com.winterframework.efamily.service.schedule.QueryLocationTriggerNoticeTask"></bean>
+	
+	<bean id="noticeDeviceSchedule" class="com.winterframework.efamily.service.schedule.NoticeDeviceTask"></bean>
+	
+	<bean id="deviceBatteryWarningSchedule" class="com.winterframework.efamily.service.schedule.DeviceBatteryWarningTask"></bean>
+	
+	
+	
+	<bean id="deviceBatteryWarningTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">	
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceBatteryWarningSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+<!-- 低电量告警 -->
+	<bean id="deviceBatteryWarningTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="deviceBatteryWarningTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="grabWeatherSchedule" class="com.winterframework.efamily.service.schedule.GrabWeatherTask"></bean>
+	<bean id="grabWeatherTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="grabWeatherSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 天气预报数据采集 -->
+	<bean id="grabWeatherTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="grabWeatherTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 20 * * * ?</value>
+		</property>
+	</bean>
+	
+	
+	
+	<bean id="weatherDevicePushSchedule" class="com.winterframework.efamily.service.schedule.WeatherDevicePushTask"></bean>
+	<bean id="weatherDevicePushTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="weatherDevicePushSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 天气预报发送 -->
+	<bean id="weatherDevicePushTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="weatherDevicePushTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0/2 * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="lunarInitSchedule" class="com.winterframework.efamily.service.schedule.LunarInitTask"></bean>
+	<bean id="lunarInitTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="lunarInitSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 农历数据采集 -->
+	<bean id="lunarInitTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="lunarInitTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 0/24 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="lunarDevicePushSchedule" class="com.winterframework.efamily.service.schedule.LunarDevicePushTask"></bean>
+	<bean id="lunarDevicePushTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="lunarDevicePushSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 农历数据采集 -->
+	<bean id="lunarDevicePushTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="lunarDevicePushTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 0 * * ?</value>
+		</property>
+	</bean>
+	<!-- 
+	<bean id="LocationInitSchedule" class="com.winterframework.efamily.service.schedule.LocationInitTask"></bean>
+	<bean id="LocationInitTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="LocationInitSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	地址数据采集
+	<bean id="LocationInitTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="LocationInitTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+	</bean> -->
+	
+	
+	<bean id="LocationOriginInitSchedule" class="com.winterframework.efamily.service.schedule.LocationOriginInitTask"></bean>
+	<bean id="LocationOriginInitTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="LocationOriginInitSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 地址数据采集 -->
+	<bean id="LocationOriginInitTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="LocationOriginInitTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/10 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="LocationSemiInitSchedule" class="com.winterframework.efamily.service.schedule.LocationSemiInitTask"></bean>
+	<bean id="LocationSemiInitTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="LocationSemiInitSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 地址数据采集 -->
+	<bean id="LocationSemiInitTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="LocationSemiInitTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/10 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- 定位坐标调整Job -->
+	<bean id="locationAdjustTask" class="com.winterframework.efamily.service.schedule.LocationAdjustTask"></bean>
+	<bean id="locationAdjustJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="targetObject" value="locationAdjustTask"/>
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+	<bean id="locationAdjustTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="locationAdjustJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0/10 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- 用户当前城市更新Job -->
+	<bean id="userCityChangeTask" class="com.winterframework.efamily.service.schedule.UserCityChangeTask"></bean>
+	<bean id="userCityChangeJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="targetObject" value="userCityChangeTask"/>
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+	<bean id="userCityChangeTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="userCityChangeJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	<bean id="electronicFenceNoticeSchedule" class="com.winterframework.efamily.service.schedule.ElectronicFenceNoticeTask"></bean>
+	<bean id="electronicFenceNoticeTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="electronicFenceNoticeSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 围栏告警 -->
+	<bean id="electronicFenceNoticeTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="electronicFenceNoticeTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="userStatusMonitorSchedule" class="com.winterframework.efamily.service.schedule.UserStatusMonitorTask"></bean>
+	<bean id="userStatusMonitorTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="userStatusMonitorSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--用户状态更新-->
+	<bean id="userStatusMonitortrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="userStatusMonitorTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0/1 * * * ?</value>
+		</property>
+	</bean>
+	
+	<!--设备主动查询 begin  -->
+	<bean id="deviceHeartQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DeviceHeartQueryTask"></bean>
+	<bean id="deviceHeartQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceHeartQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- 心律查询 每2小时-->
+	<bean id="deviceHeartQueryTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="deviceHeartQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="deviceLocationQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DeviceLocationQueryTask"></bean>
+	<bean id="deviceLocationQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceLocationQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+
+	<!-- gps位置 位置查询 每半小时-->
+	<bean id="deviceLocationQueryTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="deviceLocationQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="deviceLocationWifiQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DeviceLocationWifiQueryTask"></bean>
+	<bean id="deviceLocationWifiQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceLocationWifiQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+	
+	<!-- wift位置 40分钟一次-->
+	<bean id="deviceLocationWifiQueryTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="deviceLocationWifiQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+
+	<bean id="deviceMobileQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DeviceMobileQueryTask"></bean>
+	<bean id="deviceMobileQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceMobileQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- 基站位置-->
+	<bean id="deviceMobileQueryTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="deviceMobileQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="devicePowerOnffQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DevicePowerOnffQueryTask"></bean>
+	<bean id="devicePowerOnffQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="devicePowerOnffQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- 自动开关机查询-->
+	<bean id="devicePowerOnffQueryTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="devicePowerOnffQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="deviceSignalQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DeviceSignalQueryTask"></bean>
+	<bean id="deviceSignalQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceSignalQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!-- 信号查询-->
+	<bean id="deviceSignalQuerytrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="deviceSignalQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="deviceSoftwareQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DeviceSoftwareQueryTask"></bean>
+	<bean id="deviceSoftwareQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceSoftwareQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--软件查询-->
+	<bean id="deviceSoftwareQuerytrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="deviceSoftwareQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="deviceSleepQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DeviceSleepQueryTask"></bean>
+	<bean id="deviceSleepQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceSleepQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--睡眠查询-->
+	<bean id="deviceSleepQuerytrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="deviceSleepQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="deviceStepQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DeviceStepQueryTask"></bean>
+	<bean id="deviceStepQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceStepQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--记步查询-->
+	<bean id="deviceStepQuerytrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="deviceStepQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="deviceTimeQuerySchedule" class="com.winterframework.efamily.service.schedule.device.DeviceTimeQueryTask"></bean>
+	<bean id="deviceTimeQueryTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="deviceTimeQuerySchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--时间查询-->
+	<bean id="deviceTimeQuerytrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="deviceTimeQueryTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0 13 * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- 主动向设备发起查询 end -->
+	
+	
+	
+	
+	<bean id="sendMessageSchedule" class="com.winterframework.efamily.service.schedule.SendMessageTask"></bean>
+	<bean id="sendMessageTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="sendMessageSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--时间查询-->
+	<bean id="sendMessagetrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="sendMessageTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/1 * * * * ?</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="heartRateNoticeSchedule" class="com.winterframework.efamily.service.schedule.HeartRateNoticeTask"></bean>
+	<bean id="heartRateNoticeTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="heartRateNoticeSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--时间查询-->
+	<bean id="heartRateNoticetrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="heartRateNoticeTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean id="bloodPressureNoticeSchedule" class="com.winterframework.efamily.service.schedule.BloodPressureNoticeTask"></bean>
+	<bean id="bloodPressureNoticeTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="bloodPressureNoticeSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--时间查询-->
+	<bean id="bloodPressureNoticetrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="bloodPressureNoticeTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="locationMovemodeSchedule" class="com.winterframework.efamily.service.schedule.LocationMovemodeTask"></bean>
+	<bean id="locationMovemodeTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="locationMovemodeSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--时间查询-->
+	<bean id="locationMovemodetrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="locationMovemodeTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0/5 * * * ?</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="locationMovemodeToStillSchedule" class="com.winterframework.efamily.service.schedule.LocationMovemodeToStillTask"></bean>
+	<bean id="locationMovemodeToStillTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="locationMovemodeToStillSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--时间查询-->
+	<bean id="locationMovemodeToStilltrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="locationMovemodeToStillTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0/2 * * * ?</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="locationMovemodeToMoveSchedule" class="com.winterframework.efamily.service.schedule.LocationMovemodeToMoveTask"></bean>
+	<bean id="locationMovemodeToMoveTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="locationMovemodeToMoveSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--时间查询-->
+	<bean id="locationMovemodeToMovetrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="locationMovemodeToMoveTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0 0/2 * * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- 告警处理Job -->
+	<bean id="deviceAlarmTask" class="com.winterframework.efamily.service.schedule.DeviceAlarmTask"></bean>
+	<bean id="deviceAlarmJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="targetObject" value="deviceAlarmTask"/>
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+	<bean id="deviceAlarmTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="deviceAlarmJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0/2 * * * * ?</value>
+		</property>
+	</bean>
+	<!-- 告警发送处理Job -->
+	<bean id="deviceAlarmSendTask" class="com.winterframework.efamily.service.schedule.DeviceAlarmSendTask"></bean>
+	<bean id="deviceAlarmSendJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="targetObject" value="deviceAlarmSendTask"/>
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+	<bean id="deviceAlarmSendTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="deviceAlarmSendJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0/2 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- 心率告警数据处理Job -->
+	<bean id="heartRateAlarmTask" class="com.winterframework.efamily.service.schedule.HeartRateAlarmTask"></bean>
+	<bean id="heartRateAlarmJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				<entry key="targetObject" value="heartRateAlarmTask"/>
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+	<bean id="heartRateAlarmTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="heartRateAlarmJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	<bean id="heartRateNoticeOrgSchedule" class="com.winterframework.efamily.service.schedule.HeartRateNoticeOrgTask"></bean>
+	<bean id="heartRateNoticeOrgTask" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="jobClass">
+
+			<value>com.winterframework.efamily.service.schedule.DetailQuartzStateJobBean</value>
+		</property>
+		<property name="durability" value="true"/>
+		<property name="jobDataAsMap">
+			<map>
+				
+				<entry key="targetObject" value="heartRateNoticeOrgSchedule"/>
+				
+				<entry key="targetMethod" value="execute" />
+			</map>
+		</property>
+	</bean>
+
+	<!--时间查询-->
+	<bean id="heartRateNoticeOrgtrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+		
+			<ref bean="heartRateNoticeOrgTask" />
+		</property>
+		
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+	
+	<!-- 任务调度入口 -->
+	<bean autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<!-- 任务列表，可以配置多个任务加入到该List -->
+		<property name="triggers">
+			<list>
+				<ref bean="noticeRepeatTrigger" />
+				<ref bean="noticeDisposableTrigger" />
+				<ref bean="noticeDeviceTrigger" />
+				<ref bean="queryLocationTriggerNoticeTrigger" />
+				<ref bean="deviceBatteryWarningTrigger"/>
+				<ref bean="grabWeatherTrigger"/>
+				<ref bean="weatherDevicePushTrigger"/>
+				<ref bean="lunarDevicePushTrigger"/>
+				<ref bean="lunarInitTrigger"/>
+				<ref bean="electronicFenceNoticeTrigger"/>
+				<ref bean="userStatusMonitortrigger"/>
+				<ref bean="sendMessagetrigger"/>
+				<ref bean="LocationOriginInitTrigger"/>
+				<ref bean="LocationSemiInitTrigger"/>
+				<ref bean="locationAdjustTrigger"/>
+				<ref bean="userCityChangeTrigger"/>
+				
+				<ref bean="heartRateNoticetrigger"/>
+				<ref bean="bloodPressureNoticetrigger"/>
+				<ref bean="locationMovemodetrigger"/>
+				<ref bean="locationMovemodeToStilltrigger"/>
+				<ref bean="locationMovemodeToMovetrigger"/>
+				<ref bean="heartRateNoticeOrgtrigger"/>
+				
+				<!-- 主动向设备发起查询 -->
+				<ref bean="deviceHeartQueryTrigger"/>
+				<ref bean="deviceLocationQueryTrigger"/>
+				<ref bean="deviceLocationWifiQueryTrigger"/>
+				<ref bean="deviceMobileQueryTrigger"/>
+				<ref bean="devicePowerOnffQueryTrigger"/>
+				<ref bean="deviceSignalQuerytrigger"/>
+				<ref bean="deviceSoftwareQuerytrigger"/>
+				<ref bean="deviceSleepQuerytrigger"/>
+				<ref bean="deviceStepQuerytrigger"/>
+				<ref bean="deviceTimeQuerytrigger"/>
+				<ref bean="deviceAlarmTrigger"/>
+				<ref bean="deviceAlarmSendTrigger"/>
+				<ref bean="heartRateAlarmTrigger"/>
+			</list>
+		</property>
+		<!-- 启动时延期3秒开始任务 -->
+		<!--这个是必须的，QuartzScheduler 延时启动，应用启动完后 QuartzScheduler 再启动 -->
+		<property name="startupDelay" value="3" />
+		<property name="configLocation" value="classpath:schedule/quartz.properties" />
+		<!--这个是可选，QuartzScheduler 启动时更新己存在的Job，这样就不用每次修改targetObject后删除qrtz_job_details表对应记录了 -->
+		<property name="overwriteExistingJobs" value="true" />
+	</bean>	
+</beans>

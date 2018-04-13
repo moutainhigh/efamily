@@ -1,0 +1,90 @@
+/**   
+* @Title: LunarDevicePushTask.java 
+* @Package com.winterframework.efamily.service.schedule 
+* @Description: TODO(用一句话描述该文件做什么) 
+* @author floy   
+* @date 2015-9-15 上午10:56:32 
+* @version V1.0   
+*/
+package com.winterframework.efamily.service.schedule;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.winterframework.efamily.base.model.Notification;
+import com.winterframework.efamily.base.model.NotyMessage;
+import com.winterframework.efamily.base.model.NotyTarget;
+import com.winterframework.efamily.base.utils.DateUtils;
+import com.winterframework.efamily.base.utils.JsonUtils;
+import com.winterframework.efamily.dao.IEjlComUserDeviceDao;
+import com.winterframework.efamily.dao.IEjlUserDao;
+import com.winterframework.efamily.dto.device.DeviceLunarRequest;
+import com.winterframework.efamily.entity.EfLunar;
+import com.winterframework.efamily.entity.EjlUserDevice;
+import com.winterframework.efamily.service.IEfComLunarService;
+import com.winterframework.efamily.utils.NotificationUtil;
+
+/** 
+* @ClassName: LunarDevicePushTask 
+* @Description: TODO(这里用一句话描述这个类的作用) 
+* @author floy 
+* @date 2015-9-15 上午10:56:32 
+*  
+*/
+public class LunarDevicePushTask {
+
+	private Logger log = LoggerFactory.getLogger(LunarDevicePushTask.class);
+
+	@Resource(name = "ejlUserDaoImpl")
+	private IEjlUserDao ejlUserDaoImpl;
+
+	@Resource(name = "ejlComUserDeviceDaoImpl")
+	private IEjlComUserDeviceDao ejlComUserDeviceDaoImpl;
+
+	@Resource(name = "ejlComLunarServiceImpl")
+	private IEfComLunarService ejlComLunarServiceImpl; 
+	@Resource(name = "notificationUtil")
+	private NotificationUtil notificationUtil; 
+	
+
+	public void execute() throws Exception {
+		EjlUserDevice eEjlUserDevice = new EjlUserDevice();
+		eEjlUserDevice.setStatus(1l);
+		List<EjlUserDevice> list = ejlComUserDeviceDaoImpl.getAllByEntity(eEjlUserDevice);
+		Date date = DateUtils.parse(DateUtils.format(new Date()));
+		EfLunar efLunar = ejlComLunarServiceImpl.getEfLunarByDate(date);
+		if(efLunar != null){
+		DeviceLunarRequest struc = new DeviceLunarRequest();
+		struc.setDate(DateUtils.format(efLunar.getSolarDate()));
+		struc.setFitavoid(efLunar.getSuit() + "-" + efLunar.getAvoid());
+		struc.setGanzhi(efLunar.getGanzhi());
+		struc.setLunar(efLunar.getLunarDate());struc.setWeek(efLunar.getWeek()+"");
+		struc.setZodiac(efLunar.getZodiac());
+		struc.setWeek(efLunar.getWeek()==1?"星期一":efLunar.getWeek()==2?"星期二":efLunar.getWeek()==3?"星期三":
+				efLunar.getWeek()==4?"星期四":efLunar.getWeek()==5?"星期五":efLunar.getWeek()==6?"星期六":
+					efLunar.getWeek()==7?"星期日":null);
+		for (EjlUserDevice ejlUserDevice : list) {
+			Map<String, String> data = new HashMap<String, String>(); 
+			data.put("data", JsonUtils.toJson(struc));
+			
+			NotyTarget target=new NotyTarget(ejlUserDevice.getUserId(),ejlUserDevice.getDeviceId());
+			NotyMessage message=new NotyMessage();
+			message.setCommand(28973);
+			message.setType(NotyMessage.Type.NOTICE);
+			message.setData(data);
+			Notification notification=new Notification();
+			notification.setTarget(target);
+			notification.setMessage(message);
+			notification.setRealTime(false);
+			notificationUtil.notification(notification);
+		}
+		}
+	}
+}

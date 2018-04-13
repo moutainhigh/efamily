@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.OrgFence">
+	<resultMap id="OrgFenceResult" type="com.winterframework.efamily.entity.OrgFence">
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orgFenceColumns">
+	    <![CDATA[
+	        	id as id,
+	        	org_id as orgId,
+	        	name as name,
+	        	address as address, 
+	        	status as status,
+	        	location as location,
+	        	radius as radius,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	type as type,
+	        	remark as remark
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.OrgFence" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        org_fence (
+	        	status ,
+	        	location ,
+	        	radius ,
+	        	creator_id ,
+	        	create_time ,
+	        	type ,
+	        	remark,
+	        	org_id,
+	        	name,
+	        	address 
+	        ) VALUES (
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{location,javaType=string,jdbcType=VARCHAR} ,
+	        	#{radius,javaType=long,jdbcType=DECIMAL} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{type,javaType=integer,jdbcType=INTEGER} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{orgId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{address,javaType=string,jdbcType=VARCHAR} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.OrgFence">
+
+	        UPDATE org_fence
+		        <set>
+			       <if test="@Ognl@isNotEmpty(status)">
+						status = #{status,javaType=integer,jdbcType=INTEGER} ,
+					</if>
+			       <if test="@Ognl@isNotEmpty(location)">
+						location = #{location,javaType=string,jdbcType=VARCHAR} ,
+					</if>
+			       <if test="@Ognl@isNotEmpty(radius)">
+						radius = #{radius,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+			       <if test="@Ognl@isNotEmpty(updatorId)">
+						updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  ,
+					</if>
+			       <if test="@Ognl@isNotEmpty(updateTime)">
+						update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} ,
+					</if>
+			       <if test="@Ognl@isNotEmpty(type)">
+						type = #{type,javaType=integer,jdbcType=INTEGER} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(orgId)">
+						org_id = #{orgId,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(name)">
+						name = #{name,javaType=string,jdbcType=VARCHAR} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(address)">
+						address = #{address,javaType=string,jdbcType=VARCHAR} ,
+					</if>
+			       <if test="@Ognl@isNotEmpty(remark)">
+						remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+					</if>
+		    </set>
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from org_fence where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="OrgFenceResult" flushCache="false">
+			select <include refid="orgFenceColumns" />
+		    <![CDATA[
+			    from org_fence 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="OrgFenceResult" flushCache="false">
+			select <include refid="orgFenceColumns" />
+			    from org_fence 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="OrgFenceDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(location)">
+				and location = #{location}
+			</if>
+	       <if test="@Ognl@isNotEmpty(radius)">
+				and radius = #{radius}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(type)">
+				and type = #{type}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+			<if test="@Ognl@isNotEmpty(orgId)">
+				and org_id = #{orgId}
+			</if>
+			<if test="@Ognl@isNotEmpty(name)">
+				and name = #{name}
+			</if>
+			<if test="@Ognl@isNotEmpty(address)">
+				and address = #{address} 
+			</if>
+			
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="OrgFenceResult"  flushCache="false">
+    	select <include refid="orgFenceColumns" />
+	    from org_fence 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from org_fence 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from org_fence 
+		<include refid="OrgFenceDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="OrgFenceResult">
+    	select <include refid="orgFenceColumns" />
+	    from org_fence 
+		<include refid="OrgFenceDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="OrgFenceResult">
+    	select <include refid="orgFenceColumns" />
+	    from org_fence 
+		<include refid="OrgFenceDynamicWhere"/>
+		ORDER BY id desc
+    </select>
+
+</mapper>

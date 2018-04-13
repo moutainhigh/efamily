@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlUserFriend">
+	<resultMap id="EjlUserFriendResult" type="com.winterframework.efamily.entity.EjlUserFriend">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlUserFriendColumns">
+	    <![CDATA[
+	        	id as id,
+	        	user_id as userId,
+	        	friend_id as friendId,
+	        	source as source,
+	        	status as status,
+	        	remark_name as remarkName,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlUserFriend" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_user_friend (
+	        	user_id ,
+	        	friend_id ,
+	        	source ,
+	        	status ,
+	        	remark_name ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time 
+	        ) VALUES (
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{friendId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{source,javaType=long,jdbcType=DECIMAL} ,
+	        	#{status,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remarkName,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlUserFriend">
+	        UPDATE ejl_user_friend 
+	        <set>
+                <if test="@Ognl@isNotEmpty(userId)">
+					 USER_ID = #{userId,javaType=long,jdbcType=DECIMAL} ,
+				</if>
+		       <if test="@Ognl@isNotEmpty(friendId)">
+					 FRIEND_ID = #{friendId,javaType=long,jdbcType=DECIMAL} ,
+				</if>
+		       <if test="@Ognl@isNotEmpty(source)">
+					 SOURCE = #{source,javaType=long,jdbcType=DECIMAL} ,
+				</if>
+		       <if test="@Ognl@isNotEmpty(status)">
+					 STATUS = #{status,javaType=long,jdbcType=DECIMAL} ,
+				</if>
+					 REMARK_NAME =  #{remarkName,javaType=string,jdbcType=VARCHAR} ,
+				<if test="@Ognl@isNotEmpty(remark)">
+                    remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+                </if>
+                <if test="@Ognl@isNotEmpty(updatorId)">
+                    updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}, 
+                </if>
+                <if test="@Ognl@isNotEmpty(updateTime)">
+                    update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+                </if>
+		      </set>
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_user_friend where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlUserFriendResult" flushCache="false">
+			select <include refid="ejlUserFriendColumns" />
+		    <![CDATA[
+			    from ejl_user_friend 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlUserFriendResult" flushCache="false">
+			select <include refid="ejlUserFriendColumns" />
+			    from ejl_user_friend 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="ejlUserFriendDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(friendId)">
+				and friend_id = #{friendId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(source)">
+				and source = #{source}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remarkName)">
+				and remark_name = #{remarkName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlUserFriendResult"  flushCache="false">
+    	select <include refid="ejlUserFriendColumns" />
+	    from ejl_user_friend 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_user_friend 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_user_friend 
+		<include refid="ejlUserFriendDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlUserFriendResult">
+    	select <include refid="ejlUserFriendColumns" />
+	    from ejl_user_friend 
+		<include refid="ejlUserFriendDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlUserFriendResult">
+    	select <include refid="ejlUserFriendColumns" />
+	    from ejl_user_friend 
+		<include refid="ejlUserFriendDynamicWhere"/>
+    </select>
+
+
+	
+</mapper>

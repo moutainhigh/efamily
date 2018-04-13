@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlVerifyCode">
+
+    <resultMap id="EjlVerifyCodeResult" type="com.winterframework.efamily.entity.EjlVerifyCode">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlVerifyCodeColumns">
+	    <![CDATA[
+	        	ID as id,
+	        	FAMILY_ID as familyId,
+	        	PHONE_NUMBER as phoneNumber,
+	        	CREATE_TIME as createTime,
+	        	TIME_OUT as timeOut,
+	        	USER_ID as userId,
+	        	TYPE as type,
+	        	verify_code as verifyCode,
+	        	message_code as messageCode,
+	        	status as status
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlVerifyCode" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        EJL_VERIFY_CODE (
+	        	FAMILY_ID ,
+	        	PHONE_NUMBER ,
+	        	CREATE_TIME ,
+	        	TIME_OUT ,
+	        	USER_ID ,
+	        	TYPE ,
+	        	verify_code,
+	        	message_code,
+	        	status
+	        ) VALUES (
+	        	#{familyId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{timeOut,javaType=long,jdbcType=DECIMAL} ,
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{type,javaType=long,jdbcType=DECIMAL} ,
+	        	#{verifyCode,javaType=string,jdbcType=VARCHAR} ,
+	        	#{messageCode,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=long,jdbcType=DECIMAL} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlVerifyCode">
+	    <![CDATA[
+	        UPDATE EJL_VERIFY_CODE SET
+		        FAMILY_ID = #{familyId,javaType=long,jdbcType=DECIMAL} ,
+		        PHONE_NUMBER = #{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+		        TIME_OUT = #{timeOut,javaType=long,jdbcType=DECIMAL} ,
+		        USER_ID = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		        TYPE = #{type,javaType=long,jdbcType=DECIMAL} ,
+		        verify_code=#{verifyCode,javaType=string,jdbcType=VARCHAR} ,
+		        message_code=#{messageCode,javaType=string,jdbcType=VARCHAR} ,
+		        status=#{status,javaType=long,jdbcType=DECIMAL} 
+	        WHERE 
+		        ID = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from EJL_VERIFY_CODE where
+		        ID = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlVerifyCodeResult" flushCache="false">
+			select <include refid="ejlVerifyCodeColumns" />
+		    <![CDATA[
+			    from EJL_VERIFY_CODE 
+		        where 
+		        ID = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlVerifyCodeResult" flushCache="false">
+			select <include refid="ejlVerifyCodeColumns" />
+			    from EJL_VERIFY_CODE 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="ejlVerifyCodeDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and ID = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(familyId)">
+				and FAMILY_ID = #{familyId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phoneNumber)">
+				and PHONE_NUMBER = #{phoneNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and CREATE_TIME = #{create_time}
+			</if>
+	       <if test="@Ognl@isNotEmpty(timeOut)">
+				and TIME_OUT = #{timeOut}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and USER_ID = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(type)">
+				and TYPE = #{type}
+			</if>
+			<if test="@Ognl@isNotEmpty(verifyCode)">
+				and verify_code = #{verifyCode}
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlVerifyCodeResult"  flushCache="false">
+    	select <include refid="ejlVerifyCodeColumns" />
+	    from EJL_VERIFY_CODE 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from EJL_VERIFY_CODE 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from EJL_VERIFY_CODE 
+		<include refid="ejlVerifyCodeDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlVerifyCodeResult">
+    	select <include refid="ejlVerifyCodeColumns" />
+	    from EJL_VERIFY_CODE 
+		<include refid="ejlVerifyCodeDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+    <select id="getEjlVerifyCodeList" resultMap="EjlVerifyCodeResult" parameterType="hashmap">
+    	select <include refid="ejlVerifyCodeColumns" />
+	    from EJL_VERIFY_CODE 
+		<include refid="ejlVerifyCodeDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+    
+     <select id="getVerifyCode" resultMap="EjlVerifyCodeResult" parameterType="hashmap">
+    	select <include refid="ejlVerifyCodeColumns" />
+	    from EJL_VERIFY_CODE 
+	     <![CDATA[
+	    where phone_number=${phoneNumber} and verify_code=${verifyCode} and status=1 and date_add(create_time,INTERVAL time_out minute)>now()
+	    ]]>
+	    <if test="@Ognl@isNotEmpty(type)">
+	    and type=${type}
+	    </if>
+		limit 1
+    </select>
+    
+    <select id="getEffectiveVerifyCode" resultMap="EjlVerifyCodeResult" parameterType="hashmap">
+		SELECT <include refid="ejlVerifyCodeColumns" />
+		FROM ejl_verify_code 
+		WHERE phone_number=${phoneNumber} 
+		AND
+		<![CDATA[  
+		UNIX_TIMESTAMP()-UNIX_TIMESTAMP(create_time)<(time_out*60) 
+		]]>
+		AND
+		status=1
+		<if test="@Ognl@isNotEmpty(type)">
+	    and type=${type}
+	    </if>
+		ORDER BY id DESC 
+		LIMIT 1
+    </select>
+
+
+	
+</mapper>

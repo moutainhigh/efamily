@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfDeviceAlarm">
+	<resultMap id="EfDeviceAlarmResult" type="com.winterframework.efamily.entity.EfDeviceAlarm">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfDeviceAlarmColumns">
+       	id as id,
+       	user_id as userId,
+       	device_id as deviceId,
+       	type as type,
+       	value as value,
+       	time as time,
+       	status as status,
+       	remark as remark,
+       	creator_id as creatorId,
+       	create_time as createTime,
+       	updator_id as updatorId,
+       	update_time as updateTime
+	</sql>
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" parameterType="com.winterframework.efamily.entity.EfDeviceAlarm" 
+		useGeneratedKeys="true" keyProperty="id" 
+	 flushCache="true">
+        INSERT INTO
+        ef_device_alarm (
+        	user_id,
+        	device_id ,
+        	type,
+       		value,
+        	time,
+        	status,
+        	remark ,
+        	creator_id ,
+        	create_time  
+        ) VALUES (
+			#{userId,javaType=long,jdbcType=DECIMAL} ,
+        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+        	#{type,javaType=integer,jdbcType=INTEGER} ,
+        	#{value,javaType=string,jdbcType=VARCHAR} ,
+        	#{time,javaType=long,jdbcType=DECIMAL} ,
+        	#{status,javaType=integer,jdbcType=INTEGER} ,
+        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+        )
+	</insert>
+    
+	<update id="update" parameterType="com.winterframework.efamily.entity.EfDeviceAlarm">
+        UPDATE ef_device_alarm SET
+	        user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+	        device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        type = #{type,javaType=integer,jdbcType=INTEGER} ,
+	        value = #{value,javaType=string,jdbcType=VARCHAR} ,
+	        time = #{time,javaType=long,jdbcType=DECIMAL} ,
+	        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+	        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+	        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+        WHERE 
+	        id = #{id} 
+	</update>
+   <delete id="delete" parameterType="java.lang.Long">
+        delete from ef_device_alarm where
+	        id = #{id} 
+    </delete>   
+    <select id="getById" parameterType="long" resultMap="EfDeviceAlarmResult" flushCache="false">
+		select <include refid="EfDeviceAlarmColumns" />
+		    from ef_device_alarm 
+	        where 
+	        id = #{id} 
+	</select>	
+	<select id="getByIds" parameterType="list"  resultMap="EfDeviceAlarmResult" flushCache="false">
+		select <include refid="EfDeviceAlarmColumns" />
+		    from ef_device_alarm 
+	        where id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+               #{item}
+               </foreach>					
+	</select>	
+ 
+	<select id="getAll" resultMap="EfDeviceAlarmResult"  flushCache="false">
+    	select <include refid="EfDeviceAlarmColumns" />
+	    from ef_device_alarm 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+    
+    <select id="getByUserIdAndDeviceId" resultMap="EfDeviceAlarmResult">
+    	select <include refid="EfDeviceAlarmColumns" />
+	    from ef_device_alarm 
+		where user_id=#{userId} and device_id = #{deviceId}
+    </select>
+    
+    <select id="getByUserIdAndDeviceIdAndType" resultMap="EfDeviceAlarmResult">
+    	select <include refid="EfDeviceAlarmColumns" />
+	    from ef_device_alarm 
+		where user_id=#{userId} and device_id = #{deviceId}
+			and type=#{type}
+    </select>
+    
+    <select id="getByUserIdAndDeviceIdAndTypeAndTime" resultMap="EfDeviceAlarmResult">
+    	select <include refid="EfDeviceAlarmColumns" />
+	    from ef_device_alarm 
+		where user_id=#{userId} and device_id = #{deviceId}
+			and type=#{type} and time=#{time}
+    </select>
+    
+</mapper>

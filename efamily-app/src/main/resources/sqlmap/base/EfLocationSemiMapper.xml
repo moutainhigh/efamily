@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.winterframework.efamily.entity.EfLocationSemi">
+	<select id="getListByTimeSpan" parameterType="hashmap" resultMap="EfLocationSemiResult"  flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+	    from EF_LOCATION_SEMI 
+        where user_id=#{userId} and device_id=#{deviceId} and status in(1,2)
+        and time_begin between #{timeFrom} and #{timeTo}
+        <if test="type==1">
+			 and flag not in(4,33)
+		</if>
+		<if test="type==2">
+			 and flag not in(4)
+		</if>
+        order by TIME,TYPE asc
+    </select>
+</mapper>

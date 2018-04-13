@@ -1,0 +1,85 @@
+package com.winterframework.efamily.notification.daemon;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.winterframework.efamily.base.redis.RedisQueue;
+import com.winterframework.efamily.base.utils.DateUtils;
+import com.winterframework.efamily.notification.model.NotyQueue;
+
+@Service
+public class NotyOfflineNewServer {
+	private static final Logger log = LoggerFactory.getLogger(NotyOfflineNewServer.class);  
+	private static final int multiply=5;
+	private static final ExecutorService threadPool = Executors.newFixedThreadPool(20*multiply);
+	@Resource(name="redisQueue")
+	private RedisQueue redisQueue;
+	@PostConstruct
+	public void startup(){
+		log.info("消息 离线 服务 启动......"); 
+		new NotyOfflineThread(threadPool,NotyQueue.QUEUE_USER_OFFLINE).start();
+	}
+	
+	private class NotyOfflineThread extends Thread{
+		ExecutorService threadPool;
+		String queueName;
+		public NotyOfflineThread(ExecutorService threadPool,String queueName){
+			this.threadPool=threadPool;
+			this.queueName=queueName;
+		}
+		@SuppressWarnings("static-access")
+		@Override
+		public void run() {
+			try {  
+				while(true){
+					long time1=DateUtils.getCurTime(); 
+					try {
+						Thread.currentThread().sleep(1000);
+					} catch(InterruptedException ex){
+						log.error("Thread be interrupted.",ex);
+					}
+					//处理正常的消息队列
+					try{ 
+						execute(threadPool,queueName);
+					}catch(Exception e){
+						log.error("消息 离线 处理 execute failed.",e);
+					}
+					long time2=DateUtils.getCurTime();
+					log.debug("notyServer cost time:"+(time2-time1));
+				}
+			} catch (Exception e) {
+				log.error("消息 离线 服务 异常:"+queueName,e);
+			} 
+		} 
+	}
+	private void execute(ExecutorService threadPool,String queueName) {
+		long time1=DateUtils.getCurTime(); 
+		String value=redisQueue.getUnique(queueName);
+		long time2=DateUtils.getCurTime();
+		log.debug("notyServer redis cost time:"+(time2-time1));
+		//List<String> values=redisQueue.get(queueName,queueName + "_offline",queueName+"_offline_1");  
+		if(null==value){
+			//log.info("notification in the queue all has been pushed.");
+			return;
+		}else{
+			//log.info("notification off line value is"+value);
+		}
+		
+		/*for(String s:values)
+			log.debug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX->"+s);*/
+		/*if(null==values.get(1)){
+			//log.debug("notification in the queue is empty.");
+			return;
+		}*/
+		threadPool.execute(new NotificationOfflineProcessorNew2(value));
+		long time3=DateUtils.getCurTime();
+		log.debug("notyServer process cost time:"+(time3-time2));
+	}
+}

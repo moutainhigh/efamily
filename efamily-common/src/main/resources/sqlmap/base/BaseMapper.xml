@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.baseSql">
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="selectBaseColumns"> 
+		ID as id,
+       	REMARK as remark,
+       	CREATOR_ID as creatorId,
+       	CREATE_TIME as createTime,
+       	UPDATOR_ID as updatorId,
+       	UPDATE_TIME as updateTime
+	</sql>
+	<sql id="insertBaseColumns"> 
+		REMARK,
+       	CREATOR_ID,
+       	CREATE_TIME
+	</sql>
+	<sql id="insertBaseValues"> 
+		#{remark,javaType=string,jdbcType=VARCHAR},
+       	#{creatorId,javaType=long,jdbcType=DECIMAL},
+       	#{createTime,javaType=date,jdbcType=TIMESTAMP} 
+	</sql>
+	<sql id="updateBaseValues"> 
+		REMARK = #{remark,javaType=string,jdbcType=VARCHAR},
+		UPDATOR_ID = #{updatorId,javaType=long,jdbcType=DECIMAL}
+       	UPDATE_TIME = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	</sql>
+</mapper>

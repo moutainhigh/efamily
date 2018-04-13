@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.OrgUserHealthyFile">
+	<resultMap id="OrgUserHealthyFileResult" type="com.winterframework.efamily.entity.OrgUserHealthyFile">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orgUserHealthyFileColumns">
+	    <![CDATA[
+	        	id as id,
+	        	org_id as orgId,
+	        	org_user_id as orgUserId,
+	        	head_img as headImg,
+	        	status as status,
+	        	birthday as birthday,
+	        	sex as sex,
+	        	name as name,
+	        	age as age,
+	        	height as height,
+	        	weight as weight,
+	        	blood_type as bloodType,
+	        	phone_number as phoneNumber,
+	        	id_number as idNumber,
+	        	vision_right as visionRight,
+	        	vision_left as visionLeft,
+	        	hearing_right as hearingRight,
+	        	hearing_left as hearingLeft,
+	        	sleep_status as sleepStatus,
+	        	drug_allergy as drugAllergy,
+	        	drug_use_record as drugUseRecord,
+	        	exposure_history as exposureHistory,
+	        	operation_history as operationHistory,
+	        	disease as disease,
+	        	family_disease_history as familyDiseaseHistory,
+	        	exercise_frequency as exerciseFrequency,
+	        	exercise_time as exerciseTime,
+	        	exercise_content as exerciseContent,
+	        	smoke_frequency as smokeFrequency,
+	        	smoke_status as smokeStatus,
+	        	smoke_amount_perDay as smokeAmountPerDay,
+	        	smoke_length as smokeLength,
+	        	drink_frequency as drinkFrequency,
+	        	drink_type as drinkType,
+	        	drink_amount_perDay as drinkAmountPerDay,
+	        	drink_length as drinkLength,
+	        	diet_frequency as dietFrequency,
+	        	diet_habits as dietHabits,
+	        	diet_time as dietTime,
+	        	heart_rate_diagnostic_summary as heartRateDiagnosticSummary,
+	        	heart_rate_intervention_program as heartRateInterventionProgram,
+	        	blood_pressure_diagnostic_summary as bloodPressureDiagnosticSummary,
+	        	blood_pressure_intervention_program as bloodPressureInterventionProgram,
+	        	blood_sugar_diagnostic_summary as bloodSugarDiagnosticSummary,
+	        	blood_sugar_intervention_program as bloodSugarInterventionProgram,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.OrgUserHealthyFile" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        org_user_healthy_file (
+	        	id ,
+	        	org_id ,
+	        	org_user_id ,
+	        	head_img ,
+	        	status ,
+	        	birthday ,
+	        	sex ,
+	        	name ,
+	        	age ,
+	        	height ,
+	        	weight ,
+	        	blood_type ,
+	        	phone_number ,
+	        	id_number ,
+	        	vision_right ,
+	        	vision_left ,
+	        	hearing_right ,
+	        	hearing_left ,
+	        	sleep_status ,
+	        	drug_allergy ,
+	        	drug_use_record ,
+	        	exposure_history ,
+	        	operation_history ,
+	        	disease ,
+	        	family_disease_history ,
+	        	exercise_frequency ,
+	        	exercise_time ,
+	        	exercise_content ,
+	        	smoke_frequency ,
+	        	smoke_status ,
+	        	smoke_amount_perDay ,
+	        	smoke_length ,
+	        	drink_frequency ,
+	        	drink_type ,
+	        	drink_amount_perDay ,
+	        	drink_length ,
+	        	diet_frequency ,
+	        	diet_habits ,
+	        	diet_time ,
+	        	heart_rate_diagnostic_summary ,
+	        	heart_rate_intervention_program ,
+	        	blood_pressure_diagnostic_summary ,
+	        	blood_pressure_intervention_program ,
+	        	blood_sugar_diagnostic_summary ,
+	        	blood_sugar_intervention_program ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time ,
+	        	updator_id ,
+	        	update_time 
+	        ) VALUES (
+	        	#{id,javaType=long,jdbcType=INTEGER} ,
+	        	#{orgId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{orgUserId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{headImg,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{birthday,javaType=string,jdbcType=VARCHAR} ,
+	        	#{sex,javaType=integer,jdbcType=INTEGER} ,
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{age,javaType=integer,jdbcType=INTEGER} ,
+	        	#{height,javaType=long,jdbcType=DECIMAL} ,
+	        	#{weight,javaType=long,jdbcType=DECIMAL} ,
+	        	#{bloodType,javaType=string,jdbcType=VARCHAR} ,
+	        	#{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{idNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{visionRight,javaType=string,jdbcType=VARCHAR} ,
+	        	#{visionLeft,javaType=string,jdbcType=VARCHAR} ,
+	        	#{hearingRight,javaType=string,jdbcType=VARCHAR} ,
+	        	#{hearingLeft,javaType=string,jdbcType=VARCHAR} ,
+	        	#{sleepStatus,javaType=string,jdbcType=VARCHAR} ,
+	        	#{drugAllergy,javaType=string,jdbcType=VARCHAR} ,
+	        	#{drugUseRecord,javaType=string,jdbcType=VARCHAR} ,
+	        	#{exposureHistory,javaType=string,jdbcType=VARCHAR} ,
+	        	#{operationHistory,javaType=string,jdbcType=VARCHAR} ,
+	        	#{disease,javaType=string,jdbcType=VARCHAR} ,
+	        	#{familyDiseaseHistory,javaType=string,jdbcType=VARCHAR} ,
+	        	#{exerciseFrequency,javaType=string,jdbcType=VARCHAR} ,
+	        	#{exerciseTime,javaType=string,jdbcType=VARCHAR} ,
+	        	#{exerciseContent,javaType=string,jdbcType=VARCHAR} ,
+	        	#{smokeFrequency,javaType=string,jdbcType=VARCHAR} ,
+	        	#{smokeStatus,javaType=string,jdbcType=VARCHAR} ,
+	        	#{smokeAmountPerDay,javaType=string,jdbcType=VARCHAR} ,
+	        	#{smokeLength,javaType=string,jdbcType=VARCHAR} ,
+	        	#{drinkFrequency,javaType=string,jdbcType=VARCHAR} ,
+	        	#{drinkType,javaType=string,jdbcType=VARCHAR} ,
+	        	#{drinkAmountPerDay,javaType=string,jdbcType=VARCHAR} ,
+	        	#{drinkLength,javaType=string,jdbcType=VARCHAR} ,
+	        	#{dietFrequency,javaType=string,jdbcType=VARCHAR} ,
+	        	#{dietHabits,javaType=string,jdbcType=VARCHAR} ,
+	        	#{dietTime,javaType=string,jdbcType=VARCHAR} ,
+	        	#{heartRateDiagnosticSummary,javaType=string,jdbcType=VARCHAR} ,
+	        	#{heartRateInterventionProgram,javaType=string,jdbcType=VARCHAR} ,
+	        	#{bloodPressureDiagnosticSummary,javaType=string,jdbcType=VARCHAR} ,
+	        	#{bloodPressureInterventionProgram,javaType=string,jdbcType=VARCHAR} ,
+	        	#{bloodSugarDiagnosticSummary,javaType=string,jdbcType=VARCHAR} ,
+	        	#{bloodSugarInterventionProgram,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.OrgUserHealthyFile">
+	        UPDATE org_user_healthy_file SET
+			        <if test="@Ognl@isNotEmpty(orgId)">
+					org_id = #{orgId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(orgUserId)">
+					org_user_id = #{orgUserId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(headImg)">
+					head_img = #{headImg,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(status)">
+					status = #{status,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(birthday)">
+					birthday = #{birthday,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(sex)">
+					sex = #{sex,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(name)">
+					name = #{name,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(age)">
+					age = #{age,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(height)">
+					height = #{height,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(weight)">
+					weight = #{weight,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(bloodType)">
+					blood_type = #{bloodType,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(phoneNumber)">
+					phone_number = #{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(idNumber)">
+					id_number = #{idNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(visionRight)">
+					vision_right = #{visionRight,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(visionLeft)">
+					vision_left = #{visionLeft,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(hearingRight)">
+					hearing_right = #{hearingRight,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(hearingLeft)">
+					hearing_left = #{hearingLeft,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(sleepStatus)">
+					sleep_status = #{sleepStatus,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(drugAllergy)">
+					drug_allergy = #{drugAllergy,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(drugUseRecord)">
+					drug_use_record = #{drugUseRecord,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(exposureHistory)">
+					exposure_history = #{exposureHistory,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(operationHistory)">
+					operation_history = #{operationHistory,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(disease)">
+					disease = #{disease,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(familyDiseaseHistory)">
+					family_disease_history = #{familyDiseaseHistory,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(exerciseFrequency)">
+					exercise_frequency = #{exerciseFrequency,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(exerciseTime)">
+					exercise_time = #{exerciseTime,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(exerciseContent)">
+					exercise_content = #{exerciseContent,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(smokeFrequency)">
+					smoke_frequency = #{smokeFrequency,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(smokeStatus)">
+					smoke_status = #{smokeStatus,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(smokeAmountPerDay)">
+					smoke_amount_perDay = #{smokeAmountPerDay,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(smokeLength)">
+					smoke_length = #{smokeLength,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(drinkFrequency)">
+					drink_frequency = #{drinkFrequency,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(drinkType)">
+					drink_type = #{drinkType,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(drinkAmountPerDay)">
+					drink_amount_perDay = #{drinkAmountPerDay,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(drinkLength)">
+					drink_length = #{drinkLength,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(dietFrequency)">
+					diet_frequency = #{dietFrequency,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(dietHabits)">
+					diet_habits = #{dietHabits,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(dietTime)">
+					diet_time = #{dietTime,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(heartRateDiagnosticSummary)">
+					heart_rate_diagnostic_summary = #{heartRateDiagnosticSummary,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(heartRateInterventionProgram)">
+					heart_rate_intervention_program = #{heartRateInterventionProgram,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(bloodPressureDiagnosticSummary)">
+					blood_pressure_diagnostic_summary = #{bloodPressureDiagnosticSummary,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(bloodPressureInterventionProgram)">
+					blood_pressure_intervention_program = #{bloodPressureInterventionProgram,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(bloodSugarDiagnosticSummary)">
+					blood_sugar_diagnostic_summary = #{bloodSugarDiagnosticSummary,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(bloodSugarInterventionProgram)">
+					blood_sugar_intervention_program = #{bloodSugarInterventionProgram,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(remark)">
+					remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(creatorId)">
+					creator_id = #{creatorId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(createTime)">
+					create_time = #{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updatorId)">
+					updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updateTime)">
+					update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+				    </if>
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from org_user_healthy_file where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="OrgUserHealthyFileResult" flushCache="false">
+			select <include refid="orgUserHealthyFileColumns" />
+		    <![CDATA[
+			    from org_user_healthy_file 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="OrgUserHealthyFileResult" flushCache="false">
+			select <include refid="orgUserHealthyFileColumns" />
+			    from org_user_healthy_file 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="orgUserHealthyFileDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(orgId)">
+				and org_id = #{orgId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(orgUserId)">
+				and org_user_id = #{orgUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(headImg)">
+				and head_img = #{headImg}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(birthday)">
+				and birthday = #{birthday}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sex)">
+				and sex = #{sex}
+			</if>
+	       <if test="@Ognl@isNotEmpty(name)">
+				and name = #{name}
+			</if>
+	       <if test="@Ognl@isNotEmpty(age)">
+				and age = #{age}
+			</if>
+	       <if test="@Ognl@isNotEmpty(height)">
+				and height = #{height}
+			</if>
+	       <if test="@Ognl@isNotEmpty(weight)">
+				and weight = #{weight}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bloodType)">
+				and blood_type = #{bloodType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phoneNumber)">
+				and phone_number = #{phoneNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(idNumber)">
+				and id_number = #{idNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(visionRight)">
+				and vision_right = #{visionRight}
+			</if>
+	       <if test="@Ognl@isNotEmpty(visionLeft)">
+				and vision_left = #{visionLeft}
+			</if>
+	       <if test="@Ognl@isNotEmpty(hearingRight)">
+				and hearing_right = #{hearingRight}
+			</if>
+	       <if test="@Ognl@isNotEmpty(hearingLeft)">
+				and hearing_left = #{hearingLeft}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sleepStatus)">
+				and sleep_status = #{sleepStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(drugAllergy)">
+				and drug_allergy = #{drugAllergy}
+			</if>
+	       <if test="@Ognl@isNotEmpty(drugUseRecord)">
+				and drug_use_record = #{drugUseRecord}
+			</if>
+	       <if test="@Ognl@isNotEmpty(exposureHistory)">
+				and exposure_history = #{exposureHistory}
+			</if>
+	       <if test="@Ognl@isNotEmpty(operationHistory)">
+				and operation_history = #{operationHistory}
+			</if>
+	       <if test="@Ognl@isNotEmpty(disease)">
+				and disease = #{disease}
+			</if>
+	       <if test="@Ognl@isNotEmpty(familyDiseaseHistory)">
+				and family_disease_history = #{familyDiseaseHistory}
+			</if>
+	       <if test="@Ognl@isNotEmpty(exerciseFrequency)">
+				and exercise_frequency = #{exerciseFrequency}
+			</if>
+	       <if test="@Ognl@isNotEmpty(exerciseTime)">
+				and exercise_time = #{exerciseTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(exerciseContent)">
+				and exercise_content = #{exerciseContent}
+			</if>
+	       <if test="@Ognl@isNotEmpty(smokeFrequency)">
+				and smoke_frequency = #{smokeFrequency}
+			</if>
+	       <if test="@Ognl@isNotEmpty(smokeStatus)">
+				and smoke_status = #{smokeStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(smokeAmountPerDay)">
+				and smoke_amount_perDay = #{smokeAmountPerDay}
+			</if>
+	       <if test="@Ognl@isNotEmpty(smokeLength)">
+				and smoke_length = #{smokeLength}
+			</if>
+	       <if test="@Ognl@isNotEmpty(drinkFrequency)">
+				and drink_frequency = #{drinkFrequency}
+			</if>
+	       <if test="@Ognl@isNotEmpty(drinkType)">
+				and drink_type = #{drinkType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(drinkAmountPerDay)">
+				and drink_amount_perDay = #{drinkAmountPerDay}
+			</if>
+	       <if test="@Ognl@isNotEmpty(drinkLength)">
+				and drink_length = #{drinkLength}
+			</if>
+	       <if test="@Ognl@isNotEmpty(dietFrequency)">
+				and diet_frequency = #{dietFrequency}
+			</if>
+	       <if test="@Ognl@isNotEmpty(dietHabits)">
+				and diet_habits = #{dietHabits}
+			</if>
+	       <if test="@Ognl@isNotEmpty(dietTime)">
+				and diet_time = #{dietTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(heartRateDiagnosticSummary)">
+				and heart_rate_diagnostic_summary = #{heartRateDiagnosticSummary}
+			</if>
+	       <if test="@Ognl@isNotEmpty(heartRateInterventionProgram)">
+				and heart_rate_intervention_program = #{heartRateInterventionProgram}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bloodPressureDiagnosticSummary)">
+				and blood_pressure_diagnostic_summary = #{bloodPressureDiagnosticSummary}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bloodPressureInterventionProgram)">
+				and blood_pressure_intervention_program = #{bloodPressureInterventionProgram}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bloodSugarDiagnosticSummary)">
+				and blood_sugar_diagnostic_summary = #{bloodSugarDiagnosticSummary}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bloodSugarInterventionProgram)">
+				and blood_sugar_intervention_program = #{bloodSugarInterventionProgram}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="OrgUserHealthyFileResult"  flushCache="false">
+    	select <include refid="orgUserHealthyFileColumns" />
+	    from org_user_healthy_file 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from org_user_healthy_file 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from org_user_healthy_file 
+		<include refid="orgUserHealthyFileDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="OrgUserHealthyFileResult">
+    	select <include refid="orgUserHealthyFileColumns" />
+	    from org_user_healthy_file 
+		<include refid="orgUserHealthyFileDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="OrgUserHealthyFileResult">
+    	select <include refid="orgUserHealthyFileColumns" />
+	    from org_user_healthy_file 
+		<include refid="orgUserHealthyFileDynamicWhere"/>
+    </select>
+
+
+	
+</mapper>

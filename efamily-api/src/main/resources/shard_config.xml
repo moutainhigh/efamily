@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE shardingConfig PUBLIC "-//shardbatis.googlecode.com//DTD Shardbatis 2.0//EN"  
+  "http://shardbatis.googlecode.com/dtd/shardbatis-config.dtd">  
+<shardingConfig>
+        <!-- 
+                parseList可选配置
+                如果配置了parseList,只有在parseList范围内的sql才会被解析和修改，配置 dao中的方法
+        -->
+       <parseList>
+               <value>com.winterframework.efamily.entity.EjlLocation.getUserLatestLocation</value>
+                <value>com.winterframework.efamily.entity.EjlLocation.getListAfterByDeviceIdAndTime</value>
+                <value>com.winterframework.efamily.entity.EjlLocation.getListBetweenByDeviceIdAndTime</value>
+                <value>com.winterframework.efamily.entity.EjlHealthHeartRate.getHealthHeartRateByTime</value>
+                <value>com.winterframework.efamily.entity.EjlHealthHeartRate.getLastUserHeartRate</value>
+                <value>com.winterframework.efamily.entity.EjlHealthStepCount.getHealthStepCountByTime</value>
+                
+       </parseList>
+        <strategy tableName="ejl_location" strategyClass="com.winterframework.efamily.shardStrategy.ShardStrategyImpl"/>
+        <strategy tableName="ejl_health_heart_rate" strategyClass="com.winterframework.efamily.shardStrategy.ShardStrategyImpl"/>
+        <strategy tableName="ejl_health_step_count" strategyClass="com.winterframework.efamily.shardStrategy.ShardStrategyImpl"/>
+</shardingConfig>

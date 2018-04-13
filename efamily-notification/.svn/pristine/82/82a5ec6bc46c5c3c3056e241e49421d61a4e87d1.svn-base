@@ -1,0 +1,50 @@
+package com.winterframework.efamily.notification.service.impl;
+
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.winterframework.efamily.base.enums.Separator;
+import com.winterframework.efamily.base.redis.RedisQueue;
+import com.winterframework.efamily.base.utils.JsonUtils;
+import com.winterframework.efamily.base.utils.MD5Util;
+import com.winterframework.efamily.notification.enums.QueuePrefix;
+import com.winterframework.efamily.notification.exception.NotificationException;
+import com.winterframework.efamily.notification.model.JpushParameter;
+import com.winterframework.efamily.notification.model.ResultCode;
+import com.winterframework.efamily.notification.service.INotificationTpService;
+
+@Service("notificationTpServiceImpl")
+public class NotificationTpServiceImpl implements INotificationTpService{
+	private static final Logger log= LoggerFactory.getLogger(NotificationTpServiceImpl.class);
+	@Resource(name="redisQueue")
+	private RedisQueue redisQueue;
+	
+	public void jpush(Long userId, Long deviceId, String title,Map<String,String> data) throws NotificationException {
+		try{
+			//往待第三方推送队列扔 异步处理
+			JpushParameter param=new JpushParameter();
+			param.setAlias(getAlias(userId, deviceId));
+			param.setAlert(title);
+			param.setData(data);
+			
+			redisQueue.add(QueuePrefix.NOTY_TP_PUSH, JsonUtils.toJson(param));
+			//JPushClientUtil.sendPushBy(getAlias(userId, deviceId), title,data,appType);
+		}catch(Exception e){
+			log.error("jpush failed.userId="+userId+" deviceId="+deviceId);
+			throw new NotificationException(ResultCode.JPUSH_FAILED);
+		}
+	};
+	private String getAlias(Long userId,Long deviceId){
+		String targetKey=userId+"";
+		if(null!=deviceId){
+			targetKey+=Separator.vertical;
+			targetKey+=deviceId;
+		}
+		return MD5Util.getMD5Format(targetKey);
+	}
+}

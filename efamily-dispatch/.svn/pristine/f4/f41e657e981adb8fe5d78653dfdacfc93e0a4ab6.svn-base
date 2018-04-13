@@ -1,0 +1,3 @@
+#application configuration
+filePath=/opt/winter-device/webapps/ROOT/images/
+server.url.ccontrol=http://localhost:6089/

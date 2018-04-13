@@ -1,0 +1,135 @@
+package com.winterframework.efamily.service.impl;
+
+import java.util.Date;
+import java.util.List;
+
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.winterframework.efamily.base.utils.DateUtils;
+import com.winterframework.efamily.core.base.BaseServiceImpl;
+import com.winterframework.efamily.dao.IEfComWeatherDao;
+import com.winterframework.efamily.entity.EfWeather;
+import com.winterframework.efamily.service.IEfComWeatherService;
+
+@Service("ejlComWeatherServiceImpl")
+@Transactional(rollbackFor = Exception.class)
+public class EjlComWeatherServiceImpl extends
+		BaseServiceImpl<IEfComWeatherDao, EfWeather> implements
+		IEfComWeatherService {
+	@Resource(name = "efComWeatherDao")
+	private IEfComWeatherDao efComWeatherDao;
+
+	/**
+	 * Title: getEntityDao Description:
+	 * 
+	 * @return
+	 * @see com.winterframework.efamily.core.base.BaseServiceImpl#getEntityDao()
+	 */
+	@Override
+	protected IEfComWeatherDao getEntityDao() {
+		return efComWeatherDao;
+	}
+
+	/**
+	 * Title: deleteAll Description:
+	 * 
+	 * @throws Exception
+	 * @see com.winterframework.efamily.service.IEfComWeatherService#deleteAll()
+	 */
+	@Override
+	public void deleteAll() throws Exception {
+		efComWeatherDao.deleteAll();
+	}
+
+	@Override
+	public EfWeather getWeatherByCityName(String cityName) throws Exception {
+		return efComWeatherDao.getWeatherByCityName(cityName);
+	}
+
+	@Override
+	public int update(EfWeather efWeather) throws Exception {
+		return efComWeatherDao.update(efWeather);
+	}
+
+	/**
+	 * Title: saveOne Description:
+	 * 
+	 * @param efWeather
+	 * @throws Exception
+	 * @see com.winterframework.efamily.service.IEfComWeatherService#saveOne(com.winterframework.efamily.entity.EfWeather)
+	 */
+	@Override
+	public void saveOne(EfWeather efWeather) throws Exception {
+		EfWeather newOne = efComWeatherDao.getNewWeatherByCityName(efWeather
+				.getCityName());
+		if (newOne != null) {
+			String dbDate = DateUtils.format(newOne.getSolarDate());
+			String insertDate = DateUtils.format(efWeather.getSolarDate());
+			if (dbDate.equals(insertDate)) {
+				if (!newOne.getWeather().equals(efWeather.getWeather())
+						|| !newOne.getTemperatureCurrent().equals(
+								efWeather.getTemperatureCurrent())
+						|| !newOne.getTemperature().equals(
+								efWeather.getTemperature())
+						|| !newOne.getPollution().equals(
+								efWeather.getPollution())) {
+					efComWeatherDao.insert(efWeather);
+				}
+				
+			} else {
+				efComWeatherDao.insert(efWeather);
+			}
+		} else {
+			efComWeatherDao.insert(efWeather);
+		}
+	}
+
+	@Override
+	public EfWeather getNewWeatherByCityName(String cityName) throws Exception {
+		return efComWeatherDao.getNewWeatherByCityName(cityName);
+	}
+
+	@Override
+	public void saveFutherOne(EfWeather efWeather) throws Exception {
+		EfWeather entity = new EfWeather();
+		entity.setCityName(efWeather.getCityName());
+		entity.setSolarDate(efWeather.getSolarDate());
+		EfWeather newOne = efComWeatherDao.selectOneObjByAttribute(entity);
+		if (newOne != null) {
+			String dbDate = DateUtils.format(newOne.getSolarDate());
+			String insertDate = DateUtils.format(efWeather.getSolarDate());
+			if (dbDate.equals(insertDate)) {
+				if (!newOne.getWeather().equals(efWeather.getWeather())
+						|| !newOne.getTemperatureCurrent().equals(
+								efWeather.getTemperatureCurrent())
+						|| !newOne.getTemperature().equals(
+								efWeather.getTemperature())
+						|| !newOne.getPollution().equals(
+								efWeather.getPollution())) {
+					efWeather.setId(newOne.getId());
+					efComWeatherDao.update(efWeather);
+				}
+				
+			} else {
+				efComWeatherDao.insert(efWeather);
+			}
+		} else {
+			efComWeatherDao.insert(efWeather);
+		}
+		
+	}
+
+	@Override
+	public List<EfWeather> getFutherWeather(String cityName, Date beginDate,
+			Integer limit) throws Exception {
+		return efComWeatherDao.getFutherWeather(cityName, beginDate, limit);
+
+	}
+	
+	
+	
+}

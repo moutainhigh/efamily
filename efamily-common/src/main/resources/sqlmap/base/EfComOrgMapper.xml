@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfOrg">
+	<resultMap id="EfOrgResult" type="com.winterframework.efamily.entity.EfOrg">
+	</resultMap>
+	<resultMap id="EmployeeCanOptOrgResult" type="com.winterframework.efamily.entity.EmployeeCanOptOrg">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="efOrgColumns">
+	    <![CDATA[
+	        	id as id,
+	        	name as name,
+	        	number as number,
+	        	customer_id as customerId,
+	        	scale as scale,
+	        	province as province,
+	        	city as city,
+	        	county as county,
+	        	phone as phone,
+	        	ikey as ikey,
+	        	ukey as ukey,
+	        	status as status,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EfOrg" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ef_org (
+	        	id ,
+	        	name ,
+	        	number ,
+	        	customer_id ,
+	        	scale ,
+	        	province ,
+	        	city ,
+	        	county ,
+	        	phone ,
+	        	ikey ,
+	        	ukey ,
+	        	status ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time ,
+	        	updator_id ,
+	        	update_time 
+	        ) VALUES (
+	        	#{id,javaType=long,jdbcType=INTEGER} ,
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{number,javaType=string,jdbcType=VARCHAR} ,
+	        	#{customer_id,javaType=long,jdbcType=INTEGER} ,
+	        	#{scale,javaType=string,jdbcType=VARCHAR} ,
+	        	#{province,javaType=string,jdbcType=VARCHAR} ,
+	        	#{city,javaType=string,jdbcType=VARCHAR} ,
+	        	#{county,javaType=string,jdbcType=VARCHAR} ,
+	        	#{phone,javaType=string,jdbcType=VARCHAR} ,
+	        	#{ikey,javaType=string,jdbcType=VARCHAR} ,
+	        	#{ukey,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EfOrg">
+	    <![CDATA[
+	        UPDATE ef_org SET
+		        name = #{name,javaType=string,jdbcType=VARCHAR} ,
+		        number = #{number,javaType=string,jdbcType=VARCHAR} ,
+		        customer_id = #{customerId,javaType=long,jdbcType=DECIMAL} ,
+		        scale = #{scale,javaType=string,jdbcType=VARCHAR} ,
+		        province = #{province,javaType=string,jdbcType=VARCHAR} ,
+		        city = #{city,javaType=string,jdbcType=VARCHAR} ,
+		        county = #{county,javaType=string,jdbcType=VARCHAR} ,
+		        phone = #{phone,javaType=string,jdbcType=VARCHAR} ,
+		        ikey = #{ikey,javaType=string,jdbcType=VARCHAR} ,
+		        ukey = #{ukey,javaType=string,jdbcType=VARCHAR} ,
+		        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        creator_id = #{creatorId,javaType=long,jdbcType=DECIMAL} ,
+		        create_time = #{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ef_org where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfOrgResult" flushCache="false">
+			select <include refid="efOrgColumns" />
+		    <![CDATA[
+			    from ef_org 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EfOrgResult" flushCache="false">
+			select <include refid="efOrgColumns" />
+			    from ef_org 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="efOrgDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(name)">
+				and name = #{name}
+			</if>
+	       <if test="@Ognl@isNotEmpty(number)">
+				and number = #{number}
+			</if>
+			<if test="@Ognl@isNotEmpty(customerId)">
+				and customer_id = #{customerId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(scale)">
+				and scale = #{scale}
+			</if>
+	       <if test="@Ognl@isNotEmpty(province)">
+				and province = #{province}
+			</if>
+	       <if test="@Ognl@isNotEmpty(city)">
+				and city = #{city}
+			</if>
+	       <if test="@Ognl@isNotEmpty(county)">
+				and county = #{county}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phone)">
+				and phone = #{phone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ikey)">
+				and ikey = #{ikey}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ukey)">
+				and ukey = #{ukey}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EfOrgResult"  flushCache="false">
+    	select <include refid="efOrgColumns" />
+	    from ef_org 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ef_org 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ef_org 
+		<include refid="efOrgDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EfOrgResult">
+    	select <include refid="efOrgColumns" />
+	    from ef_org 
+		<include refid="efOrgDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EfOrgResult">
+    	select <include refid="efOrgColumns" />
+	    from ef_org 
+		<include refid="efOrgDynamicWhere"/>
+    </select>
+    
+    <select id="getEfOrgByImei" parameterType="string" resultMap="EfOrgResult" >
+    	select <include refid="efOrgColumns" />
+	    from ef_org 
+		where id=(select org_id from ef_org_device where imei =#{imei})
+    </select>
+	
+	<select id="getEmployeeCanOptOrgList" parameterType="long" resultMap="EmployeeCanOptOrgResult" >
+    	select 
+    	   	    id as orgId,
+	        	name as name,
+	        	province as province,
+	        	city as city,
+	        	county as county
+	    from ef_org 
+		where id in (select oea.org_id from org_employee_auth oea where org_employee_id =#{orgEmployeeId} and status=1)
+    </select>
+    
+    <select id="getEmployeeCanOptOrgByAddressList" parameterType="long" resultMap="EmployeeCanOptOrgResult" >
+    	select 
+    	   	    id as orgId,
+	        	name as name,
+	        	province as province,
+	        	city as city,
+	        	county as county
+	    from ef_org 
+		where id in (select oea.org_id from org_employee_auth oea where org_employee_id =#{orgEmployeeId} and status=1)
+			<if test="@Ognl@isNotEmpty(province)">
+				and province like CONCAT('%',#{province},'%')
+			</if>
+			<if test="@Ognl@isNotEmpty(city)">
+				and city like CONCAT('%',#{city},'%')
+			</if>
+			<if test="@Ognl@isNotEmpty(county)">
+				and county like CONCAT('%',#{county},'%')
+			</if>
+    </select>
+    
+	
+</mapper>

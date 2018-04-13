@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlDeviceMonitor">
+	<resultMap id="EjlDeviceMonitorResult" type="com.winterframework.efamily.entity.EjlDeviceMonitor">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlDeviceMonitorColumns">
+	    <![CDATA[
+	        	id as id,
+	        	user_id as userId,
+	        	device_user_id as deviceUserId,
+	        	device_id as deviceId,
+	        	start_time as startTime,
+	        	end_time as endTime,
+	        	status as status,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlDeviceMonitor" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_device_monitor (
+	        	user_id ,
+	        	device_user_id ,
+	        	device_id ,
+	        	start_time ,
+	        	end_time ,
+	        	status ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time 
+	        ) VALUES (
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deviceUserId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{startTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{endTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlDeviceMonitor">
+	    <![CDATA[
+	        UPDATE ejl_device_monitor SET
+		        user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		        device_user_id = #{deviceUserId,javaType=long,jdbcType=DECIMAL} ,
+		        device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+		        start_time = #{startTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        end_time = #{endTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_device_monitor where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlDeviceMonitorResult" flushCache="false">
+			select <include refid="ejlDeviceMonitorColumns" />
+		    <![CDATA[
+			    from ejl_device_monitor 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlDeviceMonitorResult" flushCache="false">
+			select <include refid="ejlDeviceMonitorColumns" />
+			    from ejl_device_monitor 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="ejlDeviceMonitorDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceUserId)">
+				and device_user_id = #{deviceUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceId)">
+				and device_id = #{deviceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(startTime)">
+				and start_time = #{startTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(endTime)">
+				and end_time = #{endTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlDeviceMonitorResult"  flushCache="false">
+    	select <include refid="ejlDeviceMonitorColumns" />
+	    from ejl_device_monitor 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_device_monitor 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_device_monitor 
+		<include refid="ejlDeviceMonitorDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlDeviceMonitorResult">
+    	select <include refid="ejlDeviceMonitorColumns" />
+	    from ejl_device_monitor 
+		<include refid="ejlDeviceMonitorDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlDeviceMonitorResult">
+    	select <include refid="ejlDeviceMonitorColumns" />
+	    from ejl_device_monitor 
+		<include refid="ejlDeviceMonitorDynamicWhere"/>
+    </select>
+
+
+	
+</mapper>

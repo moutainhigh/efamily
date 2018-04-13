@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlDeviceAddressList">
+    <select id="getAddressListByUser" parameterType="long" resultMap="EjlDeviceAddressListResult"  flushCache="false">
+    	select <include refid="ejlDeviceAddressListColumns" />
+	    from EJL_DEVICE_ADDRESS_LIST 
+		where USER_ID = #{userId}
+    </select>
+    <delete id="deleteByUserId" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from EJL_DEVICE_ADDRESS_LIST where
+		        user_id = #{userId} 
+	    ]]>
+	</delete>   
+</mapper>

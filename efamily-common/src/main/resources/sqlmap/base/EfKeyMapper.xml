@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfKey">
+	<resultMap id="EfKeyResult" type="com.winterframework.efamily.entity.EfKey">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfKeyColumns">
+       	id as id,
+       	ukey as ukey,
+       	customer_id as customerId,
+       	remark as remark,
+       	creator_id as creatorId,
+       	create_time as createTime,
+       	updator_id as updatorId,
+       	update_time as updateTime
+	</sql>
+	
+		<sql id="efKeyDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ukey)">
+				and ukey = #{ukey}
+			</if>
+	       <if test="@Ognl@isNotEmpty(customerId)">
+				and customer_id = #{customerId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		   </where>
+	    </sql>
+	
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EfKey" 
+			useGeneratedKeys="true" keyProperty="id" flushCache="true"> 
+	        INSERT INTO
+	        ef_key (
+		       	ukey,
+		       	customer_id,
+		       	remark,
+		       	creator_id,
+		       	create_time
+	        ) VALUES (
+	        	#{ukey,javaType=string,jdbcType=VARCHAR} ,
+	        	#{customerId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}
+	        )
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EfKey">
+	        UPDATE ef_key SET
+		        ukey = #{ukey,javaType=string,jdbcType=VARCHAR} ,
+		        customer_id = #{customerId,javaType=long,jdbcType=DECIMAL} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP}
+	        WHERE 
+		        id = #{id}
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	        delete from ef_key where id = #{id} 
+	   </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfKeyResult" flushCache="false">
+			select <include refid="EfKeyColumns" />
+		      from ef_key 
+	         where 
+	        	id = #{id} 
+		</select>
+		<select id="getByKey" resultMap="EfKeyResult" flushCache="false">
+			select <include refid="EfKeyColumns" />
+		      from ef_key 
+	         where 
+	        	ukey = #{ukey} 
+		</select>
+		 <select id="getObjByAttribute" resultMap="EfKeyResult">
+    	    select <include refid="EfKeyColumns" />
+	        from ef_key 
+		    <include refid="efKeyDynamicWhere"/>
+         </select>
+
+</mapper>

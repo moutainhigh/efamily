@@ -1,0 +1,87 @@
+{
+    "userBaseInfo": {
+        "memberId": 10002,
+        "orgId": 100,
+        "userId": 1479,
+        "name": "李老八",
+        "status": 1,
+        "birthday": "1999-01-01",
+        "sex": 1,
+        "age": 20,
+        "height": 187,
+        "weight": 90,
+        "phoneNumber": "13416898877",
+        "liveAddress": "深圳南山科兴科学院",
+        "emergencyContact": "刘天鹏",
+        "emergencyContactPhone": "13644775588",
+        "emergencyContactRelation": "父子",
+        "dietTaboo": "高血压，注意饮食",
+        "interests": "打球 游泳",
+        "householdAddress": "湖南长沙岳麓区10号",
+        "guardianName": "李老大",
+        "guardianPhoneNumber": null,
+        "nations": "汉族",
+        "bloodType": "XO",
+        "profession": "程序猿",
+        "rhNegative": "阴性",
+        "workUnit": "华为",
+        "educationDegree": "硕士",
+        "incomeSource": "炒股",
+        "maritalStatus": "未婚",
+        "healthStatus": null,
+        "bodyStatus": "很好",
+        "remark": "手动添加测试"
+    },
+    "time": "1475141550653",
+    "resultCode": "0",
+    "userLocationInfo": {
+        "userId": 1479,
+        "headImg": "1",
+        "userName": "爷爷42",
+        "location": "22.55328086,113.93939687",
+        "type": 2,
+        "time": 1475053642000,
+        "addressDesc": "广东省深圳市南山区科技北二路靠近富华科技大厦",
+        "duration": 5
+    },
+    "userHealthInfo": {
+        "bloodSugarInfo": [{
+            "value": 50,
+            "fromTime": 1474945200000,
+            "toTime": 1474945500000,
+            "flag": 1
+        }, {
+            "value": 55,
+            "fromTime": 1474941600000,
+            "toTime": 1474941900000,
+            "flag": 2
+        }, {
+            "value": 59,
+            "fromTime": 1474948800000,
+            "toTime": 1474949100000,
+            "flag": 2
+        }],
+        "heartRateInfo": [{
+            "value": 80,
+            "fromTime": 1474945200000,
+            "toTime": 1474945500000,
+            "flag": 2
+        }, {
+            "value": 70,
+            "fromTime": 1474941600000,
+            "toTime": 1474941900000,
+            "flag": 1
+        }, {
+            "value": 60,
+            "fromTime": 1474948800000,
+            "toTime": 1474949100000,
+            "flag": 1
+        }],
+        "bloodPressureInfo": [{
+            "value": 99,
+            "fromTime": 1474948800000,
+            "toTime": 1474949100000,
+            "flag": 2
+        }]
+    }
+}

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.UserHealtyConfig">
+	<resultMap id="UserHealtyConfigResult" type="com.winterframework.efamily.entity.UserHealtyConfig">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="UserHealtyConfigResult">
+	    <![CDATA[
+	        	ID as id,
+	        	USER_ID as userId,
+	        	DEVICE_ID as deviceId,
+	        	SITTING_SWITCH as sittingSwitch,
+	        	STEP_SWITCH as stepSwitch,
+	        	HEART_SWITCH as heartSwitch,
+	        	CLIMB_SWITCH as climbSwitch,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	sleep_switch as sleepSwitch
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.UserHealtyConfig" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+			   	    
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_user_health_config (
+	        	USER_ID,
+	        	DEVICE_ID,
+	        	SITTING_SWITCH,
+	        	STEP_SWITCH,
+	        	HEART_SWITCH,
+	        	CLIMB_SWITCH,
+	        	remark ,
+	        	creator_id ,
+	        	create_time ,
+	        	sleep_switch
+	        ) VALUES (
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{sittingSwitch,javaType=integer,jdbcType=INTEGER} ,
+	        	#{stepSwitch,javaType=integer,jdbcType=INTEGER},
+	        	#{heartSwitch,javaType=integer,jdbcType=INTEGER},
+	        	#{climbSwitch,javaType=integer,jdbcType=INTEGER} , 
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP},
+	        	#{sleepSwitch,javaType=integer,jdbcType=INTEGER}
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlFunction">
+
+	        UPDATE ejl_user_health_config 
+	        <set>
+		        <if test="@Ognl@isNotEmpty(sittingSwitch)">
+		        SITTING_SWITCH = #{sittingSwitch,javaType=integer,jdbcType=INTEGER} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(stepSwitch)">
+		        STEP_SWITCH = #{stepSwitch,javaType=integer,jdbcType=INTEGER},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(heartSwitch)">
+		        HEART_SWITCH = #{heartSwitch,javaType=integer,jdbcType=INTEGER},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(climbSwitch)">
+		        CLIMB_SWITCH = #{climbSwitch,javaType=integer,jdbcType=INTEGER},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(remark)">
+				remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+				</if>
+			    <if test="@Ognl@isNotEmpty(updatorId)">
+				updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+				</if>
+			    <if test="@Ognl@isNotEmpty(updateTime)">
+			    update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} ,
+				</if>
+				<if test="@Ognl@isNotEmpty(userId)">
+		        USER_ID = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		    	</if>
+		     	<if test="@Ognl@isNotEmpty(deviceId)">
+		        DEVICE_ID = #{deviceId,javaType=long,jdbcType=DECIMAL},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(sleepSwitch)">
+		        sleep_switch = #{sleepSwitch,javaType=integer,jdbcType=INTEGER}
+		        </if>
+		        </set>
+	        WHERE 
+		        ID = #{id} 
+
+		</update>
+		
+	  
+	    <select id="getById" parameterType="long" resultMap="UserHealtyConfigResult" flushCache="false">
+			select <include refid="UserHealtyConfigResult" />
+		    <![CDATA[
+			    from ejl_user_health_config 
+		        where 
+		        ID = #{id} 
+		    ]]>
+		</select>	
+		
+		<select id="getByDeviceIdAndUser" parameterType="hashMap" resultMap="UserHealtyConfigResult" flushCache="false">
+			select <include refid="UserHealtyConfigResult" />
+		    from ejl_user_health_config 
+	        where device_id = #{deviceId}
+	          and user_id = #{userId} 
+		</select>
+
+
+	
+
+</mapper>

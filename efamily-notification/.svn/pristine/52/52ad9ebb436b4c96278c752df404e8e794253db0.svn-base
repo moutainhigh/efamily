@@ -1,0 +1,115 @@
+package com.winterframework.efamily.notification.service.impl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.winterframework.efamily.base.exception.BizException;
+import com.winterframework.efamily.base.model.Context;
+import com.winterframework.efamily.base.model.Notification;
+import com.winterframework.efamily.base.model.NotyMessage;
+import com.winterframework.efamily.base.model.NotyRule;
+import com.winterframework.efamily.base.model.NotyTarget;
+import com.winterframework.efamily.base.model.NotyTask;
+import com.winterframework.efamily.base.utils.DateUtils;
+import com.winterframework.efamily.dto.notification.NotificationInner;
+import com.winterframework.efamily.entity.NotificationTask;
+import com.winterframework.efamily.notification.NotyRuleFactory;
+import com.winterframework.efamily.notification.enums.PushStatus;
+import com.winterframework.efamily.notification.exception.NotificationException;
+import com.winterframework.efamily.notification.service.IConnectService;
+import com.winterframework.efamily.notification.service.INotificationService;
+import com.winterframework.efamily.notification.service.INotyTaskService;
+import com.winterframework.efamily.service.INotificationTaskService;
+import com.winterframework.efamily.utils.HttpUtil;
+import com.winterframework.modules.spring.exetend.PropertyConfig;
+
+@Service("notificationServiceImpl")
+public class NotificationServiceImpl implements INotificationService{
+	private static final Logger log= LoggerFactory.getLogger(NotificationServiceImpl.class);
+	@PropertyConfig("server.url.app")
+	private String serverUrl;
+	@Resource(name="httpUtil")
+	protected HttpUtil httpUtil;
+	@PropertyConfig("noty.task.save")
+	private String urlPath;
+	@Resource(name="notificationTaskServiceImpl")
+	private INotificationTaskService notificationTaskService;
+	
+	@Resource(name="notyTaskNewServiceImpl")
+	private INotyTaskService notyTaskService;
+	@Resource(name="connectServiceImpl")
+	private IConnectService connectService;
+	
+	
+	@Override
+	public Long notify(Context ctx,Notification notification) throws NotificationException{
+		NotyTarget target=notification.getTarget();
+		NotyMessage message=notification.getMessage();
+		NotyMessage.Type type=message.getType();
+		Map<String,String> data=null!=message.getData()?message.getData():new HashMap<String,String>();
+		Long userId=target.getUserId();
+		Long deviceId=target.getDeviceId();
+		
+		//可以异步
+		NotificationTask notificationTask=new NotificationTask();
+		try{
+			String remark = "noticeType="+data.get("noticeType")+";command="+data.get("command");
+			notificationTask.setNotyType(type.getCode());
+			notificationTask.setMessageId(message.getId());
+			notificationTask.setUserId(userId);
+			notificationTask.setDeviceId(deviceId);
+			notificationTask.setStatus(NotyTask.Status.UN_SEND.getCode());
+			notificationTask.setRemark(remark);
+			notificationTaskService.save(ctx,notificationTask);
+		}catch(BizException e){
+			log.error("notification task save failed.userId="+userId+" deviceId="+deviceId,e);
+		}
+		Long taskId=notificationTask.getId();
+		if(null!=target && null==target.getDeviceId()){
+			data.put("notyType", type.getCode()+"");
+			data.put("notyId", taskId+"");			
+		}
+		if(!notification.isRealTime()){
+			NotyRule rule=NotyRuleFactory.getInstance(type);
+			NotyTask task=new NotyTask(); 
+			task.setRule(rule);
+			task.setTarget(target);
+			task.setCommand(message.getCommand());
+			task.setNotyType(type);
+			task.setData(data);
+			task.setTaskTime(DateUtils.getCurTime());
+			task.setOffline(Boolean.FALSE);
+			task.setSentOffline(Boolean.FALSE);
+			task.setId(taskId);
+			notyTaskService.doProcess(task);	
+		}else{
+			notifyRealTime(userId,deviceId,taskId,message.getCommand(),data);
+		}
+		return taskId;
+	}
+	private void notifyRealTime(Long userId,Long deviceId,Long taskId,int command,Map<String,String> data){ 
+		NotificationInner notificationInner=new NotificationInner(userId,deviceId);
+		notificationInner.setCommand(command);
+		notificationInner.setData(data);
+		try{
+			PushStatus pushStatus=connectService.push(notificationInner);
+			
+			//待加监控记录
+			if(pushStatus.equals(PushStatus.SUCCESS)){
+				log.error("notify real time success.userId="+userId+" deviceId="+deviceId+" command="+command);
+			}else if(pushStatus.equals(PushStatus.OFFLINE)){
+				log.error("notify real time offline.userId="+userId+" deviceId="+deviceId+" command="+command);
+			}else{
+				log.error("notify real time failed.userId="+userId+" deviceId="+deviceId+" command="+command);
+			}
+		}catch(Exception e){
+			log.error("push real time failed. userId="+userId+" deviceId="+deviceId+" command="+command,e);
+		}
+	}
+}

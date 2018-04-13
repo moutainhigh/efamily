@@ -1,0 +1,5 @@
+##
+server.connect.push=push/
+server.connect.jpush=push/jpush
+server.connect.channel.connect=channel/connect
+

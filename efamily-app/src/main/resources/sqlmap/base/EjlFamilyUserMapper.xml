@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlFamilyUser">
+	
+		<update id="updateStatusAndManageType" parameterType="com.winterframework.efamily.entity.EjlFamilyUser">
+	        UPDATE EJL_FAMILY_USER SET
+	        	<if test="@Ognl@isNotEmpty(updatorId)">
+                            updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}, 
+                </if>
+                <if test="@Ognl@isNotEmpty(updateTime)">
+                            update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} , 
+                </if>
+		        STATUS = #{status,javaType=long,jdbcType=DECIMAL} ,
+		        MANAGE_TYPE = #{manageType,javaType=long,jdbcType=DECIMAL}
+	        WHERE 
+		        USER_ID = #{userId} 
+		        and FAMILY_ID = #{familyId}
+		</update>
+		<delete id="deleteUserBySwitchFamily" parameterType="hashmap">
+	    <![CDATA[
+	        delete from EJL_FAMILY_USER 
+	        where
+		        USER_ID = #{userId} 
+		        and FAMILY_ID != #{familyId}
+	    ]]>
+	    </delete>  
+		<update id="quitFamily" parameterType="hashmap">
+	        UPDATE EJL_FAMILY_USER SET
+		        <if test="@Ognl@isNotEmpty(updatorId)">
+                            updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}, 
+                </if>
+                <if test="@Ognl@isNotEmpty(updateTime)">
+                            update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} , 
+                </if>
+                STATUS = 1
+	        WHERE 
+		        USER_ID = #{userId} 
+		        and FAMILY_ID = #{familyId}
+		</update>
+	 
+    <update id="updateAttrByUserIdAndFamilyId" parameterType="com.winterframework.efamily.entity.EjlFamilyUser">
+	        UPDATE ejl_family_user  
+		       <set>
+				       <if test="@Ognl@isNotEmpty(status)">
+							 STATUS = #{status,javaType=long,jdbcType=DECIMAL} ,
+						</if>
+				       <if test="@Ognl@isNotEmpty(type)">
+							 TYPE = #{type,javaType=long,jdbcType=DECIMAL} ,
+						</if>
+						<if test="@Ognl@isNotEmpty(remark)">
+                            remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+                        </if>
+                        <if test="@Ognl@isNotEmpty(updatorId)">
+                            updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}, 
+                        </if>
+                        <if test="@Ognl@isNotEmpty(updateTime)">
+                            update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} , 
+                        </if>
+                        <if test="@Ognl@isNotEmpty(isForbitSpeak)">
+                            is_forbit_speak = #{isForbitSpeak,javaType=integer,jdbcType=INTEGER} 
+                        </if>
+				</set>
+	        WHERE 
+		        USER_ID = #{userId} 
+		        and 
+		        FAMILY_ID = #{familyId}
+	</update>
+	<select id="getHostByfamilyIdAndPosition" parameterType="com.winterframework.efamily.entity.EjlFamilyUser" resultMap="EjlFamilyUserResult" flushCache="false">
+			select <include refid="ejlFamilyUserColumns" />
+			from ejl_family_user 
+		    where 
+		    family_id = #{familyId}  and position=#{position}
+	</select>	
+			
+</mapper>

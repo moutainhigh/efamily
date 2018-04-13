@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlUser">
+
+			<select id="getAppConnectNumber" parameterType="list"  resultType="long" flushCache="false">
+			select count(id)
+			    from EJL_USER 
+		        where type=1 and  id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}				</foreach>					
+		</select>	
+		
+		<select id="getDeviceConnectNumber" parameterType="list"  resultType="long" flushCache="false">
+			select count(id)
+			    from EJL_USER 
+		        where type=2 and  id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}				</foreach>					
+		</select>	
+
+    <select id="getUserIdSequence" resultType="long">
+        SELECT SEQ_EJL_USER_ID.Nextval from dual    
+    </select>
+    
+    <select id="getEjlUserByAttribute" resultMap="EjlUserResult">
+    	select <include refid="ejlUserColumns" />
+	    from EJL_USER 
+		<include refid="ejlUserDynamicWhere"/>
+    </select>
+    <select id="getChatRoomUserByRoomId" parameterType="long" resultMap="EjlUserResult">
+    	select <include refid="ejlUserColumns" />
+        from ejl_user eu 
+        where eu.id in 
+        (select eucr.user_id from ejl_user_chart_room eucr where eucr.chat_room_id = #{id} and eucr.status =0 ) 
+    </select>
+    
+        <select id="getUserByPhone" parameterType="string" resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+		    <![CDATA[
+			    from EJL_USER 
+		        where 
+		        phone = #{phone} 
+		    ]]>
+		</select>
+		
+		<select id="getUserByAddressBookPhone" parameterType="list" resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+		    from EJL_USER 
+	        where phone in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}				
+			</foreach>	
+		</select>
+		
+		<select id="getUserByUserId" parameterType="long" resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+		    <![CDATA[
+			    from EJL_USER 
+		        where 
+		        id = #{userId} 
+		    ]]>
+		</select>
+     <select id="getFamilyCountByUserId" parameterType="long" resultType="long" flushCache="false">
+			select count(*)
+		    <![CDATA[
+			     from (select eu.* from EJL_USER eu,EJL_FAMILY_USER efu where eu.ID=efu.USER_ID and eu.ID=#{userId} and efu.STATUS=0) as t
+		    ]]>
+	</select>
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlLocation">
+	<select id="getListByUserIdDeviceIdAfterTime" resultMap="EjlLocationResult">
+    	select <include refid="ejlLocationColumns"/>
+		FROM ejl_location
+		WHERE user_id=#{userId}
+			and device_id=#{deviceId}
+			and time>=DATE_ADD(#{time} ,INTERVAL -1*time_stay SECOND)
+    </select> 
+</mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlRole">
+	<resultMap id="EjlRoleResult" type="com.winterframework.efamily.entity.EjlRole">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlRoleColumns">
+	    <![CDATA[
+	        	id as id,
+	        	name as name,
+	        	type as type,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlRole" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_role (
+	        	name ,
+	        	type ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time  
+	        ) VALUES (
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{type,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlRole">
+	    <![CDATA[
+	        UPDATE ejl_role SET
+		        name = #{name,javaType=string,jdbcType=VARCHAR} ,
+		        type = #{type,javaType=long,jdbcType=DECIMAL} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_role where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlRoleResult" flushCache="false">
+			select <include refid="ejlRoleColumns" />
+		    <![CDATA[
+			    from ejl_role 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlRoleResult" flushCache="false">
+			select <include refid="ejlRoleColumns" />
+			    from ejl_role 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="ejlRoleDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(name)">
+				and name = #{name}
+			</if>
+	       <if test="@Ognl@isNotEmpty(type)">
+				and type = #{type}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlRoleResult"  flushCache="false">
+    	select <include refid="ejlRoleColumns" />
+	    from ejl_role 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_role 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_role 
+		<include refid="ejlRoleDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlRoleResult">
+    	select <include refid="ejlRoleColumns" />
+	    from ejl_role 
+		<include refid="ejlRoleDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlRoleResult">
+    	select <include refid="ejlRoleColumns" />
+	    from ejl_role 
+		<include refid="ejlRoleDynamicWhere"/>
+    </select>
+
+
+	
+</mapper>

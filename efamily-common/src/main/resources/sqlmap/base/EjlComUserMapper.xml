@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlUser">
+	<resultMap id="EjlUserResult" type="com.winterframework.efamily.entity.EjlUser">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlUserColumns">
+	    <![CDATA[
+	        	ID as id,
+	        	USER_NAME as userName,
+	        	NICK_NAME as nickName,
+	        	PHONE as phone,
+	        	PASSWD as passwd,
+	        	HEAD_IMG as headImg,
+	        	STATUS as status,
+	        	FAMILY_ID as familyId,
+	        	TYPE as type,
+	        	SEX as sex,
+	        	AGE as age,
+	        	HEIGHT as height,
+	        	WEIGHT as weight,        
+	        	SIGNATURE as signature,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	last_login_time as lastLoginTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlUser" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        EJL_USER (
+	        	USER_NAME ,
+	        	NICK_NAME ,
+	        	PHONE ,
+	        	PASSWD ,
+	        	HEAD_IMG ,
+	        	STATUS ,
+	        	FAMILY_ID ,
+	        	TYPE ,
+	        	token ,
+	        	sex,
+	        	age,
+	        	height,
+	        	weight,
+	        	SIGNATURE,
+	        	remark ,
+	        	creator_id ,
+	        	create_time ,
+	        	last_login_time 
+	        ) VALUES (
+	        	#{userName,javaType=string,jdbcType=VARCHAR} ,
+	        	#{nickName,javaType=string,jdbcType=VARCHAR} ,
+	        	#{phone,javaType=string,jdbcType=VARCHAR} ,
+	        	#{passwd,javaType=string,jdbcType=VARCHAR} ,
+	        	#{headImg,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=long,jdbcType=DECIMAL} ,
+	        	#{familyId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{type,javaType=long,jdbcType=DECIMAL} ,
+	        	#{token,javaType=string,jdbcType=VARCHAR} ,
+	        	#{sex,javaType=long,jdbcType=DECIMAL} ,
+	        	#{age,javaType=long,jdbcType=DECIMAL} ,
+	        	#{height,javaType=long,jdbcType=DECIMAL} ,
+	        	#{weight,javaType=double,jdbcType=DECIMAL} ,
+	        	#{signature,javaType=string,jdbcType=VARCHAR},
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{lastLoginTime,javaType=date,jdbcType=TIMESTAMP}
+	        )
+	    ]]>	
+	
+		</insert>
+		
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlUser">
+		 UPDATE EJL_USER
+	    <set> 
+	        USER_NAME = #{userName,javaType=string,jdbcType=VARCHAR} , 
+	        NICK_NAME = #{nickName,javaType=string,jdbcType=VARCHAR} , 
+	        PHONE = #{phone,javaType=string,jdbcType=VARCHAR} , 
+	        PASSWD = #{passwd,javaType=string,jdbcType=VARCHAR} , 
+	        HEAD_IMG = #{headImg,javaType=string,jdbcType=VARCHAR} , 
+	        STATUS = #{status,javaType=long,jdbcType=DECIMAL} , 
+	        FAMILY_ID = #{familyId,javaType=long,jdbcType=DECIMAL} , 
+	        TYPE = #{type,javaType=long,jdbcType=DECIMAL} , 
+	        sex = #{sex,javaType=long,jdbcType=DECIMAL} , 
+	        age = #{age,javaType=long,jdbcType=DECIMAL} , 
+	        height = #{height,javaType=long,jdbcType=DECIMAL} ,  
+	        weight = #{weight,javaType=double,jdbcType=DECIMAL} , 
+	        SIGNATURE = #{signature,javaType=string,jdbcType=DECIMAL}, 
+	        remark = #{remark,javaType=string,jdbcType=VARCHAR} , 
+	        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  , 
+	        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} , 
+	        last_login_time = #{lastLoginTime,javaType=date,jdbcType=TIMESTAMP}		        
+		 </set>
+	        WHERE 
+		        ID = #{id} 
+		</update>
+	    
+	    
+	    <update id="updatePasswdByUserId" parameterType="com.winterframework.efamily.entity.EjlUser">
+		 UPDATE EJL_USER
+	     <set> 
+	        PASSWD = #{passwd,javaType=string,jdbcType=VARCHAR} , 
+	        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  , 
+	        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP}	        
+		 </set>
+	        WHERE 
+		    ID = #{id} 
+		</update>
+		
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_user where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+		    <![CDATA[
+			    from ejl_user 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+			    from ejl_user 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="ejlUserDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userName)">
+				and user_name = #{userName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(nickName)">
+				and nick_name = #{nickName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phone)">
+				and phone = #{phone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(passwd)">
+				and passwd = #{passwd}
+			</if>
+	       <if test="@Ognl@isNotEmpty(headImg)">
+				and head_img = #{headImg}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(familyId)">
+				and family_id = #{familyId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(type)">
+				and type = #{type}
+			</if>
+	       <if test="@Ognl@isNotEmpty(token)">
+				and token = #{token}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sex)">
+				and sex = #{sex}
+			</if>
+	       <if test="@Ognl@isNotEmpty(age)">
+				and age = #{age}
+			</if>
+	       <if test="@Ognl@isNotEmpty(height)">
+				and height = #{height}
+			</if>
+	       <if test="@Ognl@isNotEmpty(weight)">
+				and weight = #{weight}
+			</if>
+	       <if test="@Ognl@isNotEmpty(signature)">
+				and signature = #{signature}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+			<if test="@Ognl@isNotEmpty(lastLoginTime)">
+				and last_login_time = #{lastLoginTime}
+			</if>
+			
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlUserResult"  flushCache="false">
+    	select <include refid="ejlUserColumns" />
+	    from ejl_user 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_user 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_user 
+		<include refid="ejlUserDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlUserResult">
+    	select <include refid="ejlUserColumns" />
+	    from ejl_user 
+		<include refid="ejlUserDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlUserResult">
+    	select <include refid="ejlUserColumns" />
+	    from ejl_user 
+		<include refid="ejlUserDynamicWhere"/>
+    </select>
+
+
+    <select id="getByPhone" resultMap="EjlUserResult" parameterType="java.lang.String">
+	    select <include refid="ejlUserColumns"/>
+	    <![CDATA[
+	        from ejl_user where phone = #{phone}
+	    ]]>
+    </select>
+    
+     <select id="findDeviceUser" resultMap="EjlUserResult">
+    	select <include refid="ejlUserColumns" />
+	    from ejl_user user
+	    where EXISTS (
+			select 1 from ejl_user_device userDevice
+			where user.id = userDevice.user_id
+	    		and userDevice.status = 1
+			)
+    </select>
+    
+    <select id="getUserByDeviceAndApp" parameterType="long" resultMap="EjlUserResult">
+	    	select <include refid="ejlUserColumns" />
+	        from ejl_user eu 
+	        where eu.id in 
+	        (select user_id from ejl_family_user where family_id=#{familyId} and status=0 )
+	        and
+	        type in (1,2) 
+     </select>
+	<select id="getAttentionUserByFamilyId" parameterType="long" resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+		    <![CDATA[
+			    from EJL_USER 
+		        where 
+		        id in (select user_id from ejl_attention_user where status=2 and attention_id in (select user_id from ejl_family_user where family_id=#{familyId} and status=0 and type=2) )
+		    ]]>
+	</select>
+	
+	<select id="getAttentionUserByUserIdAndAttendionId" parameterType="long" resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+		    <![CDATA[
+			    from EJL_USER 
+		        where 
+		        id in (select attention_id from ejl_attention_user where status=2 and attention_id=#{attentionId} and user_id=#{userId})
+		    ]]>
+	</select>
+	
+	
+	
+	 <select id="getFamilyHostUser" parameterType="long" resultMap="EjlUserResult">
+	    	select <include refid="ejlUserColumns" />
+	        from ejl_user eu 
+	        where eu.id in 
+	        (select user_id from ejl_family_user where family_id=#{familyId} and status=0 and position=2)
+     </select>
+      <select id="getValidListByType" parameterType="integer" resultMap="EjlUserResult">
+	    	select <include refid="ejlUserColumns" />
+	        from ejl_user 
+	        where type=#{type}
+     </select>
+     <select id="getUserByDeviceId" parameterType="long" resultMap="EjlUserResult">
+	    	select <include refid="ejlUserColumns" />
+	        from ejl_user 
+	        where id =(select user_id from ejl_user_device where device_id=#{deviceId} and status=1)
+     </select>
+     <select id="getUserByfenceId" parameterType="long" resultMap="EjlUserResult">
+	    	select <include refid="ejlUserColumns" />
+	        from ejl_user 
+	        where id in (select user_id from ejl_user_fence where fence_id=#{fenceId} and status=1)
+     </select>
+</mapper>

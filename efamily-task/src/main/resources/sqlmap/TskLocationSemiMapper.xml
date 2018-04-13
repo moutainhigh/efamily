@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfLocationSemi">
+	<resultMap id="deviceMap" type="hashmap" >
+	  <result property="userId" column="user_id" javaType="long" jdbcType="DECIMAL"/>
+	  <result property="deviceId" column="device_id" javaType="long" jdbcType="DECIMAL"/>
+	</resultMap>
+	<select id="getDeviceIdListByFlag" resultMap="deviceMap">
+    	select distinct user_id,device_id
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		AND flag = #{flag}
+		AND time BETWEEN #{timeFrom} and #{timeTo}
+    </select>    
+    <select id="getSameListById" resultType="long">
+    	select <include refid="EfLocationSemiColumns" />
+		FROM
+			ef_location_semi a
+		WHERE
+			a.user_id=#{userId}
+		AND a.device_id=#{deviceId}			
+		AND a.status=1
+		AND	EXISTS (
+				SELECT
+					1
+				FROM
+					ef_location_semi b
+				WHERE
+					b.id = #{id}
+				AND a.user_id = b.user_id
+				AND a.device_id = b.device_id
+				AND a.id<![CDATA[<>]]>b.id
+				AND a.time = b.time
+				AND a.source = b.source
+			)
+    </select> 
+    
+    <select id="getSameList" resultMap="EfLocationSemiResult" flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+		FROM
+			ef_location_semi a
+		WHERE
+			a.user_id=#{userId}
+		AND a.device_id=#{deviceId}			
+		AND a.status=1
+		AND a.time =#{time}
+		AND a.source = #{source}
+		AND a.remark = #{remark}
+    </select>   
+    <select id="getMaxMinTimeByDeviceIdAndFlag" resultType="hashmap">
+    	select min(time) as minTime,max(time) as maxTime
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		AND flag = #{flag}
+		AND user_id=#{userId}
+		AND device_id=#{deviceId}
+		AND time BETWEEN #{timeFrom} and #{timeTo}
+    </select>
+    <select id="getListByDeviceIdAndTimeFromToAndFlag" resultMap="EfLocationSemiResult" flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		AND flag = #{flag}
+		AND user_id=#{userId}
+		AND device_id=#{deviceId}
+		AND time BETWEEN #{timeFrom} and #{timeTo}
+    </select>	
+    <select id="getListNearByDeviceIdAndLatLngAndFlag" resultMap="EfLocationSemiResult" flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		AND flag = #{flag}
+		AND user_id=#{userId}
+		AND device_id=#{deviceId}
+		AND longitude BETWEEN #{longitudeFrom} and #{longitudeTo}
+		AND latitude BETWEEN #{latitudeFrom} and #{latitudeTo}
+    </select>
+    <select id="getListNearByDeviceIdAndLatLngAndFlags" resultMap="EfLocationSemiResult" flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		<if test="@Ognl@isNotEmpty(flags)">
+			AND flag in
+				<foreach item="item" index="index" collection="flags" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+		</if>		
+		AND user_id=#{userId}
+		AND device_id=#{deviceId}
+		AND longitude BETWEEN #{longitudeFrom} and #{longitudeTo}
+		AND latitude BETWEEN #{latitudeFrom} and #{latitudeTo}
+    </select>
+    
+    <select id="getPreNextListByIdAndCountAndFlags" resultMap="EfLocationSemiResult" flushCache="false">
+		SELECT
+			<include refid="EfLocationSemiColumns" />
+		from ( 
+		select * FROM (
+				SELECT * FROM(
+						SELECT * FROM
+							ef_location_semi a
+						WHERE
+							STATUS = 1
+							<if test="@Ognl@isNotEmpty(flags)">
+								AND flag in
+									<foreach item="item" index="index" collection="flags" open="(" separator="," close=")">
+					                #{item}
+					                </foreach>
+							</if>
+						AND a.user_id=#{userId}
+						AND a.device_id=#{deviceId}
+						AND EXISTS (SELECT 1
+							FROM
+								ef_location_semi b
+							WHERE
+								a.user_id = b.user_id	
+							AND a.device_id = b.device_id
+							AND b.id = #{id}
+							AND a.time <![CDATA[>]]> b.time
+						)
+					) k1
+				ORDER BY
+					time ASC
+			) k2
+		LIMIT #{count}
+		) k
+		UNION
+		SELECT
+			<include refid="EfLocationSemiColumns" />
+		from ( 
+		select * FROM (
+			SELECT * FROM(
+					SELECT * FROM
+						ef_location_semi a
+						WHERE
+							STATUS = 1
+							<if test="@Ognl@isNotEmpty(flags)">
+								AND flag in
+									<foreach item="item" index="index" collection="flags" open="(" separator="," close=")">
+					                #{item}
+					                </foreach>
+							</if>
+						AND a.user_id=#{userId}
+						AND a.device_id=#{deviceId}
+						AND EXISTS (SELECT 1
+							FROM
+								ef_location_semi b
+							WHERE
+								a.user_id = b.user_id	
+							AND a.device_id = b.device_id
+							AND b.id = #{id}
+							AND a.time <![CDATA[<]]> b.time
+						)
+					) k1
+				ORDER BY
+					time DESC
+			) k2
+		LIMIT #{count}
+		) k
+    </select>
+    <!-- 不加flag 所有数据 -->
+    <select id="getListNearByDeviceIdAndTime" resultMap="EfLocationSemiResult" flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		AND flag not in(4)
+		AND user_id=#{userId}
+		AND device_id = #{deviceId}
+		AND time BETWEEN #{timeFrom} AND #{timeTo}
+    </select>
+    <select id="getListNearByDeviceIdAndLatLngAndExcludeFlags" resultMap="EfLocationSemiResult" flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		<if test="@Ognl@isNotEmpty(flags)">
+			AND flag not in
+				<foreach item="item" index="index" collection="flags" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+		</if>		
+		AND user_id=#{userId}
+		AND device_id=#{deviceId}
+		AND longitude BETWEEN #{longitudeFrom} and #{longitudeTo}
+		AND latitude BETWEEN #{latitudeFrom} and #{latitudeTo}
+    </select>
+    <select id="getListByTimeFromToAndFlag" resultMap="EfLocationSemiResult" flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		AND flag = #{flag}
+		AND time BETWEEN #{timeFrom} and #{timeTo}
+    </select>
+    <select id="getDeviceIdListByFlags" resultMap="deviceMap">
+    	select distinct user_id,device_id
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		AND flag in
+				<foreach item="item" index="index" collection="flags" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+		AND time BETWEEN #{timeFrom} and #{timeTo}
+    </select>    
+    <select id="getMaxMinTimeByDeviceIdAndFlags" resultType="hashmap">
+    	select min(time) as minTime,max(time) as maxTime
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		AND flag in
+				<foreach item="item" index="index" collection="flags" open="(" separator="," close=")">
+                #{item}
+                </foreach>	
+		AND user_id=#{userId}
+		AND device_id=#{deviceId}
+		AND time BETWEEN #{timeFrom} and #{timeTo}
+    </select>
+     <select id="getFirstByDeviceIdAndFlags" resultMap="EfLocationSemiResult" flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+		from
+		( select *
+			FROM
+				ef_location_semi
+			WHERE
+				STATUS = 1
+			AND flag in
+					<foreach item="item" index="index" collection="flags" open="(" separator="," close=")">
+	                #{item}
+	                </foreach>	
+	        AND user_id=#{userId}
+			AND device_id=#{deviceId}
+			AND time BETWEEN #{timeFrom} and #{timeTo}
+			order by time
+		) k
+		LIMIT 1
+    </select>
+    <select id="getListByDeviceIdAndTimeFromToAndFlags" resultMap="EfLocationSemiResult" flushCache="false">
+    	select <include refid="EfLocationSemiColumns" />
+		FROM
+			ef_location_semi
+		WHERE
+			STATUS = 1
+		AND flag in
+				<foreach item="item" index="index" collection="flags" open="(" separator="," close=")">
+                #{item}
+                </foreach>	
+		AND user_id=#{userId}
+		AND device_id=#{deviceId}
+		AND time_end BETWEEN #{timeFrom} and #{timeTo}
+    </select>	
+    
+</mapper>

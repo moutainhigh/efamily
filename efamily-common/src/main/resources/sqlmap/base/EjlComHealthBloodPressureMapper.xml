@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlHealthBloodPressure">
+	<resultMap id="EjlHealthBloodPressureResult" type="com.winterframework.efamily.entity.EjlHealthBloodPressure">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlHealthBloodPressureColumns">
+	    <![CDATA[
+	        	id as id,
+	        	user_id as userId,
+	        	device_id as deviceId,
+	        	rate as rate,
+	        	high as high,
+	        	low as low,
+	        	from_time as fromTime,
+	        	to_time as toTime,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlHealthBloodPressure" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_health_blood_pressure (
+	        	id ,
+	        	user_id ,
+	        	device_id ,
+	        	rate ,
+	        	high ,
+	        	low ,
+	        	from_time ,
+	        	to_time ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time
+	        ) VALUES (
+	        	#{id,javaType=long,jdbcType=INTEGER} ,
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{rate,javaType=int,jdbcType=DECIMAL} ,
+	        	#{high,javaType=int,jdbcType=DECIMAL} ,
+	        	#{low,javaType=int,jdbcType=DECIMAL} ,
+	        	#{fromTime,javaType=long,jdbcType=DECIMAL} ,
+	        	#{toTime,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlHealthBloodPressure">
+	    <![CDATA[
+	        UPDATE ejl_health_blood_pressure SET
+		        user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		        device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+		        rate = #{rate,javaType=int,jdbcType=DECIMAL} ,
+		        high = #{high,javaType=int,jdbcType=DECIMAL} ,
+		        low = #{low,javaType=int,jdbcType=DECIMAL} ,
+		        from_time = #{fromTime,javaType=long,jdbcType=DECIMAL} ,
+		        to_time = #{toTime,javaType=long,jdbcType=DECIMAL} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_health_blood_pressure where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlHealthBloodPressureResult" flushCache="false">
+			select <include refid="ejlHealthBloodPressureColumns" />
+		    <![CDATA[
+			    from ejl_health_blood_pressure 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlHealthBloodPressureResult" flushCache="false">
+			select <include refid="ejlHealthBloodPressureColumns" />
+			    from ejl_health_blood_pressure 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="ejlHealthBloodPressureDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceId)">
+				and device_id = #{deviceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rate)">
+				and rate = #{rate}
+			</if>
+	       <if test="@Ognl@isNotEmpty(high)">
+				and high = #{high}
+			</if>
+	       <if test="@Ognl@isNotEmpty(low)">
+				and low = #{low}
+			</if>
+	       <if test="@Ognl@isNotEmpty(fromTime)">
+				and to_time >= #{fromTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(toTime)">
+			 <![CDATA[	and to_time <= #{toTime} ]]>
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlHealthBloodPressureResult"  flushCache="false">
+    	select <include refid="ejlHealthBloodPressureColumns" />
+	    from ejl_health_blood_pressure 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_health_blood_pressure 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_health_blood_pressure 
+		<include refid="ejlHealthBloodPressureDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlHealthBloodPressureResult">
+    	select <include refid="ejlHealthBloodPressureColumns" />
+	    from ejl_health_blood_pressure 
+		<include refid="ejlHealthBloodPressureDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlHealthBloodPressureResult">
+    	select <include refid="ejlHealthBloodPressureColumns" />
+	    from ejl_health_blood_pressure 
+		<include refid="ejlHealthBloodPressureDynamicWhere"/>
+    </select>
+	
+	<select id="getLastBloodPressure" resultMap="EjlHealthBloodPressureResult">
+    	select <include refid="ejlHealthBloodPressureColumns" />
+	    from ejl_health_blood_pressure 
+		<include refid="ejlHealthBloodPressureDynamicWhere"/>
+		order by to_time desc limit 1
+    </select>
+
+	
+   <select id="getBloodPressureByTime" resultMap="EjlHealthBloodPressureResult">
+    	select <include refid="ejlHealthBloodPressureColumns" />
+	    from ejl_health_blood_pressure s
+		where
+		user_id=#{userId}
+		and s.from_time <![CDATA[>]]> #{fromTime}
+		and s.from_time <![CDATA[<]]> #{endTime}
+		order by to_time desc
+    </select>
+	
+</mapper>

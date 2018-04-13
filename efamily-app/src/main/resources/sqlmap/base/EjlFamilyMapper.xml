@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlFamily">
+	
+    <select id="getFamilyByParm" parameterType="com.winterframework.efamily.entity.EjlFamily" resultMap="EjlFamilyResult" >
+        select 
+        <include refid="ejlFamilyColumns" />
+	    from EJL_FAMILY 
+		<include refid="ejlFamilyDynamicWhere"/>    
+    </select>
+	 <select id="getEjlFamilyCodeId" resultType="long">
+        SELECT (max(id)+1) as code from EJL_FAMILY  
+    </select> 
+</mapper>

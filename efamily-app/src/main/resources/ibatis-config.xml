@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+  "http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+<configuration>
+	<typeHandlers>
+		<typeHandler javaType="boolean" jdbcType="VARCHAR"
+			handler="com.winterframework.orm.dal.ibatis3.type.YesNoTypeHandler" />
+		<typeHandler handler="org.apache.ibatis.type.DateTypeHandler"
+			javaType="java.util.Date" jdbcType="TIMESTAMP" />
+	</typeHandlers>
+
+	<plugins>
+
+		<plugin interceptor="com.winterframework.orm.page.plugin.OffsetLimitInterceptor">
+			<property name="dialectClass"
+				value="com.winterframework.orm.dialect.OracleDialect" />
+		</plugin>
+	</plugins>
+	<mappers>
+		<mapper resource="sqlmap/base/TestMapper.xml" />
+		<mapper resource="sqlmap/base/ResourceMapper.xml" />
+		<mapper resource="sqlmap/base/EjlComChartRoomMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComChartRoomUserMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComDeviceAddressListMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComDeviceMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComDeviceParmConfigMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComFamilyMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComFamilyUserMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComFunctionMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComHealthHeartRateMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComHealthStepCountMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComLocationMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComMessageMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComMessageMarkMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComRemindMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComRoleFunctionMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComRoleMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserChartRoomMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserDeviceMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserFamilyMemberMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserFriendMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserLoginRecordMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserNicknameMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComP2pChatRoomMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserBarrierMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComDeviceMonitorMapper.xml"   />
+		<mapper resource="sqlmap/base/EfComResourceAssistMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComPublicDataMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserP2pChatRoomMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComAttentionUserMapper.xml"   />
+		<mapper resource="sqlmap/base/EfComCommandInfoMapper.xml"   />
+		<mapper resource="sqlmap/base/EfOperLogMapper.xml"   />
+		<mapper resource="sqlmap/base/EfComLocationSemiMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComThirdPartyLoginMapper.xml"   />
+		<mapper resource="sqlmap/base/EfComCustomerMapper.xml" />
+		
+		<mapper resource="sqlmap/base/EfResourceMapper.xml" />
+		<mapper resource="sqlmap/base/EjlFamilyMapper.xml" />
+		<mapper resource="sqlmap/base/EjlFamilyUserMapper.xml" />
+		<mapper resource="sqlmap/base/EjlFunctionMapper.xml" />
+		<mapper resource="sqlmap/base/EjlRoleFunctionMapper.xml" />
+		<mapper resource="sqlmap/base/EjlRoleMapper.xml" />
+		<mapper resource="sqlmap/base/EjlUserLoginRecordMapper.xml" />
+		<mapper resource="sqlmap/base/EjlUserMapper.xml" />
+		<mapper resource="sqlmap/base/EjlHealthHeartRateMapper.xml" />
+		<mapper resource="sqlmap/base/EjlHealthStepCountMapper.xml" />
+		<mapper resource="sqlmap/base/EjlLocationMapper.xml" />
+		<mapper resource="sqlmap/base/EjlMessageMapper.xml" />
+		<mapper resource="sqlmap/base/EjlMessageMarkMapper.xml" />
+		<mapper resource="sqlmap/base/EjlVerifyCodeMapper.xml" />
+		<mapper resource="sqlmap/base/EjlUserDeviceMapper.xml" />
+		<mapper resource="sqlmap/base/EjlDeviceParmConfigMapper.xml" />
+		<mapper resource="sqlmap/base/EjlDeviceMapper.xml" />
+		<mapper resource="sqlmap/base/EjlRemindMapper.xml" />
+		<mapper resource="sqlmap/base/EjlDeviceAddressListMapper.xml" />
+		<mapper resource="sqlmap/base/EjlChartRoomMapper.xml" />
+		<mapper resource="sqlmap/base/EjlChartRoomUserMapper.xml" />
+		<mapper resource="sqlmap/base/EjlUserChartRoomMapper.xml" />
+		<mapper resource="sqlmap/base/EjlUserFriendMapper.xml" />
+		<mapper resource="sqlmap/base/EjlUserFamilyMemberMapper.xml" />
+        <mapper resource="sqlmap/base/EjlP2pChatRoomMapper.xml"   />
+		<mapper resource="sqlmap/base/NotificationTaskMapper.xml" />
+		<mapper resource="sqlmap/base/EjlComUserHealtyConfigMapper.xml" />
+		<mapper resource="sqlmap/base/EjlComHealthSleepMapper.xml" />
+        <mapper resource="sqlmap/base/EjlUserBarrierMapper.xml"   />
+        <mapper resource="sqlmap/base/EjlDeviceMonitorMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComUserExtendInfoMapper.xml"   />
+        <mapper resource="sqlmap/base/EfResourceAssistMapper.xml"   />
+        <mapper resource="sqlmap/base/EjlPublicDataMapper.xml"   />
+        <mapper resource="sqlmap/base/QrcodeMapper.xml"   />
+        <mapper resource="sqlmap/base/EjlUserP2pChatRoomMapper.xml"   />
+        <mapper resource="sqlmap/base/EjlAttentionUserMapper.xml"   />
+        <mapper resource="sqlmap/base/EfLocationSemiMapper.xml"   />
+        
+        <mapper resource="sqlmap/base/EjlUserNoticeMapper.xml"   />
+        <mapper resource="sqlmap/base/EfDeviceModuleMapper.xml"   />
+        <mapper resource="sqlmap/base/EfModuleMapper.xml"   />
+        <mapper resource="sqlmap/base/EjlUserNoticeMapper.xml" />
+        <mapper resource="sqlmap/base/EjlComHealthBloodPressureMapper.xml" />
+        <mapper resource="sqlmap/base/EfDeviceSettingMapper.xml" />       
+        
+        <mapper resource="sqlmap/base/EfComOrgMapper.xml" />
+        <mapper resource="sqlmap/base/EfComOrgDeviceMapper.xml" />
+        <mapper resource="sqlmap/base/EfKeyMapper.xml"   />
+        <mapper resource="sqlmap/base/EfPlatformDeviceSettingMapper.xml"   />
+        <mapper resource="sqlmap/base/EfPlatformHealthSettingMapper.xml"   />
+		<mapper resource="sqlmap/base/EfUserHealthSettingMapper.xml" />
+		<mapper resource="sqlmap/base/EfPlatformDeviceVersionMapper.xml" />
+	</mappers>
+
+</configuration>

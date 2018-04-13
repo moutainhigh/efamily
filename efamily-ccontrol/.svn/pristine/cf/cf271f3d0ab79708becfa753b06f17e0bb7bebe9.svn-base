@@ -1,0 +1,105 @@
+package com.winterframework.efamily.server.notification;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.winterframework.efamily.base.enums.StatusCode;
+import com.winterframework.efamily.base.model.NotyQueue;
+import com.winterframework.efamily.base.model.NotyTarget;
+import com.winterframework.efamily.base.model.NotyTask;
+import com.winterframework.efamily.base.model.Response;
+import com.winterframework.efamily.base.redis.RedisQueue;
+import com.winterframework.efamily.base.utils.JsonUtils;
+import com.winterframework.efamily.base.utils.PropertyUtil;
+import com.winterframework.efamily.ccontrol.utils.ServerUrlUtil;
+import com.winterframework.efamily.dto.server.UserTarget;
+import com.winterframework.efamily.utils.HttpUtil;
+import com.winterframework.modules.utils.SpringContextHolder;
+
+public class  NotificationOfflineProcessorNew2 implements Runnable{ 
+	private static final Logger log= LoggerFactory.getLogger(NotificationOfflineProcessorNew2.class);
+	private final RedisQueue redisQueue=SpringContextHolder.getBean("redisQueue"); 
+	private final HttpUtil httpUtil=SpringContextHolder.getBean("httpUtil");
+	private final ServerUrlUtil serverUrlUtil=SpringContextHolder.getBean("serverUrlUtil");
+	private final PropertyUtil propertyUtil=SpringContextHolder.getBean("propertyUtil");
+	
+	private String queueNameTarget; 
+	public NotificationOfflineProcessorNew2(String queueNameTarget){
+		this.queueNameTarget=queueNameTarget; 
+	}
+	public void run() {
+		log.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+Thread.currentThread().getName());
+	    process(); 
+	} 
+	private void process(){ 
+		NotyTarget target=NotificationProcessorNew2.getTarget(queueNameTarget);
+		
+		UserTarget userTarget=new UserTarget(target.getUserId(), target.getDeviceId());
+		
+		String serverUrl=serverUrlUtil.getConnectServer(target.getUserId(), target.getDeviceId());
+		String urlPath=propertyUtil.getProperty("server.connect.channel.connect");
+		
+		try{
+			Response<String> bizRes=httpUtil.http(serverUrl, urlPath, userTarget,UserTarget.class);
+			boolean isConnected=false;//bizRes.getStatus().getCode()==StatusCode.ON_LINE.getValue(); 
+			if(isConnected){
+				addQueueWithTry(NotyQueue.QUEUE_USER_NEW,queueNameTarget);
+			}else{
+				addQueueWithTry(NotyQueue.QUEUE_USER_OFFLINE_NEW,queueNameTarget);
+			}
+		}catch(Exception e){
+			log.error("",e);
+		}
+	}
+	private void addQueueWithTry(String queueName,String value) {
+		try{
+			addQueue(queueName,value);
+		}catch(Exception e){
+			log.error("add queue offline error.",e);
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e1) {
+				log.error("thread be interrupted.",e);
+				e1.printStackTrace();
+			}
+			try{
+				addQueue(queueNameTarget);
+			}catch(Exception e2){
+				log.error("add queue offline error.",e2);
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e1) {
+					log.error("thread be interrupted.",e);
+				}
+				addQueue(queueNameTarget);
+			}
+		}
+	} 
+	/**
+	 * 加入队首
+	 * @param notyTask
+	 * @param isOffline
+	 */
+	private void addQueueHead(NotyTask notyTask,boolean isOffline){
+		//log.info("this is offline message is connection add :"+NotyQueue.getQueue(notyTask.getRule().getIndex(),null!=notyTask.getTarget().getDeviceId(),isOffline).getName(), JsonUtils.toJson(notyTask));
+		redisQueue.addHead(NotyQueue.getQueue(notyTask.getRule().getIndex(),null!=notyTask.getTarget().getDeviceId(),isOffline).getName(), JsonUtils.toJson(notyTask));  
+	}
+	private void addQueue(NotyTask notyTask,boolean isOffline){
+		//log.info("this is offline message add :"+NotyQueue.getQueue(notyTask.getRule().getIndex(),null!=notyTask.getTarget().getDeviceId(),isOffline).getName(), JsonUtils.toJson(notyTask));
+		redisQueue.add(NotyQueue.getQueue(notyTask.getRule().getIndex(),null!=notyTask.getTarget().getDeviceId(),isOffline).getName(), JsonUtils.toJson(notyTask));
+	}
+	private void addQueue(String queueNameTarget){
+		//log.info("this is offline message add :"+NotyQueue.getQueue(notyTask.getRule().getIndex(),null!=notyTask.getTarget().getDeviceId(),isOffline).getName(), JsonUtils.toJson(notyTask));
+		redisQueue.add(NotyQueue.QUEUE_USER_OFFLINE_NEW,queueNameTarget);
+	}
+	private void addQueueUser(String queueNameTarget){
+		//log.info("this is offline message add :"+NotyQueue.getQueue(notyTask.getRule().getIndex(),null!=notyTask.getTarget().getDeviceId(),isOffline).getName(), JsonUtils.toJson(notyTask));
+		redisQueue.add(NotyQueue.QUEUE_USER_NEW,queueNameTarget);
+	}
+	private void addQueue(String queueName,String value){
+		//log.info("this is offline message add :"+NotyQueue.getQueue(notyTask.getRule().getIndex(),null!=notyTask.getTarget().getDeviceId(),isOffline).getName(), JsonUtils.toJson(notyTask));
+		redisQueue.add(queueName,value);
+	}
+	
+	
+}

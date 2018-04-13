@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfDeviceAlarmLast">
+	<resultMap id="EfDeviceAlarmLastLastResult" type="com.winterframework.efamily.entity.EfDeviceAlarmLast">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfDeviceAlarmLastColumns">
+       	id as id,
+       	user_id as userId,
+       	device_id as deviceId,
+       	type as type,
+       	value as value,
+       	time as time,
+       	status as status,
+       	remark as remark,
+       	creator_id as creatorId,
+       	create_time as createTime,
+       	updator_id as updatorId,
+       	update_time as updateTime
+	</sql>
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" parameterType="com.winterframework.efamily.entity.EfDeviceAlarmLast" 
+		useGeneratedKeys="true" keyProperty="id" 
+	 flushCache="true">
+        INSERT INTO
+        ef_device_alarm_last (
+        	user_id,
+        	device_id ,
+        	type,
+       		value,
+        	time,
+        	status,
+        	remark ,
+        	creator_id ,
+        	create_time  
+        ) VALUES (
+			#{userId,javaType=long,jdbcType=DECIMAL} ,
+        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+        	#{type,javaType=integer,jdbcType=INTEGER} ,
+        	#{value,javaType=string,jdbcType=VARCHAR} ,
+        	#{time,javaType=long,jdbcType=DECIMAL} ,
+        	#{status,javaType=integer,jdbcType=INTEGER} ,
+        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+        )
+	</insert>
+    
+	<update id="update" parameterType="com.winterframework.efamily.entity.EfDeviceAlarmLast">
+        UPDATE ef_device_alarm_last SET
+	        user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+	        device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        type = #{type,javaType=integer,jdbcType=INTEGER} ,
+	        value = #{value,javaType=string,jdbcType=VARCHAR} ,
+	        time = #{time,javaType=long,jdbcType=DECIMAL} ,
+	        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+	        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+	        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+        WHERE 
+	        id = #{id} 
+	</update>
+   <delete id="delete" parameterType="java.lang.Long">
+        delete from ef_device_alarm_last where
+	        id = #{id} 
+    </delete>   
+    <select id="getById" parameterType="long" resultMap="EfDeviceAlarmLastLastResult" flushCache="false">
+		select <include refid="EfDeviceAlarmLastColumns" />
+		    from ef_device_alarm_last 
+	        where 
+	        id = #{id} 
+	</select>	
+	<select id="getByIds" parameterType="list"  resultMap="EfDeviceAlarmLastLastResult" flushCache="false">
+		select <include refid="EfDeviceAlarmLastColumns" />
+		    from ef_device_alarm_last 
+	        where id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+               #{item}
+               </foreach>					
+	</select>	
+ 
+	<select id="getAll" resultMap="EfDeviceAlarmLastLastResult"  flushCache="false">
+    	select <include refid="EfDeviceAlarmLastColumns" />
+	    from ef_device_alarm_last 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+    
+    <select id="getByUserIdAndDeviceId" resultMap="EfDeviceAlarmLastLastResult">
+    	select <include refid="EfDeviceAlarmLastColumns" />
+	    from ef_device_alarm_last 
+		where user_id=#{userId} and device_id = #{deviceId}
+    </select>
+    
+    <select id="getByUserIdAndType" resultMap="EfDeviceAlarmLastLastResult">
+    	select <include refid="EfDeviceAlarmLastColumns" />
+	    from ef_device_alarm_last 
+		where user_id=#{userId} and type = #{type}
+    </select>
+    
+    <update id="closeUserExceptionRemind" parameterType="long">
+        UPDATE ef_device_alarm_last SET
+	        status = 1 ,
+	        update_time = now()
+        WHERE 
+	        user_id = #{user_id} 
+	</update>
+    
+</mapper>

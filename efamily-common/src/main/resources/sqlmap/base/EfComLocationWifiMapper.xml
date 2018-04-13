@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfLocationWifi">
+	<resultMap id="EfLocationWifiResult" type="com.winterframework.efamily.entity.EfLocationWifi">
+	</resultMap>
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfLocationWifiColumns">
+       	ID as id,
+       	USER_ID as userId,
+       	DEVICE_ID as deviceId,
+       	MAC1 as mac1,
+       	MAC2 as mac2,
+       	MAC3 as mac3,
+       	MAC4 as mac4,
+       	MAC5 as mac5,
+       	MAC_NAME1 as macName1,
+       	MAC_NAME2 as macName2,
+       	MAC_NAME3 as macName3,
+       	MAC_NAME4 as macName4,
+       	MAC_NAME5 as macName5,
+       	SIGNAL1 as signal1,
+       	SIGNAL2 as signal2,
+       	SIGNAL3 as signal3,
+       	SIGNAL4 as signal4,
+       	SIGNAL5 as signal5,
+       	TIME as time,
+       	CREATE_TIME as createTime,
+       	OP_TAG as opTag
+	</sql>
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" parameterType="com.winterframework.efamily.entity.EfLocationWifi" 
+		useGeneratedKeys="true" keyProperty="id" flushCache="true">
+        INSERT INTO
+        EF_LOCATION_WIFI (
+        	USER_ID ,
+        	DEVICE_ID ,
+        	MAC1,
+        	MAC2,
+        	MAC3,
+        	MAC4,
+        	MAC5,
+        	MAC_NAME1,
+        	MAC_NAME2,
+        	MAC_NAME3,
+        	MAC_NAME4,
+        	MAC_NAME5,
+        	SIGNAL1,
+        	SIGNAL2,
+        	SIGNAL3,
+        	SIGNAL4,
+        	SIGNAL5,
+        	TIME,
+        	CREATE_TIME,
+        	creator_id 
+        ) VALUES (
+        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+        	#{deviceId,javaType=long,jdbcType=DECIMAL}, 
+        	#{mac1,javaType=string,jdbcType=VARCHAR} ,
+        	#{mac2,javaType=string,jdbcType=VARCHAR} ,
+        	#{mac3,javaType=string,jdbcType=VARCHAR} ,
+        	#{mac4,javaType=string,jdbcType=VARCHAR} ,
+        	#{mac5,javaType=string,jdbcType=VARCHAR} ,
+        	#{macName1,javaType=string,jdbcType=VARCHAR} ,
+        	#{macName2,javaType=string,jdbcType=VARCHAR} ,
+        	#{macName3,javaType=string,jdbcType=VARCHAR} ,
+        	#{macName4,javaType=string,jdbcType=VARCHAR} ,
+        	#{macName5,javaType=string,jdbcType=VARCHAR} ,
+        	#{signal1,javaType=integer,jdbcType=DECIMAL} ,
+        	#{signal2,javaType=integer,jdbcType=DECIMAL} ,
+        	#{signal3,javaType=integer,jdbcType=DECIMAL} ,
+        	#{signal4,javaType=integer,jdbcType=DECIMAL} ,
+        	#{signal5,javaType=integer,jdbcType=DECIMAL} ,
+        	#{time,javaType=long,jdbcType=DECIMAL} ,
+        	#{createTime,javaType=date,jdbcType=TIMESTAMP},
+        	#{creatorId,javaType=long,jdbcType=DECIMAL} 
+        )	
+	</insert>
+	
+	
+	<update id="update" parameterType="com.winterframework.efamily.entity.EfLocationWifi">
+	    <![CDATA[
+	        UPDATE EF_LOCATION_WIFI SET
+		       OP_TAG = #{opTag,javaType=integer,jdbcType=INTEGER},
+		       remark = #{remark,javaType=string,jdbcType=VARCHAR} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from EF_LOCATION_WIFI where ID = #{id} 
+    </delete>   
+    <select id="getById" parameterType="long" resultMap="EfLocationWifiResult" flushCache="false">
+		select <include refid="EfLocationWifiColumns" />
+	    from EF_LOCATION_WIFI 
+        where ID = #{id} 
+	</select> 
+	
+	<select id="getByOpTag" parameterType="hashmap" resultMap="EfLocationWifiResult" flushCache="false">
+		select <include refid="EfLocationWifiColumns" />
+	    from EF_LOCATION_WIFI 
+        where OP_TAG = #{opTag}
+        <if test="@Ognl@isNotEmpty(beginTime)">
+        	 and time<![CDATA[>=]]> #{beginTime}
+        </if>
+        <if test="@Ognl@isNotEmpty(endTime)">
+        	 and time<![CDATA[<=]]> #{endTime}
+        </if>
+        <if test="@Ognl@isNotEmpty(userId)">
+			and user_id=#{userId}
+		</if>
+		 <if test="@Ognl@isNotEmpty(deviceId)">
+			and device_id=#{deviceId}
+		</if>
+        order by DEVICE_ID,time
+	</select>
+	
+	<select id="getMaxMinTimeWift" parameterType="long" resultType="hashmap">
+    	select from_unixtime(min(time)/1000) as minTime,from_unixtime(max(time)/1000) as maxTime
+		FROM
+			EF_LOCATION_WIFI
+		WHERE
+			op_tag = 0
+		AND time <![CDATA[>]]> #{time}
+    </select>  
+    
+    <resultMap id="deviceMap" type="hashmap" >
+	  <result property="userId" column="user_id" javaType="long" jdbcType="DECIMAL"/>
+	  <result property="deviceId" column="device_id" javaType="long" jdbcType="DECIMAL"/>
+	</resultMap>
+    
+    <select id="getDeviceIdListByFlags" resultMap="deviceMap">
+    	select distinct user_id,device_id
+		FROM
+			EF_LOCATION_WIFI
+		WHERE
+			op_tag = 0
+		AND time BETWEEN #{timeFrom} and #{timeTo}
+		order by time
+    </select>
+</mapper>

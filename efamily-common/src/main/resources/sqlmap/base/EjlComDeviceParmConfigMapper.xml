@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlDeviceParmConfig">
+	<resultMap id="EjlDeviceParmConfigResult" type="com.winterframework.efamily.entity.EjlDeviceParmConfig">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlDeviceParmConfigColumns">
+	    <![CDATA[
+	        	id as id,
+	        	device_id as deviceId,
+	        	param_key as paramKey,
+	        	param_value as paramValue,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlDeviceParmConfig" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_device_parm_config (
+	        	device_id ,
+	        	param_key ,
+	        	param_value ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time  
+	        ) VALUES (
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{paramKey,javaType=string,jdbcType=VARCHAR} ,
+	        	#{paramValue,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlDeviceParmConfig">
+	        UPDATE ejl_device_parm_config 
+		        <set>
+                <if test="@Ognl@isNotEmpty(deviceId)">
+                    device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+                </if>
+                <if test="@Ognl@isNotEmpty(paramKey)">
+                    param_key = #{paramKey,javaType=string,jdbcType=VARCHAR} ,
+                </if>
+                <if test="@Ognl@isNotEmpty(paramValue)">
+                    param_value = #{paramValue,javaType=string,jdbcType=VARCHAR} , 
+                </if>
+		        <if test="@Ognl@isNotEmpty(remark)">
+                   remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+                </if>
+                <if test="@Ognl@isNotEmpty(updatorId)">
+                       updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}, 
+                </if>
+                <if test="@Ognl@isNotEmpty(updateTime)">
+                       update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+                </if>
+		      </set>
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_device_parm_config where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlDeviceParmConfigResult" flushCache="false">
+			select <include refid="ejlDeviceParmConfigColumns" />
+		    <![CDATA[
+			    from ejl_device_parm_config 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlDeviceParmConfigResult" flushCache="false">
+			select <include refid="ejlDeviceParmConfigColumns" />
+			    from ejl_device_parm_config 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="ejlDeviceParmConfigDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceId)">
+				and device_id = #{deviceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(paramKey)">
+				and param_key = #{paramKey}
+			</if>
+	       <if test="@Ognl@isNotEmpty(paramValue)">
+				and param_value = #{paramValue}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlDeviceParmConfigResult"  flushCache="false">
+    	select <include refid="ejlDeviceParmConfigColumns" />
+	    from ejl_device_parm_config 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_device_parm_config 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_device_parm_config 
+		<include refid="ejlDeviceParmConfigDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlDeviceParmConfigResult">
+    	select <include refid="ejlDeviceParmConfigColumns" />
+	    from ejl_device_parm_config 
+		<include refid="ejlDeviceParmConfigDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlDeviceParmConfigResult">
+    	select <include refid="ejlDeviceParmConfigColumns" />
+	    from ejl_device_parm_config 
+		<include refid="ejlDeviceParmConfigDynamicWhere"/>
+    </select>
+    <select id="getByDeviceIdAndKey" resultMap="EjlDeviceParmConfigResult">
+    	select <include refid="ejlDeviceParmConfigColumns" />
+	    from ejl_device_parm_config 
+		where
+		device_id = #{deviceId}
+		and 
+		param_key = #{paramKey}
+    </select>
+    <select id="updateByDeviceAndKey" parameterType="com.winterframework.efamily.entity.EjlDeviceParmConfig">
+	        UPDATE ejl_device_parm_config SET
+              <set>
+                <if test="@Ognl@isNotEmpty(deviceId)">
+                    device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+                </if>
+                <if test="@Ognl@isNotEmpty(paramKey)">
+                    param_key = #{paramKey,javaType=string,jdbcType=VARCHAR} ,
+                </if>
+                <if test="@Ognl@isNotEmpty(paramValue)">
+                    param_value = #{paramValue,javaType=string,jdbcType=VARCHAR} , 
+                </if>
+		        <if test="@Ognl@isNotEmpty(remark)">
+                   remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+                </if>
+                <if test="@Ognl@isNotEmpty(updatorId)">
+                       updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}, 
+                </if>
+                <if test="@Ognl@isNotEmpty(updateTime)">
+                       update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+                </if>
+		      </set>
+	        WHERE 
+				device_id = #{deviceId}
+				and 
+				param_key = #{paramKey}
+    </select>
+
+	
+</mapper>

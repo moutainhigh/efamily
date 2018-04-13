@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfDeviceHealthyDataPush">
+	<resultMap id="EfDeviceHealthyDataPushResult" type="com.winterframework.efamily.entity.EfDeviceHealthyDataPush">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="efDeviceHealthyDataPushColumns">
+	    <![CDATA[
+	        	id as id,
+	        	user_id as userId,
+	        	device_id as deviceId,
+	        	imei as imei,
+	        	type as type,
+	        	healthy_id as healthyId,
+	        	customer_id as customerId,
+	        	send_number as sendNumber,
+	        	healthy_data as healthyData,
+	        	status as status,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EfDeviceHealthyDataPush" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ef_device_healthy_data_push (
+	        	user_id ,
+	        	device_id ,
+	        	imei ,
+	        	type ,
+	        	healthy_id ,
+	        	customer_id ,
+	        	send_number ,
+	        	healthy_data ,
+	        	status ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time ,
+	        	updator_id ,
+	        	update_time 
+	        ) VALUES (
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{imei,javaType=string,jdbcType=VARCHAR} ,
+	        	#{type,javaType=integer,jdbcType=INTEGER} ,
+	        	#{healthyId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{customerId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{sendNumber,javaType=integer,jdbcType=INTEGER} ,
+	        	#{healthyData,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EfDeviceHealthyDataPush">
+	        UPDATE ef_device_healthy_data_push SET
+			        <if test="@Ognl@isNotEmpty(userId)">
+					user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(deviceId)">
+					device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(imei)">
+					imei = #{imei,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(type)">
+					type = #{type,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(healthyId)">
+					healthy_id = #{healthyId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(customerId)">
+					customer_id = #{customerId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(sendNumber)">
+					send_number = #{sendNumber,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(healthyData)">
+					healthy_data = #{healthyData,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(status)">
+					status = #{status,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(remark)">
+					remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(creatorId)">
+					creator_id = #{creatorId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(createTime)">
+					create_time = #{createTime,javaType=date,jdbcType=TIMESTAMP}
+				    </if>
+
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ef_device_healthy_data_push where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfDeviceHealthyDataPushResult" flushCache="false">
+			select <include refid="efDeviceHealthyDataPushColumns" />
+		    <![CDATA[
+			    from ef_device_healthy_data_push 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EfDeviceHealthyDataPushResult" flushCache="false">
+			select <include refid="efDeviceHealthyDataPushColumns" />
+			    from ef_device_healthy_data_push 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="efDeviceHealthyDataPushDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceId)">
+				and device_id = #{deviceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imei)">
+				and imei = #{imei}
+			</if>
+	       <if test="@Ognl@isNotEmpty(type)">
+				and type = #{type}
+			</if>
+	       <if test="@Ognl@isNotEmpty(healthyId)">
+				and healthy_id = #{healthyId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(customerId)">
+				and customer_id = #{customerId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sendNumber)">
+				and send_number = #{sendNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(healthyData)">
+				and healthy_data = #{healthyData}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EfDeviceHealthyDataPushResult"  flushCache="false">
+    	select <include refid="efDeviceHealthyDataPushColumns" />
+	    from ef_device_healthy_data_push 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ef_device_healthy_data_push 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ef_device_healthy_data_push 
+		<include refid="efDeviceHealthyDataPushDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EfDeviceHealthyDataPushResult">
+    	select <include refid="efDeviceHealthyDataPushColumns" />
+	    from ef_device_healthy_data_push 
+		<include refid="efDeviceHealthyDataPushDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EfDeviceHealthyDataPushResult">
+    	select <include refid="efDeviceHealthyDataPushColumns" />
+	    from ef_device_healthy_data_push 
+		<include refid="efDeviceHealthyDataPushDynamicWhere"/>
+    </select>
+
+    <!--  取出符合条件的推送数据      -->
+
+   <select id="getDeviceHealthyDataPushList" resultMap="EfDeviceHealthyDataPushResult">
+    	select <include refid="efDeviceHealthyDataPushColumns" />
+	    from ef_device_healthy_data_push 
+		where 
+		<![CDATA[
+		create_time>=#{fromTime} and create_time<#{toTime}
+		and
+		status=#{status}
+		]]>
+    </select>
+
+	
+</mapper>

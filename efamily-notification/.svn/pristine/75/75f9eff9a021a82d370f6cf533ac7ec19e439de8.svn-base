@@ -1,0 +1,9 @@
+package com.winterframework.efamily.notification.enums;
+
+public class QueuePrefix {
+	public static final String NOTY="noty_new";
+	public static final String OFFLINE="offline_new";
+	public static final String NOTY_INDEX="noty_index_new";
+	public static final String NOTY_LOCK="noty_lock_new";
+	public static final String NOTY_TP_PUSH="noty_tp_push";
+}

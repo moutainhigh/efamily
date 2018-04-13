@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlUserNotice">
+	<resultMap id="EjlUserNoticeResult" type="com.winterframework.efamily.entity.EjlUserNotice">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlUserNoticeColumns">
+	    <![CDATA[
+	        	id as id,
+	        	user_id as userId,
+	        	device_user_id as deviceUserId,
+	        	rate_status as rateStatus,
+	        	blood_status as bloodStatus,
+	        	diastolic_range_lt as diastolicRangeLt,
+	        	diastolic_range_gt as diastolicRangeGt,
+	        	systolic_range_lt as systolicRangeLt,
+	        	systolic_range_gt as systolicRangeGt,
+	        	rate_range_lt as rateRangeLt,
+	        	rate_range_gt as rateRangeGt,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlUserNotice" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_user_notice (
+	        	user_id ,
+	        	device_user_id ,
+	        	rate_status ,
+	        	blood_status ,
+	        	diastolic_range_lt ,
+	        	diastolic_range_gt ,
+	        	systolic_range_lt ,
+	        	systolic_range_gt ,
+	        	rate_range_lt ,
+	        	rate_range_gt ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time 
+	        ) VALUES (
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deviceUserId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{rateStatus,javaType=integer,jdbcType=INTEGER} ,
+	        	#{bloodStatus,javaType=integer,jdbcType=INTEGER} ,
+	        	#{diastolicRangeLt,javaType=integer,jdbcType=INTEGER} ,
+	        	#{diastolicRangeGt,javaType=integer,jdbcType=INTEGER} ,
+	        	#{systolicRangeLt,javaType=integer,jdbcType=INTEGER} ,
+	        	#{systolicRangeGt,javaType=integer,jdbcType=INTEGER} ,
+	        	#{rateRangeLt,javaType=integer,jdbcType=INTEGER} ,
+	        	#{rateRangeGt,javaType=integer,jdbcType=INTEGER} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} 
+	        	
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlUserNotice">
+	        UPDATE ejl_user_notice 
+	        <set>
+	        <if test="@Ognl@isNotEmpty(userId)">
+		        user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(deviceUserId)">
+		        device_user_id = #{deviceUserId,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(rateStatus)">
+		        rate_status = #{rateStatus,javaType=integer,jdbcType=INTEGER} ,
+		         </if>
+		        <if test="@Ognl@isNotEmpty(bloodStatus)">
+		        blood_status = #{bloodStatus,javaType=integer,jdbcType=INTEGER} ,
+		         </if>
+		        <if test="@Ognl@isNotEmpty(diastolicRangeLt)">
+		        diastolic_range_lt = #{diastolicRangeLt,javaType=integer,jdbcType=INTEGER} ,
+		         </if>
+		        <if test="@Ognl@isNotEmpty(diastolicRangeGt)">
+		        diastolic_range_gt = #{diastolicRangeGt,javaType=integer,jdbcType=INTEGER} ,
+		         </if>
+		        <if test="@Ognl@isNotEmpty(systolicRangeLt)">
+		        systolic_range_lt = #{systolicRangeLt,javaType=integer,jdbcType=INTEGER} ,
+		         </if>
+		        <if test="@Ognl@isNotEmpty(systolicRangeGt)">
+		        systolic_range_gt = #{systolicRangeGt,javaType=integer,jdbcType=INTEGER} ,
+		         </if>
+		        <if test="@Ognl@isNotEmpty(rateRangeLt)">
+		        rate_range_lt = #{rateRangeLt,javaType=integer,jdbcType=INTEGER} ,
+		         </if>
+		        <if test="@Ognl@isNotEmpty(rateRangeGt)">
+		        rate_range_gt = #{rateRangeGt,javaType=integer,jdbcType=INTEGER} ,
+		         </if>
+		        <if test="@Ognl@isNotEmpty(remark)">
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		         </if>
+		       <if test="@Ognl@isNotEmpty(updatorId)">
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		         </if>
+		        <if test="@Ognl@isNotEmpty(updateTime)">
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+		         </if>
+		       </set>
+	        WHERE 
+		        id = #{id} 
+	   
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_user_notice where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlUserNoticeResult" flushCache="false">
+			select <include refid="ejlUserNoticeColumns" />
+		    <![CDATA[
+			    from ejl_user_notice 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlUserNoticeResult" flushCache="false">
+			select <include refid="ejlUserNoticeColumns" />
+			    from ejl_user_notice 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="ejlUserNoticeDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceUserId)">
+				and device_user_id = #{deviceUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rateStatus)">
+				and rate_status = #{rateStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bloodStatus)">
+				and blood_status = #{bloodStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(diastolicRangeLt)">
+				and diastolic_range_lt = #{diastolicRangeLt}
+			</if>
+	       <if test="@Ognl@isNotEmpty(diastolicRangeGt)">
+				and diastolic_range_gt = #{diastolicRangeGt}
+			</if>
+	       <if test="@Ognl@isNotEmpty(systolicRangeLt)">
+				and systolic_range_lt = #{systolicRangeLt}
+			</if>
+	       <if test="@Ognl@isNotEmpty(systolicRangeGt)">
+				and systolic_range_gt = #{systolicRangeGt}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rateRangeLt)">
+				and rate_range_lt = #{rateRangeLt}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rateRangeGt)">
+				and rate_range_gt = #{rateRangeGt}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlUserNoticeResult"  flushCache="false">
+    	select <include refid="ejlUserNoticeColumns" />
+	    from ejl_user_notice 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_user_notice 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_user_notice 
+		<include refid="ejlUserNoticeDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlUserNoticeResult">
+    	select <include refid="ejlUserNoticeColumns" />
+	    from ejl_user_notice 
+		<include refid="ejlUserNoticeDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlUserNoticeResult">
+    	select <include refid="ejlUserNoticeColumns" />
+	    from ejl_user_notice 
+		<include refid="ejlUserNoticeDynamicWhere"/>
+    </select>
+
+
+	
+</mapper>

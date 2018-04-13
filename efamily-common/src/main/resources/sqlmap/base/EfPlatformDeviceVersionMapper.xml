@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfPlatformDeviceVersion">
+	<resultMap id="EfPlatformDeviceVersionResult" type="com.winterframework.efamily.entity.EfPlatformDeviceVersion">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfPlatformDeviceVersionColumns">
+       	id as id,
+       	device_type as deviceType,
+       	device_model as deviceModel,
+       	device_version as deviceVersion,
+       	open_version as openVersion,
+       	publish_time as publishTime,
+       	status as status,
+       	remark as remark,
+       	creator_id as creatorId,
+       	create_time as createTime,
+       	updator_id as updatorId,
+       	update_time as updateTime
+	</sql>
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" parameterType="com.winterframework.efamily.entity.EfPlatformDeviceVersion" 
+		useGeneratedKeys="true" keyProperty="id" 
+	 flushCache="true">
+        INSERT INTO
+        ef_platform_device_version (
+        	device_type ,
+        	device_model ,
+        	device_version ,
+        	open_version ,
+        	publish_time ,
+        	status,
+        	remark ,
+        	creator_id ,
+        	create_time  
+        ) VALUES (
+        	#{deviceType,javaType=integer,jdbcType=INTEGER} ,
+        	#{deviceModel,javaType=string,jdbcType=VARCHAR} ,
+        	#{deviceVersion,javaType=string,jdbcType=VARCHAR} ,
+        	#{openVersion,javaType=string,jdbcType=VARCHAR} ,
+        	#{publishTime,javaType=date,jdbcType=TIMESTAMP} ,
+			#{status,javaType=integer,jdbcType=INTEGER} ,
+        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+        )
+	</insert>
+    
+	<update id="update" parameterType="com.winterframework.efamily.entity.EfPlatformDeviceVersion">
+        UPDATE ef_platform_device_version SET
+	        device_type = #{deviceType,javaType=integer,jdbcType=INTEGER} ,
+	        device_model = #{deviceModel,javaType=string,jdbcType=VARCHAR} ,
+	        device_version = #{deviceVersion,javaType=string,jdbcType=VARCHAR} ,
+	        open_version = #{openVersion,javaType=string,jdbcType=VARCHAR} ,
+	        publish_time = #{publishTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+	        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+	        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+        WHERE 
+	        id = #{id} 
+	</update>
+   <delete id="delete" parameterType="java.lang.Long">
+        delete from ef_platform_device_version where
+	        id = #{id} 
+    </delete>   
+    <select id="getById" parameterType="long" resultMap="EfPlatformDeviceVersionResult" flushCache="false">
+		select <include refid="EfPlatformDeviceVersionColumns" />
+		    from ef_platform_device_version 
+	        where 
+	        id = #{id} 
+	</select>	
+	<select id="getByIds" parameterType="list"  resultMap="EfPlatformDeviceVersionResult" flushCache="false">
+		select <include refid="EfPlatformDeviceVersionColumns" />
+		    from ef_platform_device_version 
+	        where id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+               #{item}
+               </foreach>					
+	</select>	
+ 
+	<select id="getAll" resultMap="EfPlatformDeviceVersionResult"  flushCache="false">
+    	select <include refid="EfPlatformDeviceVersionColumns" />
+	    from ef_platform_device_version 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+    <select id="getLatestByDeviceTypeAndDeviceModelAndCustomer" resultMap="EfPlatformDeviceVersionResult" flushCache="false">
+		select <include refid="EfPlatformDeviceVersionColumns" />
+		    from ef_platform_device_version 
+	        where 
+	        device_type = #{deviceType}
+	        and device_model=#{deviceModel}
+	        and customer_number=#{customerNumber} 
+	        order by publish_time desc limit 1
+	</select>	
+    <select id="getByDeviceTypeAndDeviceModelAndDeviceVersion" resultMap="EfPlatformDeviceVersionResult" flushCache="false">
+		select <include refid="EfPlatformDeviceVersionColumns" />
+		    from ef_platform_device_version 
+	        where 
+	        device_type = #{deviceType}
+	        and device_model=#{deviceModel} 
+	        and device_version=#{deviceVersion} 
+	</select>
+</mapper>

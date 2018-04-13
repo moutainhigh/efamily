@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlUserChartRoom">
+	
+	<resultMap id="ChatGroupDetailsListResult" type="com.winterframework.efamily.dto.ChatGroupDetailsList"> 
+	</resultMap>
+	
+		<update id="updateByUserIdAndChatId" parameterType="com.winterframework.efamily.entity.EjlUserChartRoom">
+	        UPDATE EJL_USER_CHART_ROOM 
+		        <set>
+			        <if test="@Ognl@isNotEmpty(userId)">
+					   USER_ID = #{userId,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+			        <if test="@Ognl@isNotEmpty(chatRoomId)">
+					   CHAT_ROOM_ID = #{chatRoomId,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(chatRoomName)">
+					   CHAT_ROOM_NAME = #{chatRoomName,javaType=string,jdbcType=VARCHAR}, 
+					</if>
+					<if test="@Ognl@isNotEmpty(chatRoomTop)">
+					   CHAT_ROOM_TOP = #{chatRoomTop,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(messageNotify)">
+					   MESSAGE_NOTIFY = #{messageNotify,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(saveAddressBook)">
+					   SAVE_ADDRESS_BOOK = #{saveAddressBook,javaType=long,jdbcType=DECIMAL} , 
+					</if>
+				    <if test="@Ognl@isNotEmpty(updateTime)">
+					   update_time = #{updateTime},
+					</if>
+					<if test="@Ognl@isNotEmpty(status)">
+					   STATUS = #{status,javaType=long,jdbcType=DECIMAL} 
+					</if>
+		        </set>
+	        WHERE 
+		        USER_ID = #{userId} and CHAT_ROOM_ID = #{chatRoomId}
+		</update>
+	  
+		 <select id="getByUserIdAndChatRoomId" parameterType="com.winterframework.efamily.entity.EjlUserChartRoom" resultMap="EjlUserChartRoomResult" flushCache="false">
+			select <include refid="ejlUserChartRoomColumns" />
+		    <![CDATA[
+			    from EJL_USER_CHART_ROOM 
+		        where 
+		        USER_ID = #{userId} and CHAT_ROOM_ID = #{chatRoomId}
+		    ]]>
+		</select>	
+		
+    <select id="getChatGroupDetailsByUserIdAndChatId" parameterType="com.winterframework.efamily.entity.EjlUserChartRoom" resultMap="ChatGroupDetailsListResult" flushCache="false">
+            select ucr.chat_room_id as chart_room_id,
+            cr.name as chatRoomName,
+            ucr.chat_room_top as chatRoomTop,
+            ucr.message_notify as messageNotify,
+            ucr.save_address_book as saveAddressBook
+            from ejl_chart_room as cr, ejl_user_chart_room ucr 
+            where cr.id=ucr.chat_room_id and ucr.user_id=#{userId} and ucr.chat_room_id=#{chatRoomId}
+	</select>
+	<select id="getChatGroupMemberInfo" parameterType="com.winterframework.efamily.entity.EjlUserChartRoom" resultType="com.winterframework.efamily.dto.UserChartRoomMemberInfo" flushCache="false">
+		  select u.id as userId,u.nick_name as nickName,u.head_img as headImgUrl, IFNULL((select remark_name from ejl_user_friend euf where euf.user_id=#{userId} and euf.friend_id=u.id ),"") as remarkName,u.type as userType from ejl_user u where u.id  in(select cru.user_id from ejl_chart_room_user cru where cru.chart_room_id=#{chatRoomId} and cru.status=0)
+	</select>
+	
+</mapper>

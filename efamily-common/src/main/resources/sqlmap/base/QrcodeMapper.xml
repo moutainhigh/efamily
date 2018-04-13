@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.Qrcode">
+	<resultMap id="QrcodeResult" type="com.winterframework.efamily.entity.Qrcode">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="efQrcodeColumns">
+	    <![CDATA[
+	        	id as id,
+	        	imsi as imsi,
+	        	phone_number as phoneNumber,
+	        	imei as imei,
+	        	model as model,
+	        	type as type,
+	        	sim_status as simStatus,
+	        	status as status,
+	        	create_time as createTime,
+	        	customer_number as customerNumber,
+	        	qrcode_resource_id as qrcodeResourceId,
+	        	software_version as softwareVersion,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.Qrcode" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ef_qrcode (
+	        	imsi ,
+	        	phone_number ,
+	        	imei,
+	        	model,
+	        	type,
+	        	sim_status,
+	        	status , 
+	        	customer_number ,
+	        	qrcode_resource_id,
+	        	software_version,
+	        	remark ,
+	        	creator_id ,
+	        	create_time
+	        ) VALUES (
+	        	#{imsi,javaType=string,jdbcType=VARCHAR} ,
+	        	#{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{imei,javaType=string,jdbcType=VARCHAR} ,
+	        	#{model,javaType=string,jdbcType=VARCHAR} ,
+	        	#{type,javaType=integer,jdbcType=INTEGER} ,
+	        	#{simStatus,javaType=integer,jdbcType=INTEGER} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{customerNumber,javaType=integer,jdbcType=INTEGER} ,
+	        	#{qrcodeResourceId,javaType=string,jdbcType=VARCHAR} , 
+	        	#{softwareVersion,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.Qrcode">
+	    <![CDATA[
+	        UPDATE ef_qrcode SET
+		        imsi = #{imsi,javaType=string,jdbcType=VARCHAR} ,
+		        phone_number = #{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+		        imei = #{imei,javaType=string,jdbcType=VARCHAR} ,
+		        model = #{model,javaType=string,jdbcType=VARCHAR} ,
+		        type = #{type,javaType=integer,jdbcType=INTEGER} ,
+		        sim_status = #{simStatus,javaType=integer,jdbcType=INTEGER} ,
+		        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+		        customer_number = #{customerNumber,javaType=integer,jdbcType=INTEGER} ,
+		        qrcode_resource_id = #{qrcodeResourceId,javaType=string,jdbcType=VARCHAR} ,
+		        software_version = #{softwareVersion,javaType=string,jdbcType=VARCHAR} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP}
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ef_qrcode where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="QrcodeResult" flushCache="false">
+			select <include refid="efQrcodeColumns" />
+		    <![CDATA[
+			    from ef_qrcode 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="QrcodeResult" flushCache="false">
+			select <include refid="efQrcodeColumns" />
+			    from ef_qrcode 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="efQrcodeDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(imsi)">
+				and imsi = #{imsi}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phoneNumber)">
+				and phone_number = #{phoneNumber}
+			</if>
+			<if test="@Ognl@isNotEmpty(imei)">
+				and imei = #{imei}
+			</if>
+			<if test="@Ognl@isNotEmpty(model)">
+				and model = #{model}
+			</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				and type = #{type}
+			</if>
+			<if test="@Ognl@isNotEmpty(simStatus)">
+				and sim_status = #{simStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+			<if test="@Ognl@isNotEmpty(customerNumber)">
+				and customer_number = #{customerNumber}
+			</if>
+			<if test="@Ognl@isNotEmpty(qrcodeResourceId)">
+				and qrcode_resource_id = #{qrcodeResourceId}
+			</if>
+			
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="QrcodeResult"  flushCache="false">
+    	select <include refid="efQrcodeColumns" />
+	    from ef_qrcode 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ef_qrcode 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ef_qrcode 
+		<include refid="efQrcodeDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="QrcodeResult">
+    	select <include refid="efQrcodeColumns" />
+	    from ef_qrcode 
+		<include refid="efQrcodeDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="QrcodeResult">
+    	select <include refid="efQrcodeColumns" />
+	    from ef_qrcode 
+		<include refid="efQrcodeDynamicWhere"/>
+    </select>
+
+	<select id="getByImsi" parameterType="string" resultMap="QrcodeResult"
+		flushCache="false">
+		select <include refid="efQrcodeColumns" /> 
+		from EF_QRCODE where IMSI = #{imsi}  
+	</select>
+	<select id="getByImei" parameterType="string" resultMap="QrcodeResult"
+		flushCache="false">
+		select <include refid="efQrcodeColumns" /> 
+		from EF_QRCODE where imei = #{imei}  
+	</select>
+	<select id="getByImeiList" parameterType="java.util.List" resultMap="QrcodeResult"
+		flushCache="false">
+		select <include refid="efQrcodeColumns" /> 
+		from EF_QRCODE where imei in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			<if test="index==800">
+				null ) and imei in (
+			</if>
+            #{item}
+        </foreach>
+	</select>
+	
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insertBatchEntity" parameterType="java.util.List" 
+			useGeneratedKeys="true"  
+		 flushCache="true">
+		 <!--
+		 declare
+		 begin
+	    	<foreach collection="list" item="item">
+	    		INSERT INTO
+		        ef_qrcode (
+		        	imsi ,
+		        	phone_number ,
+		        	imei,
+		        	model,
+		        	type,
+		        	sim_status,
+		        	status ,
+		        	create_time ,
+		        	remark ,
+		        	creator_id  
+		        ) VALUES (
+		        	#{item.imsi,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.imei,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.model,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.type,javaType=integer,jdbcType=INTEGER} ,
+		        	#{item.simStatus,javaType=integer,jdbcType=INTEGER} ,
+		        	#{item.status,javaType=integer,jdbcType=INTEGER} ,
+		        	#{item.createTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        	#{item.remark,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.creatorId,javaType=long,jdbcType=DECIMAL}   
+		        );
+	        </foreach>
+		 end;
+		 -->
+		 
+		 	INSERT INTO
+		        ef_qrcode (
+		        	imsi ,
+		        	phone_number ,
+		        	imei,
+		        	model,
+		        	type,
+		        	sim_status,
+		        	status ,
+		        	customer_number ,
+		        	qrcode_resource_id ,
+		        	software_version,
+		        	remark ,
+		        	creator_id ,
+		        	create_time
+		        ) VALUES 
+	    	<foreach collection="list" item="item"  separator="," >
+	    		(
+		        	#{item.imsi,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.imei,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.model,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.type,javaType=integer,jdbcType=INTEGER} ,
+		        	#{item.simStatus,javaType=integer,jdbcType=INTEGER} ,
+		        	#{item.status,javaType=integer,jdbcType=INTEGER} ,
+		        	#{item.customerNumber,javaType=integer,jdbcType=INTEGER}, 
+		        	#{item.qrcodeResourceId,javaType=string,jdbcType=VARCHAR},
+		        	#{item.softwareVersion,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.remark,javaType=string,jdbcType=VARCHAR} ,
+		        	#{item.creatorId,javaType=long,jdbcType=DECIMAL} ,
+		        	#{item.createTime,javaType=date,jdbcType=TIMESTAMP}
+		        ) 
+	        </foreach>
+	        
+		</insert>
+</mapper>

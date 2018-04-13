@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.StatisticUserConnect">
+	<resultMap id="StatisticUserConnectResult" type="com.winterframework.efamily.entity.StatisticUserConnect">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="statisticUserConnectColumns">
+	    <![CDATA[
+	        	id as id,
+	        	appcount as appcount,
+	        	time as time,
+	        	devicecount as devicecount,
+	        	ip as ip,
+	        	remark as remark
+	        	
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.StatisticUserConnect" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        statistic_user_connect (
+	        	id ,
+	        	appcount ,
+	        	time ,
+	        	devicecount ,
+	        	ip ,
+	        	remark
+	        ) VALUES (
+	        	#{id,javaType=long,jdbcType=INTEGER} ,
+	        	#{appcount,javaType=integer,jdbcType=INTEGER} ,
+	        	#{time,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{devicecount,javaType=integer,jdbcType=INTEGER} ,
+	        	#{ip,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.StatisticUserConnect">
+	    <![CDATA[
+	        UPDATE statistic_user_connect SET
+		        appcount = #{appcount,javaType=integer,jdbcType=INTEGER} ,
+		        time = #{time,javaType=date,jdbcType=TIMESTAMP} ,
+		        devicecount = #{devicecount,javaType=integer,jdbcType=INTEGER}  ,
+		        ip = #{ip,javaType=string,jdbcType=VARCHAR} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from statistic_user_connect where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="StatisticUserConnectResult" flushCache="false">
+			select <include refid="statisticUserConnectColumns" />
+		    <![CDATA[
+			    from statistic_user_connect 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="StatisticUserConnectResult" flushCache="false">
+			select <include refid="statisticUserConnectColumns" />
+			    from statistic_user_connect 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="statisticUserConnectDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(appcount)">
+				and appcount = #{appcount}
+			</if>
+	       <if test="@Ognl@isNotEmpty(time)">
+				and time = #{time}
+			</if>
+	       <if test="@Ognl@isNotEmpty(devicecount)">
+				and devicecount = #{devicecount}
+			</if>
+			 <if test="@Ognl@isNotEmpty(ip)">
+				and ip = #{ip}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="StatisticUserConnectResult"  flushCache="false">
+    	select <include refid="statisticUserConnectColumns" />
+	    from statistic_user_connect 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from statistic_user_connect 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from statistic_user_connect 
+		<include refid="statisticUserConnectDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="StatisticUserConnectResult">
+    	select <include refid="statisticUserConnectColumns" />
+	    from statistic_user_connect 
+		<include refid="statisticUserConnectDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="StatisticUserConnectResult">
+    	select <include refid="statisticUserConnectColumns" />
+	    from statistic_user_connect 
+		<include refid="statisticUserConnectDynamicWhere"/>
+    </select>
+    
+    <select id="getNewestRecord" resultMap="StatisticUserConnectResult"  flushCache="false">
+    	select <include refid="statisticUserConnectColumns" />
+	    from statistic_user_connect order by id desc limit 1
+    </select>	
+    
+    <select id="getNewestIpRecord" parameterType="String" resultMap="StatisticUserConnectResult"  flushCache="false">
+    	select <include refid="statisticUserConnectColumns" />
+	    from statistic_user_connect where ip=#{ip} order by id desc limit 1
+    </select>	
+
+
+	
+</mapper>

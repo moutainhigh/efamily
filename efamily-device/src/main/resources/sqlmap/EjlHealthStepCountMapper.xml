@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlHealthStepCount">
+	<select id="getLastUserStepCount" resultMap="EjlHealthStepCountResult"  flushCache="false">
+    	select t.ID as id,
+	        	t.USER_ID as userId,
+	        	t.GMT_CREATED as gmtCreated,
+	        	t.STEPS as steps,
+	        	t.BEGINTIME as begintime,
+	        	t.ENDTIME as endtime,
+	        	t.DEVICE_ID as deviceId
+	    from (select * from EJL_HEALTH_STEP_COUNT t where t.user_id=#{userId} 
+	    <if test="@Ognl@isNotEmpty(deviceId)">
+	    and t.DEVICE_ID=#{deviceId} 
+	    </if>
+	    order by GMT_CREATED desc) as t
+		 limit 1
+    </select>
+    
+    <delete id="deleteUserHealthStepCount" parameterType="hashmap">
+	        delete from EJL_HEALTH_STEP_COUNT where
+		        user_id = #{userId} 
+		        <if test="@Ognl@isNotEmpty(deviceId)">
+		        and DEVICE_ID=#{deviceId}
+		        </if>
+	</delete>
+	
+	<select id="getAllDayStepsByUser" parameterType="hashmap" resultType="long">
+    	select sum(STEPS)
+	    from EJL_HEALTH_STEP_COUNT where
+		<![CDATA[  USER_ID = #{userId} and trunc(BEGINTIME)=trunc(#{queryDate}) and trunc(ENDTIME)= trunc(#{queryDate})]]>
+    </select>
+</mapper>

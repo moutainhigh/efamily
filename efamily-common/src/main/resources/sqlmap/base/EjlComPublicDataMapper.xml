@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlPublicData">
+	<resultMap id="EjlPublicDataResult" type="com.winterframework.efamily.entity.EjlPublicData">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlPublicDataColumns">
+	    <![CDATA[
+	        	id as id,
+	        	update_flag as updateFlag,
+	        	device_type as deviceType,
+	        	version_number as versionNumber,
+	        	version_describe as versionDescribe,
+	        	download_url as downloadUrl,
+	        	logo_url as logoUrl,
+	        	we_chat as weChat,
+	        	weibo_name as weiboName,
+	        	weibo_url as weiboUrl,
+	        	phone_number as phoneNumber,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	verify_code_length as verifyCodeLength
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlPublicData" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_public_data (
+	        	update_flag ,
+	        	device_type ,
+	        	version_number ,
+	        	version_describe ,
+	        	download_url ,
+	        	logo_url ,
+	        	we_chat ,
+	        	weibo_name ,
+	        	weibo_url ,
+	        	phone_number ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time ,
+	        	verify_code_length 
+	        ) VALUES (
+	        	#{updateFlag,javaType=string,jdbcType=VARCHAR} ,
+	        	#{deviceType,javaType=integer,jdbcType=INTEGER} ,
+	        	#{versionNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{versionDescribe,javaType=string,jdbcType=VARCHAR} ,
+	        	#{downloadUrl,javaType=string,jdbcType=VARCHAR} ,
+	        	#{logoUrl,javaType=string,jdbcType=VARCHAR} ,
+	        	#{weChat,javaType=string,jdbcType=VARCHAR} ,
+	        	#{weiboName,javaType=string,jdbcType=VARCHAR} ,
+	        	#{weiboUrl,javaType=string,jdbcType=VARCHAR} ,
+	        	#{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  ,
+	        	#{verifyCodeLength,javaType=integer,jdbcType=INTEGER} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlPublicData">
+	        UPDATE ejl_public_data SET
+			        <if test="@Ognl@isNotEmpty(updateFlag)">
+					update_flag = #{updateFlag,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(deviceType)">
+					device_type = #{deviceType,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(versionNumber)">
+					version_number = #{versionNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(versionDescribe)">
+					version_describe = #{versionDescribe,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(downloadUrl)">
+					download_url = #{downloadUrl,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(logoUrl)">
+					logo_url = #{logoUrl,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(weChat)">
+					we_chat = #{weChat,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(weiboName)">
+					weibo_name = #{weiboName,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(weiboUrl)">
+					weibo_url = #{weiboUrl,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(phoneNumber)">
+					phone_number = #{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(remark)">
+					remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updatorId)">
+					updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+				    <if test="@Ognl@isNotEmpty(verifyCodeLength)">
+					verify_code_length = #{verifyCodeLength,javaType=integer,jdbcType=INTEGER},
+				    </if>
+				    update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP}
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_public_data where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlPublicDataResult" flushCache="false">
+			select <include refid="ejlPublicDataColumns" />
+		    <![CDATA[
+			    from ejl_public_data 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlPublicDataResult" flushCache="false">
+			select <include refid="ejlPublicDataColumns" />
+			    from ejl_public_data 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}				
+                </foreach>					
+		</select>	
+
+	<sql id="ejlPublicDataDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateFlag)">
+				and update_flag = #{updateFlag}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceType)">
+				and device_type = #{deviceType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(versionNumber)">
+				and version_number = #{versionNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(versionDescribe)">
+				and version_describe = #{versionDescribe}
+			</if>
+	       <if test="@Ognl@isNotEmpty(downloadUrl)">
+				and download_url = #{downloadUrl}
+			</if>
+	       <if test="@Ognl@isNotEmpty(logoUrl)">
+				and logo_url = #{logoUrl}
+			</if>
+	       <if test="@Ognl@isNotEmpty(weChat)">
+				and we_chat = #{weChat}
+			</if>
+	       <if test="@Ognl@isNotEmpty(weiboName)">
+				and weibo_name = #{weiboName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(weiboUrl)">
+				and weibo_url = #{weiboUrl}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phoneNumber)">
+				and phone_number = #{phoneNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		   <if test="@Ognl@isNotEmpty(verifyCodeLength)">
+				and verify_code_length = #{verifyCodeLength}
+		    </if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlPublicDataResult"  flushCache="false">
+    	select <include refid="ejlPublicDataColumns" />
+	    from ejl_public_data 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_public_data 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_public_data 
+		<include refid="ejlPublicDataDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlPublicDataResult">
+    	select <include refid="ejlPublicDataColumns" />
+	    from ejl_public_data 
+		<include refid="ejlPublicDataDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+		<include refid="pageCondition"/>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlPublicDataResult">
+    	select <include refid="ejlPublicDataColumns" />
+	    from ejl_public_data 
+		<include refid="ejlPublicDataDynamicWhere"/>
+    </select>
+
+	<sql id="pageCondition">
+	       <if test="@Ognl@isNotEmpty(offset)">
+				limit #{offset}
+			</if>
+	       <if test="@Ognl@isNotEmpty(lastRows)">
+				, #{lastRows}
+			</if>
+	</sql>
+	
+</mapper>

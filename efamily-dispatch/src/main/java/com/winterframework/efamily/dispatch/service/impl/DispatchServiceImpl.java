@@ -1,0 +1,85 @@
+package com.winterframework.efamily.dispatch.service.impl;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.winterframework.efamily.base.enums.Separator;
+import com.winterframework.efamily.base.http.IHttpClient;
+import com.winterframework.efamily.base.model.Response;
+import com.winterframework.efamily.base.redis.RedisClient;
+import com.winterframework.efamily.base.utils.JsonUtils;
+import com.winterframework.efamily.dispatch.exception.DispatchException;
+import com.winterframework.efamily.dispatch.model.ResultCode;
+import com.winterframework.efamily.dispatch.service.IDispatchService;
+import com.winterframework.efamily.dto.common.RedisPrefix;
+import com.winterframework.efamily.dto.server.ServerLoad;
+import com.winterframework.efamily.entity.EfServer;
+import com.winterframework.modules.spring.exetend.PropertyConfig;
+
+@Service("dispatchServiceImpl")
+@Transactional(rollbackFor = Exception.class)
+public class DispatchServiceImpl implements IDispatchService {
+	private static final Logger log = LoggerFactory.getLogger(DispatchServiceImpl.class);
+	@PropertyConfig("server.url.ccontrol")
+	private String serverUrl;
+	@PropertyConfig("ccontrol.server.load")
+	private String urlPath;
+	
+	@Resource(name = "RedisClient")
+	private RedisClient redisClient;	
+	@Resource(name = "httpClientImpl")
+	private IHttpClient httpClient;
+	
+	public String getServer(String ip) throws DispatchException{
+		/**
+		 * 1.获取可用服务器列表
+		 * 2.找出负载低的服务器
+		 */
+		try{
+			Response<List<ServerLoad>> serverLoadList=null;
+			serverLoadList=httpClient.invokeHttp(serverUrl+urlPath,"",new TypeReference<Response<List<ServerLoad>>>() {
+			});
+			ServerLoad serverLoad=getLowestLoadServer(serverLoadList.getData());
+			String serverInfo=null;
+			if(null!=serverLoad){
+				serverInfo=serverLoad.getIp()+Separator.vertical+serverLoad.getPort();
+			}
+			return serverInfo;
+		}catch(Exception e){
+			log.error("get server load error.", e);
+			throw new DispatchException(ResultCode.HTTP);
+		}
+	}
+	protected List<EfServer> getServerList() throws DispatchException{
+		String serverStr=redisClient.get(RedisPrefix.SERVER_LIST);
+		if(null!=serverStr){
+			return JsonUtils.fromJson2List(serverStr, EfServer.class);
+		}
+		return null;
+	}
+	protected ServerLoad getLowestLoadServer(List<ServerLoad> serverLoadList) throws DispatchException{
+		//找出负载最低的服务器
+		if(null!=serverLoadList && serverLoadList.size()>0){
+			sort(serverLoadList);
+			return serverLoadList.get(0);
+		}
+		return null;
+	}
+	private void sort(List<ServerLoad> serverLoadList){
+		Collections.sort(serverLoadList, new Comparator<ServerLoad>() {
+			@Override
+			public int compare(ServerLoad o1, ServerLoad o2) { 
+				return o1.getLoad()>=o2.getLoad()?1:-1;
+			}
+		});
+	}
+}

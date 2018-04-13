@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.OrgUser">
+	<resultMap id="OrgUserResult" type="com.winterframework.efamily.entity.OrgUser">
+	</resultMap>
+
+	<resultMap id="UserHeartRateAndBloodPressureResult" type="com.winterframework.efamily.entity.UserHeartRateAndBloodPressure">
+	</resultMap>	
+
+	<resultMap id="DeviceAlarmLastForPlatformResult" type="com.winterframework.efamily.entity.DeviceAlarmLastForPlatform">
+	</resultMap>	
+
+	<resultMap id="OrgBindDeviceBaseInfoResult" type="com.winterframework.efamily.entity.OrgBindDeviceBaseInfo">
+	</resultMap>
+	
+	<resultMap id="OrgUnbindUserBaseInfoResult" type="com.winterframework.efamily.entity.OrgUnbindUserBaseInfo">
+	</resultMap>
+	
+	<resultMap id="WatchParamBaseInfoResult" type="com.winterframework.efamily.entity.WatchParamBaseInfo">
+	</resultMap>
+	
+	<resultMap id="MemberSimpleInfoStructResult" type="com.winterframework.efamily.entity.MemberSimpleInfoStruct">
+	</resultMap>	
+	
+	
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orgUserColumns">
+	    <![CDATA[
+	        	id as id,
+	        	org_id as orgId,
+	        	user_id as userId,
+	        	name as name,
+	        	head_img as headImg,
+	        	status as status,
+	        	birthday as birthday,
+	        	id_number as idNumber,
+	        	sex as sex,
+	        	age as age,
+	        	height as height,
+	        	weight as weight,
+	        	phone_number as phoneNumber,
+	        	live_address as liveAddress,
+	        	emergency_contact as emergencyContact,
+	        	emergency_contact_phone as emergencyContactPhone,
+	        	emergency_contact_relation as emergencyContactRelation,
+	        	diet_taboo as dietTaboo,
+	        	interests as interests,
+	        	household_address as householdAddress,
+	        	guardian_name as guardianName,
+	        	guardian_phone_number as guardianPhoneNumber,
+	        	guardian_relation as guardianRelation,
+	        	nations as nations,
+	        	blood_type as bloodType,
+	        	profession as profession,
+	        	rh_negative as rhNegative,
+	        	work_unit as workUnit,
+	        	education_degree as educationDegree,
+	        	income_source as incomeSource,
+	        	marital_status as maritalStatus,
+	        	health_status as healthStatus,
+	        	body_status as bodyStatus,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.OrgUser" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        org_user (
+	        	org_id ,
+	        	user_id ,
+	        	name ,
+	        	head_img ,
+	        	status ,
+	        	birthday ,
+	        	id_number ,
+	        	sex ,
+	        	age ,
+	        	height ,
+	        	weight ,
+	        	phone_number ,
+	        	live_address ,
+	        	emergency_contact ,
+	        	emergency_contact_phone ,
+	        	emergency_contact_relation ,
+	        	diet_taboo ,
+	        	interests ,
+	        	household_address ,
+	        	guardian_name ,
+	        	guardian_phone_number ,
+	        	guardian_relation ,
+	        	nations ,
+	        	blood_type ,
+	        	profession ,
+	        	rh_negative ,
+	        	work_unit ,
+	        	education_degree ,
+	        	income_source ,
+	        	marital_status ,
+	        	health_status ,
+	        	body_status ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time
+	        ) VALUES (
+	        	#{orgId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{headImg,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{birthday,javaType=string,jdbcType=VARCHAR} ,
+	        	#{idNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{sex,javaType=integer,jdbcType=INTEGER} ,
+	        	#{age,javaType=integer,jdbcType=INTEGER} ,
+	        	#{height,javaType=long,jdbcType=DECIMAL} ,
+	        	#{weight,javaType=long,jdbcType=DECIMAL} ,
+	        	#{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{liveAddress,javaType=string,jdbcType=VARCHAR} ,
+	        	#{emergencyContact,javaType=string,jdbcType=VARCHAR} ,
+	        	#{emergencyContactPhone,javaType=string,jdbcType=VARCHAR} ,
+	        	#{emergencyContactRelation,javaType=string,jdbcType=VARCHAR} ,
+	        	#{dietTaboo,javaType=string,jdbcType=VARCHAR} ,
+	        	#{interests,javaType=string,jdbcType=VARCHAR} ,
+	        	#{householdAddress,javaType=string,jdbcType=VARCHAR} ,
+	        	#{guardianName,javaType=string,jdbcType=VARCHAR} ,
+	        	#{guardianPhoneNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{guardianRelation,javaType=string,jdbcType=VARCHAR} ,
+	        	#{nations,javaType=string,jdbcType=VARCHAR} ,
+	        	#{bloodType,javaType=string,jdbcType=VARCHAR} ,
+	        	#{profession,javaType=string,jdbcType=VARCHAR} ,
+	        	#{rhNegative,javaType=string,jdbcType=VARCHAR} ,
+	        	#{workUnit,javaType=string,jdbcType=VARCHAR} ,
+	        	#{educationDegree,javaType=string,jdbcType=VARCHAR} ,
+	        	#{incomeSource,javaType=string,jdbcType=VARCHAR} ,
+	        	#{maritalStatus,javaType=string,jdbcType=VARCHAR} ,
+	        	#{healthStatus,javaType=string,jdbcType=VARCHAR} ,
+	        	#{bodyStatus,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.OrgUser">
+	        UPDATE org_user SET
+			        <if test="@Ognl@isNotEmpty(orgId)">
+					org_id = #{orgId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(userId)">
+					user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(name)">
+					name = #{name,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(headImg)">
+					head_img = #{headImg,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(status)">
+					status = #{status,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(birthday)">
+					birthday = #{birthday,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(idNumber)">
+					id_number = #{idNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(sex)">
+					sex = #{sex,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(age)">
+					age = #{age,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(height)">
+					height = #{height,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(weight)">
+					weight = #{weight,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(phoneNumber)">
+					phone_number = #{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(liveAddress)">
+					live_address = #{liveAddress,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(emergencyContact)">
+					emergency_contact = #{emergencyContact,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(emergencyContactPhone)">
+					emergency_contact_phone = #{emergencyContactPhone,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(emergencyContactRelation)">
+					emergency_contact_relation = #{emergencyContactRelation,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(dietTaboo)">
+					diet_taboo = #{dietTaboo,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(interests)">
+					interests = #{interests,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(householdAddress)">
+					household_address = #{householdAddress,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(guardianName)">
+					guardian_name = #{guardianName,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(guardianPhoneNumber)">
+					guardian_phone_number = #{guardianPhoneNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(guardianRelation)">
+					guardian_relation = #{guardianRelation,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(nations)">
+					nations = #{nations,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(bloodType)">
+					blood_type = #{bloodType,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(profession)">
+					profession = #{profession,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(rhNegative)">
+					rh_negative = #{rhNegative,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(workUnit)">
+					work_unit = #{workUnit,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(educationDegree)">
+					education_degree = #{educationDegree,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(incomeSource)">
+					income_source = #{incomeSource,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(maritalStatus)">
+					marital_status = #{maritalStatus,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(healthStatus)">
+					health_status = #{healthStatus,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(bodyStatus)">
+					body_status = #{bodyStatus,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(remark)">
+					remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updatorId)">
+					updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updateTime)">
+					update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+				    </if>
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from org_user where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="OrgUserResult" flushCache="false">
+			select <include refid="orgUserColumns" />
+		    <![CDATA[
+			    from org_user 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="OrgUserResult" flushCache="false">
+			select <include refid="orgUserColumns" />
+			    from org_user 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="orgUserDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(orgId)">
+				and org_id = #{orgId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(name)">
+				and name = #{name}
+			</if>
+	       <if test="@Ognl@isNotEmpty(headImg)">
+				and head_img = #{headImg}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(birthday)">
+				and birthday = #{birthday}
+			</if>
+	       <if test="@Ognl@isNotEmpty(idNumber)">
+				and id_number = #{idNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sex)">
+				and sex = #{sex}
+			</if>
+	       <if test="@Ognl@isNotEmpty(age)">
+				and age = #{age}
+			</if>
+	       <if test="@Ognl@isNotEmpty(height)">
+				and height = #{height}
+			</if>
+	       <if test="@Ognl@isNotEmpty(weight)">
+				and weight = #{weight}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phoneNumber)">
+				and phone_number = #{phoneNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(liveAddress)">
+				and live_address = #{liveAddress}
+			</if>
+	       <if test="@Ognl@isNotEmpty(emergencyContact)">
+				and emergency_contact = #{emergencyContact}
+			</if>
+	       <if test="@Ognl@isNotEmpty(emergencyContactPhone)">
+				and emergency_contact_phone = #{emergencyContactPhone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(emergencyContactRelation)">
+				and emergency_contact_relation = #{emergencyContactRelation}
+			</if>
+	       <if test="@Ognl@isNotEmpty(dietTaboo)">
+				and diet_taboo = #{dietTaboo}
+			</if>
+	       <if test="@Ognl@isNotEmpty(interests)">
+				and interests = #{interests}
+			</if>
+	       <if test="@Ognl@isNotEmpty(householdAddress)">
+				and household_address = #{householdAddress}
+			</if>
+	       <if test="@Ognl@isNotEmpty(guardianName)">
+				and guardian_name = #{guardianName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(guardianPhoneNumber)">
+				and guardian_phone_number = #{guardianPhoneNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(guardianRelation)">
+				and guardian_relation = #{guardianRelation}
+			</if>
+	       <if test="@Ognl@isNotEmpty(nations)">
+				and nations = #{nations}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bloodType)">
+				and blood_type = #{bloodType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(profession)">
+				and profession = #{profession}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rhNegative)">
+				and rh_negative = #{rhNegative}
+			</if>
+	       <if test="@Ognl@isNotEmpty(workUnit)">
+				and work_unit = #{workUnit}
+			</if>
+	       <if test="@Ognl@isNotEmpty(educationDegree)">
+				and education_degree = #{educationDegree}
+			</if>
+	       <if test="@Ognl@isNotEmpty(incomeSource)">
+				and income_source = #{incomeSource}
+			</if>
+	       <if test="@Ognl@isNotEmpty(maritalStatus)">
+				and marital_status = #{maritalStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(healthStatus)">
+				and health_status = #{healthStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(bodyStatus)">
+				and body_status = #{bodyStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="OrgUserResult"  flushCache="false">
+    	select <include refid="orgUserColumns" />
+	    from org_user 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from org_user 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from org_user 
+		<include refid="orgUserDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="OrgUserResult">
+    	select <include refid="orgUserColumns" />
+	    from org_user 
+		<include refid="orgUserDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="OrgUserResult">
+    	select <include refid="orgUserColumns" />
+	    from org_user 
+		<include refid="orgUserDynamicWhere"/>
+    </select>
+    
+    
+    	<select id="getUserHeartRateAndBloodPressureList" resultMap="UserHeartRateAndBloodPressureResult">
+        SELECT 
+          ou.id as orgUserId,
+          ou.user_id AS userId,
+          ou.name AS userName,
+          (SELECT  CONCAT(ebp.high,'/',ebp.low) FROM ejl_health_blood_pressure ebp WHERE ebp.user_id=ou.user_id ORDER BY ebp.from_time DESC LIMIT 1) AS bloodPressure,
+          (SELECT ehr.rate FROM ejl_health_heart_rate ehr WHERE ehr.user_id=ou.user_id ORDER BY ehr.from_time DESC LIMIT 1 ) AS heartRate  
+        FROM org_user ou 
+        WHERE ou.org_id=#{orgId} AND ou.status=#{status}
+        <if test="@Ognl@isNotEmpty(name)">
+			and ou.name like CONCAT('%',#{name},'%') 
+		</if>
+		<if test="@Ognl@isNotEmpty(phoneNumber)">
+			and ou.phone_number like CONCAT('%',#{phoneNumber},'%') 
+		</if>
+    </select>
+
+    
+    	<select id="getDeviceAlarmLastForPlatformList" resultMap="DeviceAlarmLastForPlatformResult" parameterType="hashmap">
+	        SELECT 
+	          ou.id as memberId,
+	          ou.user_id as userId,
+	          ou.name as userName,
+	          ou.head_img as headImg,
+	          dl.type as type,
+	       	  dl.value as value,
+	       	  dl.time as time
+	        FROM org_user ou ,ef_device_alarm_last dl
+	        WHERE ou.user_id=dl.user_id and ou.org_id=#{orgId} AND ou.status=#{status} AND dl.status=0 AND dl.time <![CDATA[>]]>  #{time}
+	        group by dl.type
+        </select>
+     
+   <select id="getOrgBindDeviceBaseInfo" resultMap="OrgBindDeviceBaseInfoResult">
+    	select   
+			ou.id as orgUserId,
+			ou.name as orgUserName,
+			ed.user_id as userId,
+			ed.name as	deviceName,
+			ed.type as type,
+			ed.status as status,
+			ed.code as imei,
+			(select param_value from ejl_device_parm_config where device_id=ed.id and param_key='battery') as battery,
+			ed.phone_number	as	phoneNumber,
+			ed.bind_on_off_time as	bindOnOffTime
+	    from org_user ou , ejl_device ed
+        where
+        ou.org_id=#{orgId} and ou.status=1
+        and ou.user_id=ed.user_id
+        and ed.status=1
+        <if test="@Ognl@isNotEmpty(orgUserName)">
+			and ou.name like CONCAT('%',#{orgUserName},'%') 
+		</if>
+		<if test="@Ognl@isNotEmpty(imei)">
+			and ed.code like CONCAT('%',#{imei},'%') 
+		</if>
+        order by ou.id asc
+        limit #{start},#{pagesize}
+    </select>
+	
+	<select id="getOrgUnbindUserBaseInfo" resultMap="OrgUnbindUserBaseInfoResult">
+    	select   
+			ou.id as orgUserId,
+			ou.name as orgUserName,
+			ou.id_number as idNumber,
+			ou.phone_number as phoneNumber
+	    from org_user ou 
+        where
+        ou.org_id=#{orgId} and ou.status=0
+        <if test="@Ognl@isNotEmpty(name)">
+			and ou.name like CONCAT('%',#{name},'%') 
+		</if>
+	    <if test="@Ognl@isNotEmpty(phoneNumber)">
+			and ou.phone_number like CONCAT('%',#{phoneNumber},'%') 
+		</if>
+        order by id asc
+        limit #{start},#{pagesize}
+    </select>
+	
+	<select id="getWatchParamBaseInfo" parameterType="long"  resultMap="WatchParamBaseInfoResult">
+    	select   
+			  ou.id as orgUserId,
+			  ou.user_id as userId,
+			  ou.name as orgUserName,
+			  ou.id_number as idNumber,
+			  ou.phone_number as phoneNumber,
+			  ou.guardian_name as guardianName,
+			  ou.guardian_phone_number as guardianPhoneNumber,
+			  ou.status as status,
+			  
+			  ed.id as deviceId,
+			  ed.update_time as updateTime,
+			  ed.code as imei,
+			  ed.name as deviceName,
+			  (select edpc.param_value from ejl_device_parm_config edpc where edpc.device_id=ed.id and edpc.param_key='battery' ) as battery,
+			  ed.phone_number as simPhoneNumber
+	    from org_user ou ,ejl_device ed
+        where
+        ou.id=#{orgUserId} and ou.status=1 and ou.user_id=ed.user_id and ed.status=1
+        order by ou.id asc
+
+    </select>
+    
+    	<select id="getMemberSimpleInfoStructList" resultMap="MemberSimpleInfoStructResult">
+	    	select   
+				 ou.id as orgUserId,
+				 ou.org_id as orgId,
+				 ou.user_id as userId,
+				 ou.name as name,
+				 ou.id_number as idNumber,
+				 ou.status as status,
+				 ou.sex as sex,
+				 ou.age as age,
+				 ou.phone_number as phoneNumber,
+				 ou.emergency_contact as emergencyContact,
+				 ou.emergency_contact_phone as emergencyContactPhone,
+				 ou.emergency_contact_relation as emergencyContactRelation
+		    from org_user ou 
+	        where
+	        ou.org_id=#{orgId} and ou.status <![CDATA[<]]> 9
+	        <if test="@Ognl@isNotEmpty(name)">
+				and ou.name like CONCAT('%',#{name},'%') 
+			</if>
+		    <if test="@Ognl@isNotEmpty(phoneNumber)">
+				and ou.phone_number like CONCAT('%',#{phoneNumber},'%') 
+			</if>
+			<if test="@Ognl@isNotEmpty(idNumber)">
+				and ou.id_number like CONCAT('%',#{idNumber},'%') 
+			</if>
+	        order by id desc
+	        limit #{start},#{pagesize}
+    </select>
+    
+    
+
+</mapper>

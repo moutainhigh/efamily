@@ -1,0 +1,8 @@
+测试协议
+1）心跳包 cmd:0
+   key          value          类型
+   h_address    32.1111        str
+   z_address    32.1111        str
+ 
+   返回值：
+  time        1234556         number

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+  "http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+<configuration>
+	<typeHandlers>
+		<typeHandler javaType="boolean" jdbcType="VARCHAR"
+			handler="com.winterframework.orm.dal.ibatis3.type.YesNoTypeHandler" />
+		<typeHandler handler="org.apache.ibatis.type.DateTypeHandler"
+			javaType="java.util.Date" jdbcType="TIMESTAMP" />
+	</typeHandlers>
+
+	<plugins>
+
+		<plugin interceptor="com.winterframework.orm.page.plugin.OffsetLimitInterceptor">
+			<property name="dialectClass"
+				value="com.winterframework.orm.dialect.OracleDialect" />
+		</plugin>
+		<plugin interceptor="com.google.code.shardbatis.plugin.ShardPlugin" >
+			<property name="shardingConfig" value="shard_config.xml" />
+		</plugin >
+	</plugins>
+	 <mappers>
+		<mapper resource="sqlmap/base/EjlComLocationMapper.xml"/>
+		<mapper resource="sqlmap/base/EjlComDeviceMapper.xml"/>
+		<mapper resource="sqlmap/base/EjlComUserMapper.xml"/>
+		<mapper resource="sqlmap/base/EjlComHealthHeartRateMapper.xml"   />
+		<mapper resource="sqlmap/base/EjlComHealthSleepMapper.xml"   />  
+		<mapper resource="sqlmap/base/EjlComHealthStepCountMapper.xml"   />
+		<mapper resource="sqlmap/base/EfKeyMapper.xml"   />
+		<mapper resource="sqlmap/base/EfKeyApiMapper.xml"   />
+		<mapper resource="sqlmap/base/EfComApiAccessMapper.xml"/> 
+		<mapper resource="sqlmap/base/EfComApiMapper.xml"/> 
+		<mapper resource="sqlmap/ApiLocationMapper.xml"/>       
+		<mapper resource="sqlmap/HealthStepCountMapper.xml"   />
+		<mapper resource="sqlmap/EjlHealthHeartRateMapper.xml"   /> 
+		<mapper resource="sqlmap/ApiDeviceMapper.xml"   /> 
+		<mapper resource="sqlmap/EjlHealthSleepMapper.xml"   /> 
+		<mapper resource="sqlmap/EfApiLimitMapper.xml"   />
+		<mapper resource="sqlmap/EfApiMapper.xml"   /> 
+		<mapper resource="sqlmap/EfKeyApiLimitMapper.xml"   /> 
+		<mapper resource="sqlmap/EfKeyIpMapper.xml"   /> 
+		
+		<mapper resource="sqlmap/base/EjlComVerifyCodeMapper.xml"   /> 
+		<mapper resource="sqlmap/base/EfComOrgMapper.xml"   /> 
+		<mapper resource="sqlmap/base/EfComOrgDeviceMapper.xml"   /> 
+		<mapper resource="sqlmap/base/EfComApiLimitMapper.xml"   /> 
+		<mapper resource="sqlmap/base/EfComApiMapper.xml"   /> 
+		<mapper resource="sqlmap/base/EfComKeyApiLimitMapper.xml"   /> 
+		<mapper resource="sqlmap/base/EfComKeyIpMapper.xml"   /> 
+	</mappers> 
+
+</configuration>

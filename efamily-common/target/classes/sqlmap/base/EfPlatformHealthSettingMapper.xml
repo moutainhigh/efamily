@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfPlatformHealthSetting">
+	<resultMap id="EfPlatformHealthSettingResult" type="com.winterframework.efamily.entity.EfPlatformHealthSetting">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfPlatformHealthSettingColumns">
+       	id as id,
+       	age_level as ageLevel,
+       	blood_high_span as bloodHighSpan,
+       	blood_low_span as bloodLowSpan,
+       	rate_span as rateSpan,
+       	remark as remark,
+       	creator_id as creatorId,
+       	create_time as createTime,
+       	updator_id as updatorId,
+       	update_time as updateTime
+	</sql>
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" parameterType="com.winterframework.efamily.entity.EfPlatformHealthSetting" 
+		useGeneratedKeys="true" keyProperty="id" 
+	 flushCache="true">
+        INSERT INTO
+        ef_platform_health_setting (
+        	age_level ,
+        	blood_high_span ,
+        	blood_low_span ,
+        	rate_span ,
+        	remark ,
+        	creator_id ,
+        	create_time  
+        ) VALUES (
+        	#{ageLevel,javaType=integer,jdbcType=INTEGER} ,
+        	#{bloodHighSpan,javaType=string,jdbcType=VARCHAR} ,
+        	#{bloodLowSpan,javaType=string,jdbcType=VARCHAR} ,
+        	#{rateSpan,javaType=string,jdbcType=VARCHAR} ,
+        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+        )
+	</insert>
+    
+	<update id="update" parameterType="com.winterframework.efamily.entity.EfPlatformHealthSetting">
+        UPDATE ef_platform_health_setting SET
+	        age_level = #{ageLevel,javaType=integer,jdbcType=INTEGER} ,
+	        blood_high_span = #{bloodHighSpan,javaType=string,jdbcType=VARCHAR} ,
+	        blood_low_span = #{bloodLowSpan,javaType=string,jdbcType=VARCHAR} ,
+	        rate_span = #{rateSpan,javaType=string,jdbcType=VARCHAR} ,
+	        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+	        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+        WHERE 
+	        id = #{id} 
+	</update>
+   <delete id="delete" parameterType="java.lang.Long">
+        delete from ef_platform_health_setting where
+	        id = #{id} 
+    </delete>   
+    <select id="getById" parameterType="long" resultMap="EfPlatformHealthSettingResult" flushCache="false">
+		select <include refid="EfPlatformHealthSettingColumns" />
+		    from ef_platform_health_setting 
+	        where 
+	        id = #{id} 
+	</select>	
+	<select id="getByIds" parameterType="list"  resultMap="EfPlatformHealthSettingResult" flushCache="false">
+		select <include refid="EfPlatformHealthSettingColumns" />
+		    from ef_platform_health_setting 
+	        where id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+               #{item}
+               </foreach>					
+	</select>	
+ 
+	<select id="getAll" resultMap="EfPlatformHealthSettingResult"  flushCache="false">
+    	select <include refid="EfPlatformHealthSettingColumns" />
+	    from ef_platform_health_setting 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+    <select id="getByAgeLevel" parameterType="integer" resultMap="EfPlatformHealthSettingResult" flushCache="false">
+		select <include refid="EfPlatformHealthSettingColumns" />
+		    from ef_platform_health_setting 
+	        where 
+	        age_level = #{ageLevel} 
+	</select>	
+    
+</mapper>

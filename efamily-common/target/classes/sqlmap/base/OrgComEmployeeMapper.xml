@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.OrgEmployee">
+	<resultMap id="OrgEmployeeResult" type="com.winterframework.efamily.entity.OrgEmployee">
+	</resultMap>
+	<resultMap id="OrgEmployeeBaseInfoResult" type="com.winterframework.efamily.entity.OrgEmployeeBaseInfo">
+	</resultMap>	
+	<resultMap id="AccountNumberBaseInfoResult" type="com.winterframework.efamily.entity.AccountNumberBaseInfo">
+	</resultMap>		
+	
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orgEmployeeColumns">
+	    <![CDATA[
+	        	id as id,
+	        	org_id as orgId,
+	        	role_id as roleId,
+	        	name as name,
+	        	password as password,
+	        	head_img as headImg,
+	        	status as status,
+	        	login_auth as loginAuth,
+                id_number as idNumber,
+	        	birthday as birthday,
+	        	sex as sex,
+	        	age as age,
+	        	height as height,
+	        	weight as weight,
+	        	phone_number as phoneNumber,
+	        	emergency_contact as emergencyContact,
+	        	emergency_contact_phone as emergencyContactPhone,
+	        	emergency_contact_relation as emergencyContactRelation,
+	        	nations as nations,
+	        	marital_status as maritalStatus,
+	        	education_degree as educationDegree,
+	        	political_outlook as politicalOutlook,
+	        	part as part,
+	        	duty as duty,
+	        	contract_start_time as contractStartTime,
+	        	contract_end_time as contractEndTime,
+	        	contract_number as contractNumber,
+	        	pay_range as payRange,
+	        	household_address as householdAddress,
+	        	live_address as liveAddress,
+	        	entry_time as entryTime,
+	        	leave_time as leaveTime,
+	        	off_work_start_time as offWorkStartTime,
+	        	off_work_end_time as offWorkEndTime,
+	        	create_auth_user as createAuthUser,
+			    create_auth_time as createAuthTime,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.OrgEmployee" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        org_employee (
+	        	id ,
+	        	org_id ,
+	        	role_id ,
+	        	name ,
+	        	password ,
+	        	head_img ,
+	        	status ,
+	        	id_number ,
+	        	login_auth ,
+	        	birthday ,
+	        	sex ,
+	        	age ,
+	        	height ,
+	        	weight ,
+	        	phone_number ,
+	        	emergency_contact ,
+	        	emergency_contact_phone ,
+	        	emergency_contact_relation ,
+	        	nations ,
+	        	marital_status ,
+	        	education_degree ,
+	        	political_outlook ,
+	        	part ,
+	        	duty ,
+	        	contract_start_time ,
+	        	contract_end_time ,
+	        	contract_number ,
+	        	pay_range ,
+	        	household_address ,
+	        	live_address ,
+	        	entry_time,
+	        	leave_time,
+	            off_work_start_time,
+	        	off_work_end_time,
+	        	create_auth_user,
+	        	create_auth_time,
+	        	remark ,
+	        	creator_id ,
+	        	create_time 
+	        ) VALUES (
+	        	#{id,javaType=long,jdbcType=INTEGER} ,
+	        	#{orgId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{roleId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{password,javaType=string,jdbcType=VARCHAR} ,
+	        	#{headImg,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{idNumber,javaType=string,jdbcType=VARCHAR} ,
+                #{loginAuth,javaType=integer,jdbcType=INTEGER} ,
+	        	#{birthday,javaType=string,jdbcType=VARCHAR} ,
+	        	#{sex,javaType=integer,jdbcType=INTEGER} ,
+	        	#{age,javaType=integer,jdbcType=INTEGER} ,
+	        	#{height,javaType=long,jdbcType=DECIMAL} ,
+	        	#{weight,javaType=long,jdbcType=DECIMAL} ,
+	        	#{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{emergencyContact,javaType=string,jdbcType=VARCHAR} ,
+	        	#{emergencyContactPhone,javaType=string,jdbcType=VARCHAR} ,
+	        	#{emergencyContactRelation,javaType=string,jdbcType=VARCHAR} ,
+	        	#{nations,javaType=string,jdbcType=VARCHAR} ,
+	        	#{maritalStatus,javaType=string,jdbcType=VARCHAR} ,
+	        	#{educationDegree,javaType=string,jdbcType=VARCHAR} ,
+	        	#{politicalOutlook,javaType=string,jdbcType=VARCHAR} ,
+	        	#{part,javaType=string,jdbcType=VARCHAR} ,
+	        	#{duty,javaType=string,jdbcType=VARCHAR} ,
+	        	#{contractStartTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{contractEndTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{contractNumber,javaType=string,jdbcType=VARCHAR} ,
+	        	#{payRange,javaType=string,jdbcType=VARCHAR} ,
+	        	#{householdAddress,javaType=string,jdbcType=VARCHAR} ,
+	        	#{liveAddress,javaType=string,jdbcType=VARCHAR} ,
+	        	#{entryTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{leaveTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{offWorkStartTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{offWorkEndTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{createAuthUser,javaType=string,jdbcType=VARCHAR} ,
+	        	#{createAuthTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.OrgEmployee">
+	        UPDATE org_employee SET
+			        <if test="@Ognl@isNotEmpty(orgId)">
+					org_id = #{orgId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(roleId)">
+					role_id = #{roleId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(name)">
+					name = #{name,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(password)">
+					password = #{password,javaType=string,jdbcType=VARCHAR} ,
+				    </if>	        	
+			        <if test="@Ognl@isNotEmpty(headImg)">
+					head_img = #{headImg,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(status)">
+					status = #{status,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(idNumber)">
+					id_number = #{idNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(loginAuth)">
+					login_auth = #{loginAuth,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(birthday)">
+					birthday = #{birthday,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(sex)">
+					sex = #{sex,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(age)">
+					age = #{age,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(height)">
+					height = #{height,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(weight)">
+					weight = #{weight,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(phoneNumber)">
+					phone_number = #{phoneNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(emergencyContact)">
+					emergency_contact = #{emergencyContact,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(emergencyContactPhone)">
+					emergency_contact_phone = #{emergencyContactPhone,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(emergencyContactRelation)">
+					emergency_contact_relation = #{emergencyContactRelation,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(nations)">
+					nations = #{nations,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(maritalStatus)">
+					marital_status = #{maritalStatus,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(educationDegree)">
+					education_degree = #{educationDegree,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(politicalOutlook)">
+					political_outlook = #{politicalOutlook,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(part)">
+					part = #{part,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(duty)">
+					duty = #{duty,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(contractStartTime)">
+					contract_start_time = #{contractStartTime,javaType=date,jdbcType=TIMESTAMP} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(contractEndTime)">
+					contract_end_time = #{contractEndTime,javaType=date,jdbcType=TIMESTAMP} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(contractNumber)">
+					contract_number = #{contractNumber,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(payRange)">
+					pay_range = #{payRange,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(householdAddress)">
+					household_address = #{householdAddress,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(liveAddress)">
+					live_address = #{liveAddress,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+				    <if test="@Ognl@isNotEmpty(entryTime)">
+					entry_time = #{entryTime,javaType=date,jdbcType=TIMESTAMP} ,
+				    </if>
+				    <if test="@Ognl@isNotEmpty(leaveTime)">
+					leave_time = #{leaveTime,javaType=date,jdbcType=TIMESTAMP} ,
+				    </if>
+				    <if test="@Ognl@isNotEmpty(offWorkStartTime)">
+					off_work_start_time = #{offWorkStartTime,javaType=date,jdbcType=TIMESTAMP} ,
+				    </if>
+				    <if test="@Ognl@isNotEmpty(offWorkEndTime)">
+					off_work_end_time = #{offWorkEndTime,javaType=date,jdbcType=TIMESTAMP} ,
+				    </if>
+				    <if test="@Ognl@isNotEmpty(createAuthUser)">
+					create_auth_user = #{createAuthUser,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(createAuthTime)">
+					create_auth_time = #{createAuthTime,javaType=date,jdbcType=TIMESTAMP} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(remark)">
+					remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updatorId)">
+					updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updateTime)">
+					update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+				    </if>
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from org_employee where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="OrgEmployeeResult" flushCache="false">
+			select <include refid="orgEmployeeColumns" />
+		    <![CDATA[
+			    from org_employee 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="OrgEmployeeResult" flushCache="false">
+			select <include refid="orgEmployeeColumns" />
+			    from org_employee 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="orgEmployeeDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(orgId)">
+				and org_id = #{orgId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(roleId)">
+				and role_id = #{roleId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(name)">
+				and name = #{name}
+			</if>
+	       <if test="@Ognl@isNotEmpty(password)">
+				and password = #{password}
+			</if>
+	       <if test="@Ognl@isNotEmpty(headImg)">
+				and head_img = #{headImg}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+			 <if test="@Ognl@isNotEmpty(idNumber)">
+				and id_number = #{idNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(loginAuth)">
+				and login_auth = #{loginAuth}
+			</if>
+	       <if test="@Ognl@isNotEmpty(birthday)">
+				and birthday = #{birthday}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sex)">
+				and sex = #{sex}
+			</if>
+	       <if test="@Ognl@isNotEmpty(age)">
+				and age = #{age}
+			</if>
+	       <if test="@Ognl@isNotEmpty(height)">
+				and height = #{height}
+			</if>
+	       <if test="@Ognl@isNotEmpty(weight)">
+				and weight = #{weight}
+			</if>
+	       <if test="@Ognl@isNotEmpty(phoneNumber)">
+				and phone_number = #{phoneNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(emergencyContact)">
+				and emergency_contact = #{emergencyContact}
+			</if>
+	       <if test="@Ognl@isNotEmpty(emergencyContactPhone)">
+				and emergency_contact_phone = #{emergencyContactPhone}
+			</if>
+	       <if test="@Ognl@isNotEmpty(emergencyContactRelation)">
+				and emergency_contact_relation = #{emergencyContactRelation}
+			</if>
+	       <if test="@Ognl@isNotEmpty(nations)">
+				and nations = #{nations}
+			</if>
+	       <if test="@Ognl@isNotEmpty(maritalStatus)">
+				and marital_status = #{maritalStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(educationDegree)">
+				and education_degree = #{educationDegree}
+			</if>
+	       <if test="@Ognl@isNotEmpty(politicalOutlook)">
+				and political_outlook = #{politicalOutlook}
+			</if>
+	       <if test="@Ognl@isNotEmpty(part)">
+				and part = #{part}
+			</if>
+	       <if test="@Ognl@isNotEmpty(duty)">
+				and duty = #{duty}
+			</if>
+	       <if test="@Ognl@isNotEmpty(contractStartTime)">
+				and contract_start_time = #{contractStartTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(contractEndTime)">
+				and contract_end_time = #{contractEndTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(contractNumber)">
+				and contract_number = #{contractNumber}
+			</if>
+	       <if test="@Ognl@isNotEmpty(payRange)">
+				and pay_range = #{payRange}
+			</if>
+	       <if test="@Ognl@isNotEmpty(householdAddress)">
+				and household_address = #{householdAddress}
+			</if>
+	       <if test="@Ognl@isNotEmpty(liveAddress)">
+				and live_address = #{liveAddress}
+			</if>
+			<if test="@Ognl@isNotEmpty(entryTime)">
+				and entry_time = #{entryTime}
+			</if>
+			<if test="@Ognl@isNotEmpty(leaveTime)">
+				and leave_time = #{leaveTime}
+			</if>		
+			<if test="@Ognl@isNotEmpty(offWorkStartTime)">
+				and off_work_start_time = #{offWorkStartTime}
+			</if>		
+			<if test="@Ognl@isNotEmpty(offWorkEndTime)">
+				and off_work_end_time = #{offWorkEndTime}
+			</if>		
+		   <if test="@Ognl@isNotEmpty(createAuthUser)">
+				and create_auth_user = #{createAuthUser}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createAuthTime)">
+				and create_auth_time = #{createAuthTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="OrgEmployeeResult"  flushCache="false">
+    	select <include refid="orgEmployeeColumns" />
+	    from org_employee 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from org_employee 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from org_employee 
+		<include refid="orgEmployeeDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="OrgEmployeeResult">
+    	select <include refid="orgEmployeeColumns" />
+	    from org_employee 
+		<include refid="orgEmployeeDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="OrgEmployeeResult">
+    	select <include refid="orgEmployeeColumns" />
+	    from org_employee 
+		<include refid="orgEmployeeDynamicWhere"/>
+    </select>
+    
+    <select id="getOrgEmployeeBaseInfoPage" resultMap="OrgEmployeeBaseInfoResult">
+    	select 
+    	     oe.id as orgEmployeeId,
+    		 oe.org_id as orgId,
+			 (select name from org_role where id=oe.role_id) as roleName,
+			 oe.name as name,
+			 oe.status as status,
+			 oe.login_auth as loginAuth,
+			 oe.id_number as idNumber,
+			 oe.phone_number as phoneNumber,
+			 oe.entry_time as entryTime,
+			 oe.leave_time as leaveTime
+	    from org_employee oe
+        where
+        org_id=#{orgId} and status<![CDATA[<]]>9
+        <if test="@Ognl@isNotEmpty(name)">
+			and oe.name like CONCAT('%',#{name},'%')
+		</if>
+        <if test="@Ognl@isNotEmpty(phoneNumber)">
+			and oe.phone_number like CONCAT('%',#{phoneNumber},'%') 
+		</if>
+		<if test="@Ognl@isNotEmpty(roleId)">
+			and oe.role_id = #{roleId}
+		</if>
+		<if test="@Ognl@isNotEmpty(status)">
+			and oe.status = #{status}
+		</if>
+		<if test="@Ognl@isNotEmpty(entryTimeStart)">
+			and oe.entry_time <![CDATA[>]]> #{entryTimeStart}  
+		</if>
+        <if test="@Ognl@isNotEmpty(entryTimeEnd)">
+			and oe.entry_time <![CDATA[<]]> #{entryTimeEnd}
+		</if>
+        order by id asc
+        limit #{start},#{pagesize}
+    </select>
+
+    <select id="getAccountNumberBaseInfoPage" resultMap="AccountNumberBaseInfoResult">
+    	select 
+    		 oe.org_id as orgId,
+			 (select name from org_role where id=oe.role_id) as roleName,
+			 oe.name as name,
+			 oe.phone_number as phoneNumber,
+			 oe.create_auth_user as createAuthUser,
+			 oe.create_auth_time as createAuthTime
+	    from org_employee oe
+        where
+        org_id=#{orgId} and status<![CDATA[<]]>9
+        <if test="@Ognl@isNotEmpty(name)">
+			and oe.name like CONCAT('%',#{name},'%')
+		</if>
+        <if test="@Ognl@isNotEmpty(phoneNumber)">
+			and oe.phone_number like CONCAT('%',#{phoneNumber},'%') 
+		</if>
+        and oe.login_auth=1
+        order by id asc
+        limit #{start},#{pagesize}
+    </select>
+
+   
+	
+</mapper>

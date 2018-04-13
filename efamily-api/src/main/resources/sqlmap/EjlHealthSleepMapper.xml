@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlHealthSleep">
+	
+	<select id="getSleepsByTime" resultMap="EjlHealthSleepResult">
+    	select DISTINCT
+	        	from_time as fromTime,
+	        	to_time as toTime,
+	        	deepStruc as deepStruc,
+	        	wakeStruc as wakeStruc
+	    from ejl_health_sleep 
+		<include refid="ejlHealthSleepDynamicWhere"/>
+		order by from_time
+    </select>
+</mapper>

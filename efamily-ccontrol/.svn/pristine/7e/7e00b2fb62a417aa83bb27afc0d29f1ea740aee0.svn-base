@@ -1,0 +1,16 @@
+package com.winterframework.efamily.server.notification;
+
+import com.winterframework.efamily.base.model.NotyTask;
+import com.winterframework.efamily.ccontrol.exception.CcontrolException;
+import com.winterframework.efamily.server.notification.exception.NotificationException;
+
+
+public interface INotyTaskService {
+	/**
+	 * 推送任务处理
+	 * @param notyTask
+	 * @return taskId
+	 * @throws CcontrolException
+	 */
+	void doProcess(NotyTask notyTask) throws NotificationException;
+}

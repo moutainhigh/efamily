@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlUserChartRoom">
+	<resultMap id="EjlUserChartRoomResult" type="com.winterframework.efamily.entity.EjlUserChartRoom">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlUserChartRoomColumns">
+	    <![CDATA[
+	        	id as id,
+	        	user_id as userId,
+	        	chat_room_id as chatRoomId,
+	        	chat_room_name as chatRoomName,
+	        	chat_room_top as chatRoomTop,
+	        	message_notify as messageNotify,
+	        	save_address_book as saveAddressBook,
+	        	status as status,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlUserChartRoom" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_user_chart_room (
+	        	user_id ,
+	        	chat_room_id ,
+	        	chat_room_name ,
+	        	chat_room_top ,
+	        	message_notify ,
+	        	save_address_book ,
+	        	status ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time  
+	        ) VALUES (
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{chatRoomId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{chatRoomName,javaType=string,jdbcType=VARCHAR} ,
+	        	#{chatRoomTop,javaType=long,jdbcType=DECIMAL} ,
+	        	#{messageNotify,javaType=long,jdbcType=DECIMAL} ,
+	        	#{saveAddressBook,javaType=long,jdbcType=DECIMAL} ,
+	        	#{status,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlUserChartRoom">
+	        UPDATE ejl_user_chart_room 
+		        <set>
+			        <if test="@Ognl@isNotEmpty(userId)">
+					   USER_ID = #{userId,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+			        <if test="@Ognl@isNotEmpty(chatRoomId)">
+					   CHAT_ROOM_ID = #{chatRoomId,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(chatRoomName)">
+					   CHAT_ROOM_NAME = #{chatRoomName,javaType=string,jdbcType=VARCHAR} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(chatRoomTop)">
+					   CHAT_ROOM_TOP = #{chatRoomTop,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(messageNotify)">
+					   MESSAGE_NOTIFY = #{messageNotify,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(saveAddressBook)">
+					   SAVE_ADDRESS_BOOK = #{saveAddressBook,javaType=long,jdbcType=DECIMAL} ,
+					</if>
+					<if test="@Ognl@isNotEmpty(status)">
+					   STATUS = #{status,javaType=long,jdbcType=DECIMAL}  ,
+					</if>
+					<if test="@Ognl@isNotEmpty(remark)">
+                       remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+                    </if>
+                    <if test="@Ognl@isNotEmpty(updatorId)">
+                       updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}, 
+                    </if>
+                    <if test="@Ognl@isNotEmpty(updateTime)">
+                       update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+                    </if>
+		        </set>
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_user_chart_room where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlUserChartRoomResult" flushCache="false">
+			select <include refid="ejlUserChartRoomColumns" />
+		    <![CDATA[
+			    from ejl_user_chart_room 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlUserChartRoomResult" flushCache="false">
+			select <include refid="ejlUserChartRoomColumns" />
+			    from ejl_user_chart_room 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="ejlUserChartRoomDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(chatRoomId)">
+				and chat_room_id = #{chatRoomId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(chatRoomName)">
+				and chat_room_name = #{chatRoomName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(chatRoomTop)">
+				and chat_room_top = #{chatRoomTop}
+			</if>
+	       <if test="@Ognl@isNotEmpty(messageNotify)">
+				and message_notify = #{messageNotify}
+			</if>
+	       <if test="@Ognl@isNotEmpty(saveAddressBook)">
+				and save_address_book = #{saveAddressBook}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlUserChartRoomResult"  flushCache="false">
+    	select <include refid="ejlUserChartRoomColumns" />
+	    from ejl_user_chart_room 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_user_chart_room 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_user_chart_room 
+		<include refid="ejlUserChartRoomDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlUserChartRoomResult">
+    	select <include refid="ejlUserChartRoomColumns" />
+	    from ejl_user_chart_room 
+		<include refid="ejlUserChartRoomDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlUserChartRoomResult">
+    	select <include refid="ejlUserChartRoomColumns" />
+	    from ejl_user_chart_room 
+		<include refid="ejlUserChartRoomDynamicWhere"/>
+    </select>
+
+
+	
+</mapper>

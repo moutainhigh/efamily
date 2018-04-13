@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlHealthStepCount">
+     <select id="getHealthStepCountByTime" parameterType="hashmap" resultMap="EjlHealthStepCountResult">
+    	select <include refid="ejlHealthStepCountColumns" />
+	    from ejl_health_step_count 
+		<include refid="ejlHealthStepCountDynamicWhere"/>
+    </select>
+</mapper>

@@ -1,0 +1,10 @@
+{
+    "exceptionUserInfo": [{
+        "userId": 1479,
+        "userName": "李老八",
+        "headImg": "16165151651",
+        "value": "type=7&{\"time\":\"1474333388000\",\"heartRate\":\"102\",\"imei\":\"351601106298854\",\"type\":\"2\"} #type=4&{\"location\":\"40.080505,116.347417\",\"radius\":\"289\",\"type\":\"1\"}#type=3&{\"battery\":\"20\"}",
+        "location": "22.55328086,113.93939687"
+    }],
+    "resultCode": "0"
+}

@@ -1,0 +1,126 @@
+package com.winterframework.efamily.server.notification;
+
+import java.text.MessageFormat;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.winterframework.efamily.base.enums.StatusCode;
+import com.winterframework.efamily.base.exception.BizException;
+import com.winterframework.efamily.base.model.Context;
+import com.winterframework.efamily.base.model.Notification;
+import com.winterframework.efamily.base.model.NotyMessage;
+import com.winterframework.efamily.base.model.NotyRule;
+import com.winterframework.efamily.base.model.NotyTarget;
+import com.winterframework.efamily.base.model.NotyTask;
+import com.winterframework.efamily.base.model.Response;
+import com.winterframework.efamily.base.utils.DateUtils;
+import com.winterframework.efamily.ccontrol.utils.ServerUrlUtil;
+import com.winterframework.efamily.dto.device.NotyTaskRequest;
+import com.winterframework.efamily.dto.notification.NotificationInner;
+import com.winterframework.efamily.entity.NotificationTask;
+import com.winterframework.efamily.entity.converter.DTOConvert;
+import com.winterframework.efamily.server.notification.exception.NotificationException;
+import com.winterframework.efamily.service.INotificationTaskService;
+import com.winterframework.efamily.utils.HttpUtil;
+import com.winterframework.modules.spring.exetend.PropertyConfig;
+
+@Service("notificationServiceImpl")
+public class NotificationServiceImpl implements INotificationService{
+	private static final Logger log= LoggerFactory.getLogger(NotificationServiceImpl.class);
+	@PropertyConfig("server.connect.push")
+	private String urlPath;
+	@Resource(name="httpUtil")
+	protected HttpUtil httpUtil;
+	@Resource(name="serverUrlUtil")
+	private ServerUrlUtil serverUrlUtil;
+	@Resource(name="notyTaskNewServiceImpl")
+	private INotyTaskService notyTaskService;
+	@Resource(name = "notificationTaskServiceImpl")
+	private INotificationTaskService notificationTaskService;
+	
+	public Long notify(Notification notification) throws NotificationException {
+		NotyTarget target=notification.getTarget();
+		NotyMessage message=notification.getMessage();
+		NotyMessage.Type type=message.getType();
+		Map<String,String> data=message.getData();
+		Long userId=target.getUserId();
+		Long deviceId=target.getDeviceId();
+		
+		NotyTaskRequest bizReq=new NotyTaskRequest();
+		bizReq.setNotyType(type.getCode());
+		bizReq.setMessageId(message.getId());
+		bizReq.setUserId(userId);
+		bizReq.setDeviceId(deviceId);
+		bizReq.setStatus(NotyTask.Status.UN_SEND.getCode());
+		String remark = "noticeType="+data.get("noticeType")+";command="+message.getCommand();
+		bizReq.setRemark(remark);
+		
+		Context ctx=new Context();
+		ctx.set("userId","-1");
+		NotificationTask notificationTask=DTOConvert.toNotificationTask(bizReq);
+		try{
+			notificationTaskService.save(ctx,notificationTask);
+		}catch(BizException e){
+			log.error("save notification task failed.",e);
+			throw new NotificationException(e.getCode(),e);
+		}
+		 		
+		Long taskId=notificationTask.getId();
+		if(null!=target && null==target.getDeviceId()){
+			data.put("notyType", type.getCode()+"");
+			data.put("notyId", taskId+"");			
+		}
+		if(!notification.isRealTime()){
+			NotyRule rule=NotyRuleFactory.getInstance(type);
+			NotyTask task=new NotyTask(); 
+			task.setRule(rule);
+			task.setTarget(target);
+			task.setCommand(message.getCommand());
+			task.setNotyType(type);
+			task.setData(data);
+			task.setTaskTime(DateUtils.getCurTime());
+			task.setOffline(Boolean.FALSE);
+			task.setSentOffline(Boolean.FALSE);
+			task.setId(taskId);
+			//task.setSendType(message.getSendType());
+			notyTaskService.doProcess(task);	
+		}else{
+			//考虑合并到NotyMessage.Type.REAL_TIME
+			notifyRealTime(userId,deviceId,taskId,message.getCommand(),data);
+		}
+		return taskId;
+	}
+	private void notifyRealTime(Long userId,Long deviceId,Long taskId,int command,Map<String,String> data) throws NotificationException{ 
+		String serverUrl=serverUrlUtil.getConnectServer(userId, deviceId);
+		
+		//正常连接
+		try {
+			NotificationInner notificationInner=new NotificationInner();
+			notificationInner.setUserId(userId);
+			notificationInner.setDeviceId(deviceId);
+			notificationInner.setCommand(command);
+			notificationInner.setData(data);
+			
+			Response<NotificationInner> bizRes=httpUtil.http(serverUrl,urlPath,notificationInner,NotificationInner.class);
+			if(null!=bizRes && bizRes.getStatus().getCode()!=StatusCode.OK.getValue()){
+				
+				//更新状态：已发送 
+				NotyTaskRequest bizReq2=new NotyTaskRequest();
+				bizReq2.setId(taskId);
+				bizReq2.setStatus(NotyTask.Status.SENT.getCode());
+				Context ctx=new Context();
+				ctx.set("userId", -1+"");	//系统
+				NotificationTask notificationTask=DTOConvert.toNotificationTask(bizReq2);
+				
+				notificationTaskService.save(ctx, notificationTask);
+			}
+		} catch (BizException e) {
+			log.error("notify real time failed.status="+e.getCode()+" "+e.getMessage(),e);
+		}
+	}
+}

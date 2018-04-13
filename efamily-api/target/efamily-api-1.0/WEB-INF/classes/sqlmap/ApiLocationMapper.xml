@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlLocation">
+     <select id="getListAfterByDeviceIdAndTime" parameterType="hashmap" resultMap="EjlLocationResult"  flushCache="false">
+    	select <include refid="ejlLocationColumns" />
+	    from EJL_LOCATION
+        where device_id=#{deviceId}
+        and TIME <![CDATA[>]]> #{bizTime}
+        order by TIME asc
+    </select>
+</mapper>

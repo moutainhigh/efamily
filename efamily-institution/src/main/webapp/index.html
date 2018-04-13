@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>首页</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/dateRange.css" />
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/AMap.WalkingRender1120.css" />
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/area.js"></script>
+    <script type="text/javascript" src="js/dateRange.js"></script>
+    <!--    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=6d4fe30e994b2375d43c97dc71b7f4fb&plugin=AMap.Walking"></script>-->
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=6d4fe30e994b2375d43c97dc71b7f4fb&plugin=AMap.Geocoder"></script>
+    <script type="text/javascript" src="js/WalkingRender1230.js"></script>
+    <script src="js/style.js"></script>
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <!--    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=6d4fe30e994b2375d43c97dc71b7f4fb&plugin=AMap.Geocoder"></script>-->
+</head>
+
+<body>
+    <header class="top">
+        <div class="headerLeft">
+            <div class="logoBox"><img src="img/logo.png" alt=""></div>
+            <span class="YJL">亿家联健康卫士管理平台</span>
+        </div>
+
+        <div class="headerRight">
+            <span class="rightW"></span>
+
+            <span class="rightT"></span>
+            <span class="rightI"><img src="img/icon_weather_qt.png" alt=""></span>
+            <span class="rightY"></span>
+            <span class="rightS"></span>
+            <div class="userId">
+                <span>ljy483185756</span>
+                <img src="img/kit_xljt.png" alt="">
+            </div>
+            <span class="rightH"><img src="img/logo.png" alt=""></span>
+        </div>
+    </header>
+    <section class="content">
+        <aside class="content_left">
+            <ul>
+                <li id="home">
+                    <img src="img/icon_home_nor.png" alt="">
+                    <span>主页</span>
+                </li>
+                <li id="vipMng">
+                    <img src="img/icon_hygl_nor.png" alt="">
+                    <span>会员管理</span>
+                </li>
+                <li id="fenceSet">
+                    <img src="img/icon_wlsetting_nor.png" alt="">
+                    <span>围栏设置</span>
+                </li>
+                <li id="EquMan">
+                    <img src="img/icon_sbgl_nor.png" alt="">
+                    <span>设备管理</span>
+                </li>
+                <li id="helRec">
+                    <img src="img/icon_dagl_nor.png" alt="">
+                    <span>健康档案</span>
+                </li>
+                <li id="EmpMng">
+                    <img src="img/icon_yggl_nor.png" alt="">
+                    <span>员工管理</span>
+                </li>
+
+                <li id="accNum">
+                    <img src="img/icon_zhgl_nor.png" alt="">
+                    <span>账号管理</span>
+                </li>
+
+                <li id="chaPassword">
+                    <img src="img/icon_xgmm_nor.png" alt="">
+                    <span>修改密码</span>
+                </li>
+            </ul>
+            <article class="showLis">显示列表
+                <p>></p>
+            </article>
+        </aside>
+        <article class="content_Right">
+            <header>
+                <div class="reg_adr">
+                    <select id="s_province" name="s_province"></select>
+                    <select id="s_city" name="s_city"></select>
+                    <select id="s_county" name="s_county" display="none"></select>
+                    <select id="s_place" name="s_place">
+                        <option value="养老院选择">养老院选择</option>
+                    </select>
+                </div>
+            </header>
+            <section class="map">
+                <header class="H_z">
+                    <div><a href="index.html">主页</a></div>
+                    <p>基本信息</p>
+                </header>
+                <article class="mapLeft">
+                    <div>
+                        <input id="inputId" type="text" placeholder="&nbsp;&nbsp;请输入会员姓名">
+                        <img class="fa" src="img/icon_search_nor.png" alt="">
+                    </div>
+                    <table id="T_showLis" cellspacing="0">
+                        <!--
+                        <tr class="V_lis">
+                            <td class="td_lis">李老八</td>
+                            <td>aaa</td>
+                            <td>123</td>
+                        </tr>
+-->
+                    </table>
+                </article>
+                <article class="detailLeft">
+                    <section class="S_P1">
+                        <div class="D_P1Top">
+                            <span class="tianChong"></span>
+                            <div class="L_L"><img src="img/icon_touxiang.jpg" alt=""></div>
+                            <div class="R_R">
+                                <p>姓名：<span class="D_name"></span></p>
+                                <p>性别：<span id="sex"></span></p>
+                                <p>出生日期：<span id="birthday"></span></p>
+                                <p>身份证号：<span>1575492667521943192</span></p>
+                            </div>
+                        </div>
+                        <div class="D_P1Down">
+                            <p>手机号：<span id="phoneNumber"></span></p>
+                            <p>居住地址：<span id="liveAddress"></span></p>
+                            <p>紧急联系人：<span id="emergencyContact"></span></p>
+                            <p>与紧急联系人关系：<span id="emeContactRel"></span></p>
+                            <p>紧急联系人手机号：<span class="D_tell"></span></p>
+                            <p>饮食禁忌：<span class="D_detail"></span></p>
+                            <i class="C_green">查看更多</i>
+                        </div>
+                    </section>
+                    <section class="S_P2">
+                        <span>健康记录</span>
+                        <p>
+                            <img class="rateCliBtn" src="img/icon_search_nor.png" alt="">
+                        </p>                        
+                        <div id="datePicker_demo1">
+                            <input type="text" name="date" id="date_demo1" value="" class="gri_date" style="float:left" />
+                        </div>
+
+                    </section>
+                    <section class="S_P3">
+                        <div id="head_tab">
+                            <div class="tab_top1">心率历史记录</div>
+                            <div class="tab_top2">血压历史记录</div>
+                            <div class="tab_top3">血糖历史记录</div>
+                        </div>
+                        <div id="head_show">
+                           
+<!--
+                            <div class="show_data">
+                                <p class="P_top">09-21</p>
+                                <p class="P_num">
+                                    <span>21:00</span>
+                                    <span class="P_rightSpan">
+                                    <span class="pianGao">偏高</span>
+                                    <span>129</span>
+                                    <span>bmp</span>
+                                    </span>
+                                </p>
+                            </div>
+-->
+                            
+                        </div>
+                        
+                        
+                    </section>
+                </article>
+                <article class="mapRight">
+                    <div id="container"></div>
+                    <div id="panel"></div>
+                    <div class="button-group">
+                        <input type="button" class="button" value="开始动画" id="start" />
+                        <input type="button" class="button" value="停止动画" id="stop" />
+                    </div>
+                    <div class="hover_guiji">
+                        <div class="left_hover">
+                            <img src="img/icon_shishiwz_hover.png" alt="">
+                            <span class="reaTimLoc">实时位置</span>
+                        </div>
+                        <div class="right_hover">
+                            <img src="img/icon_lsgj_hover.png" alt="">
+                            <span>轨迹</span>
+                            <img src="img/kit_xlsj.png" alt="">
+                        </div>
+                        <div class="show_guiji">
+                            <div class="right_oth1">
+                                <span>3小时轨迹</span>
+                            </div>
+                            <div class="right_oth2">
+                                <span>6小时轨迹</span>
+                            </div>
+                            <div class="right_oth3">
+                                <span>12小时轨迹</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="show_place">
+                        <p class="place_start">开始</p>
+                        <p class="zhankai">共0个位置</p>
+                        <!--<p class="place_nor">中途地点中途地点中途地点</p>-->
+                        <p class="place_end">结束</p>
+                    </div>
+                </article>
+            </section>
+        </article>
+    </section>
+    <div class="noyichangBg">
+        <div class="noyichang">
+            <div class="noword">没有异常数据</div>
+            <div class="trueBtn">
+                <button>确定</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+</script>
+
+</html>

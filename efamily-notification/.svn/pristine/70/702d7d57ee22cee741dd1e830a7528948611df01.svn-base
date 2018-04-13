@@ -1,0 +1,264 @@
+package com.winterframework.efamily.notification.daemon;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.winterframework.efamily.base.enums.Separator;
+import com.winterframework.efamily.base.enums.YesNo;
+import com.winterframework.efamily.base.model.NotyMessage;
+import com.winterframework.efamily.base.model.NotyTarget;
+import com.winterframework.efamily.base.redis.RedisClient;
+import com.winterframework.efamily.base.redis.RedisQueue;
+import com.winterframework.efamily.base.utils.DateUtils;
+import com.winterframework.efamily.base.utils.JsonUtils;
+import com.winterframework.efamily.base.utils.PropertyUtil;
+import com.winterframework.efamily.dto.RemindTaskStruc;
+import com.winterframework.efamily.dto.UserNotice;
+import com.winterframework.efamily.dto.notification.NotificationInner;
+import com.winterframework.efamily.notification.enums.PushStatus;
+import com.winterframework.efamily.notification.enums.QueuePrefix;
+import com.winterframework.efamily.notification.model.NotyQueue;
+import com.winterframework.efamily.notification.model.NotyRule;
+import com.winterframework.efamily.notification.model.NotyTask;
+import com.winterframework.efamily.notification.service.IConnectService;
+import com.winterframework.efamily.notification.service.INotificationTpService;
+import com.winterframework.modules.utils.SpringContextHolder;
+
+public class NotificationProcessorNew2 implements Runnable{ 
+	private static final Logger log= LoggerFactory.getLogger(NotificationProcessorNew2.class);
+	private final RedisQueue redisQueue=SpringContextHolder.getBean("redisQueue");
+	private final RedisClient redisClient=SpringContextHolder.getBean("RedisClient");
+	private final IConnectService connectService=SpringContextHolder.getBean("connectServiceImpl");
+	private final INotificationTpService notificationTpService=SpringContextHolder.getBean("notificationTpServiceImpl");
+	
+	private final PropertyUtil propertyUtil=SpringContextHolder.getBean("propertyUtil");
+	 
+	private String queueName; 
+	public NotificationProcessorNew2(String queueName){
+		this.queueName=queueName;
+	}
+	@Override
+	public void run() {
+		//log.debug("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+Thread.currentThread().getName());
+	    process(); 
+	}
+	
+	private void process(){
+		//synchronized(queueName){	//防止并发 必须要加锁 
+			//System.out.println(Thread.currentThread().getName()+"LLLLLLLLLLLLLLLLLIIIIIIIIIIIIIIIIIIIIIIIIII:"+queueName);
+			try{
+				int length=redisQueue.len(queueName);
+				if(length>0){
+					NotyTask notyTask=null;
+					int index=0;
+					NotyTarget target=getTarget(queueName);
+					Long userId=target.getUserId();
+					Long deviceId=target.getDeviceId();
+					boolean hasOffline=false;
+					for(;index<length;index++){
+						String dataStr=redisQueue.get(queueName, index);	
+						if(null==dataStr) continue;
+						notyTask=JsonUtils.fromJson(dataStr, NotyTask.class);
+						//System.out.println(Thread.currentThread().getName()+"QQQQQQQQQQQQQQQQQQQQQQQQQQQ:"+queueName+ "  index="+index+" dataStr="+dataStr);
+						boolean isFinished=doProcess(notyTask);
+						if(isFinished){
+							redisQueue.del(queueName, dataStr);
+							index--;
+							length--;
+						}else{
+							redisQueue.set(queueName, index, JsonUtils.toJson(notyTask));
+							hasOffline=true;
+						}
+					}
+					if(hasOffline){
+						redisQueue.add(NotyQueue.QUEUE_USER_OFFLINE, queueName);
+					}
+					redisClient.set(QueuePrefix.NOTY_INDEX+queueName, index+""); 	//记录用户队列下次处理的index
+					//System.out.println(Thread.currentThread().getName()+"LLLLLLLLLLLLLLLLLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO:"+queueName);
+				}
+			}catch(Exception e){
+				log.error("process notification error. queueName="+queueName,e);
+			}finally{
+				redisClient.unlock(QueuePrefix.NOTY_LOCK+queueName);
+			}
+		//}
+	}
+	
+	/**
+	 * @param notyTask
+	 * @param isOfflineQueue
+	 * @return 是否用户已经断线（断线则下次再处理）
+	 */
+	private boolean doProcess(NotyTask notyTask) {
+		/**
+		 * 获取目标服务器IP
+		 * 调用推送http
+		 * isOK则删除队列
+		 * isDisconnect则离线推送
+		 * isFailed则保留队列
+		 */
+		boolean isOffline=false;
+		NotyTarget target=notyTask.getTarget();
+		NotyRule rule=notyTask.getRule();
+		Map<String,String> data=notyTask.getData();
+		Long taskTime=notyTask.getTaskTime();
+		
+		int command=notyTask.getCommand();
+		Long userId=target.getUserId();
+		Long deviceId=target.getDeviceId(); 
+		int expireTime=rule.getExpireTime();
+		
+		
+		//不管是否离线在线 过期消息 一律先过滤
+		if(expireTime!=-1 && ((DateUtils.getCurTime()-taskTime)/1000/60>expireTime)){
+			return true;
+		}
+		
+		//离线发送过 则标注
+		if(notyTask.isOffline()){
+			data.put("isOffline", YesNo.YES.getValue()+"");
+		}
+		NotificationInner notificationInner=new NotificationInner(userId,deviceId);
+		notificationInner.setCommand(command);
+		notificationInner.setData(data);
+		try{
+			PushStatus pushStatus=connectService.push(notificationInner);
+			if(pushStatus.equals(PushStatus.SUCCESS)){
+				return true;
+			}else if(pushStatus.equals(PushStatus.OFFLINE)){
+				/**离线处理逻辑：
+				 * 设备的消息保留
+				 * APP的离线推送
+				 */
+				if(isOfflineSend(notyTask.getSendType())){
+					isOffline=true;
+					//手表终端 需要连线后继续推送
+					//log.debug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX->userId:"+userId+"  deviceId:"+deviceId);
+					//log.debug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX->userId:"+userId+"  deviceId:"+deviceId);
+					final NotyMessage.Type notyType=notyTask.getNotyType();  
+					if (!notyType.equals(NotyMessage.Type.OPER)&&!notyType.equals(NotyMessage.Type.NOTICE)){
+						//手机终端离线推送（离线在线都需要推送的  离线推送过的就不再推送）
+						if(!notyTask.isSentOffline()){
+							Map<String,String> extraData=new HashMap<String,String>();
+							extraData.put("notyType", data.get("notyType"));
+							if(data.get("noticeType")!=null){
+								extraData.put("noticeType", data.get("noticeType"));
+							}
+							StringBuffer iosMsg = new StringBuffer("");
+							if(notyType.equals(NotyMessage.Type.MSG)){
+								extraData.put("sendUserId", data.get("sendUserId"));
+								extraData.put("name", data.get("senderName"));
+								extraData.put("chatRoomId", data.get("chatGroupId"));
+								extraData.put("chatType", data.get("chatType"));
+								extraData.put("contentType", data.get("contentType"));
+								extraData.put("content", data.get("content"));
+								extraData.put("sendTime", data.get("sendTime"));
+								if(data.get("contentType")!=null && data.get("contentType").equals("6")){//contentType=6 提示类型的聊天内容
+									iosMsg.append(data.get("content"));
+								}else{
+									iosMsg.append(propertyUtil.getProperty("notice.send.message").replace("@_0_@", data.get("senderName")));
+								}
+								
+							}else if(notyType.equals(NotyMessage.Type.REMIND)){
+								RemindTaskStruc remind=JsonUtils.fromJson(data.get("remind"), RemindTaskStruc.class);
+								extraData.put("sendUserId", remind.getUserId()+"");
+								extraData.put("name", remind.getUserName());
+								extraData.put("sendTime", DateUtils.convertDate2Long(DateUtils.currentDate())+"");
+								iosMsg.append(propertyUtil.getProperty("notice.send.remind").replace("@_0_@", remind.getUserName()));
+							} else if(notyType.equals(NotyMessage.Type.ALARM)){
+								extraData.put("userId", data.get("userId"));
+								extraData.put("nickName", data.get("nickName"));
+								if(data.get("noticeType").equals(UserNotice.NoticeType.BATTERY_WARNING.getValue()+"")){
+									extraData.put("battery", data.get("battery"));
+									extraData.put("batteryTime", data.get("batteryTime"));
+									iosMsg.append(propertyUtil.getProperty("notice.watch.battery").replace("@_0_@", data.get("nickName")).replace("@_1_@", data.get("battery")));
+								}else if(data.get("noticeType").equals(UserNotice.NoticeType.ELECTRONIC_WARNING.getValue()+"")){
+									extraData.put("time", data.get("time"));
+									extraData.put("type", data.get("type"));
+									if(data.get("type").equals("1")){
+										iosMsg.append(propertyUtil.getProperty("notice.watch.fence.in").replace("@_0_@", data.get("nickName")).replace("@_1_@", data.get("remark")));
+									}else{
+										iosMsg.append(propertyUtil.getProperty("notice.watch.fence.out").replace("@_0_@", data.get("nickName")).replace("@_1_@", data.get("remark")));
+									}
+								}
+								else if(data.get("noticeType").equals(UserNotice.NoticeType.RATE_WARNING.getValue()+"")){
+									extraData.put("time", data.get("time"));
+									extraData.put("type", data.get("type"));
+									extraData.put("configValue", data.get("configValue"));
+									extraData.put("value", data.get("value"));
+									
+									extraData.put("deviceId", data.get("deviceId"));
+									extraData.put("familyId", data.get("familyId"));
+									iosMsg.append("异常警报：" + data.get("nickName") + "心率数据异常！" );
+								}else if(data.get("noticeType").equals(UserNotice.NoticeType.BLOOOD_PRESSURE.getValue()+"")){
+									extraData.put("time", data.get("time"));
+									extraData.put("type", data.get("type"));
+									extraData.put("configValue", data.get("configValue"));
+									extraData.put("value", data.get("value"));
+									extraData.put("bloodPressureType", data.get("bloodPressureType"));
+									extraData.put("deviceId", data.get("deviceId"));
+									iosMsg.append("异常警报：" + data.get("nickName") + "血压数据异常！" );
+								}
+							}
+							//可改进：独立服务器处理第三方推送 
+							try{
+								notificationTpService.jpush(userId, deviceId, iosMsg.toString(), extraData);	//亿家联APP
+							}catch(Exception e){
+								log.error("JPush failed:"+extraData.toString(),e);
+							} 
+							notyTask.setSentOffline(true);
+							extraData=null;
+						}
+						/*new Thread(){
+							public void run() {								
+								JPushClientUtil.sendPushBy(token+"","您有一条新"+notyType.getValue(),extraData);
+							};
+						}.start();*/
+					}
+					//在线推送（告警离线推了 在线 需要再推）
+					if(notyType.equals(NotyMessage.Type.NOTICE) || notyType.equals(NotyMessage.Type.OPER)||notyType.equals(NotyMessage.Type.ALARM)){
+						if(!notyTask.isOffline()){
+							notyTask.setOffline(true);
+						}
+						//addQueueHead(notyTask);//加入用户队列队首
+						return false;
+					}
+				}
+				
+				//在线推送（告警离线推了 在线 需要再推）
+				if(isOnlineSend(notyTask.getSendType())){
+					if(!notyTask.isOffline()){
+						notyTask.setOffline(true);
+					}
+					//addQueueHead(notyTask);//加入用户队列队首
+					return false;
+				}
+			}else{
+				//推送失败 再推送
+				return false;
+			}
+		}catch(Exception e){
+			log.error("push failed.userId="+userId+" deviceId="+deviceId,e);
+			return false;
+		}
+		return true;
+ 	}
+	private boolean isOfflineSend(int sendType){
+		return sendType==NotyMessage.SendType.OFF_LINE.getValue() || sendType==NotyMessage.SendType.ONFF_LINE.getValue();
+	}
+	private boolean isOnlineSend(int sendType){
+		return sendType==NotyMessage.SendType.ON_LINE.getValue() || sendType==NotyMessage.SendType.ONFF_LINE.getValue();
+	}
+	public static NotyTarget getTarget(String queueNameTarget){
+		if(null==queueNameTarget) return null;
+		String targetStr=queueNameTarget.split(Separator.escape+Separator.underline)[1]; 
+		String[] targetArr=targetStr.split(Separator.escape+Separator.vertical);
+		Long userId=Long.valueOf(targetArr[0]);
+		Long deviceId=targetArr.length==2?Long.valueOf(targetArr[1]):null;
+		
+		return new NotyTarget(userId,deviceId);
+	}
+}

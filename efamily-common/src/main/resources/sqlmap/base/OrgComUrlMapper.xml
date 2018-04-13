@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.OrgUrl">
+	<resultMap id="OrgUrlResult" type="com.winterframework.efamily.entity.OrgUrl">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orgUrlColumns">
+	    <![CDATA[
+	        	id as id,
+	        	parent_id as parentId,
+	        	number as number,
+	        	name as name,
+	        	url as url,
+	        	status as status,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.OrgUrl" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        org_url (
+	        	parent_id ,
+	        	number ,
+	        	name ,
+	        	url ,
+	        	status ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time 
+	        ) VALUES (
+	        	#{parentId,javaType=long,jdbcType=INTEGER} ,
+	        	#{number,javaType=integer,jdbcType=INTEGER} ,
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{url,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.OrgUrl">
+	        UPDATE org_url SET
+			        <if test="@Ognl@isNotEmpty(parentId)">
+					parent_id = #{parentId,javaType=long,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(number)">
+					number = #{number,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(name)">
+					name = #{name,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(url)">
+					url = #{url,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(status)">
+					status = #{status,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(remark)">
+					remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updatorId)">
+					updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updateTime)">
+					update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+				    </if>
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from org_url where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="OrgUrlResult" flushCache="false">
+			select <include refid="orgUrlColumns" />
+		    <![CDATA[
+			    from org_url 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="OrgUrlResult" flushCache="false">
+			select <include refid="orgUrlColumns" />
+			    from org_url 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="orgUrlDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(parentId)">
+				and parent_id = #{parentId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(number)">
+				and number = #{number}
+			</if>
+	       <if test="@Ognl@isNotEmpty(name)">
+				and name = #{name}
+			</if>
+	       <if test="@Ognl@isNotEmpty(url)">
+				and url = #{url}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="OrgUrlResult"  flushCache="false">
+    	select <include refid="orgUrlColumns" />
+	    from org_url 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from org_url 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from org_url 
+		<include refid="orgUrlDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="OrgUrlResult">
+    	select <include refid="orgUrlColumns" />
+	    from org_url 
+		<include refid="orgUrlDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="OrgUrlResult">
+    	select <include refid="orgUrlColumns" />
+	    from org_url 
+		<include refid="orgUrlDynamicWhere"/>
+    </select>
+
+
+    <select id="getByUrl" resultMap="OrgUrlResult" parameterType="java.lang.String">
+	    select <include refid="orgUrlColumns"/>
+	    <![CDATA[
+	        from org_url where url = #{url}
+	    ]]>
+    </select>
+    
+	
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlHealthBloodPressure">
+	<resultMap id="deviceMap" type="hashmap" >
+	  <result property="userId" column="user_id" javaType="long" jdbcType="DECIMAL"/>
+	  <result property="deviceId" column="device_id" javaType="long" jdbcType="DECIMAL"/>
+	</resultMap>
+	
+	<select id="getNoticeUserBloodPressure" resultMap="EjlHealthBloodPressureResult"  flushCache="false">
+    	select <include refid="ejlHealthBloodPressureColumns" />
+	   from ejl_health_blood_pressure s where s.USER_ID=#{userId}
+	    <if test="@Ognl@isNotEmpty(startTime)">
+	       <![CDATA[  and s.from_time>#{startTime}]]>
+	    </if>
+	     <if test="@Ognl@isNotEmpty(toTime)">
+	       <![CDATA[  and s.to_time<#{toTime}]]>
+	    </if>
+	    and (1>1 
+	    <if test="@Ognl@isNotEmpty(systolicPressureGt)">
+	     or s.high>#{systolicPressureGt}
+	    </if>
+	    <if test="@Ognl@isNotEmpty(systolicPressureLt)">
+	    <![CDATA[ or s.high<#{systolicPressureLt}]]>
+	    </if>
+	    <if test="@Ognl@isNotEmpty(diastolicPressureGt)">
+	     or s.low>#{diastolicPressureGt}
+	    </if>
+	    <if test="@Ognl@isNotEmpty(diastolicPressureLt)">
+	    <![CDATA[ or s.low<#{diastolicPressureLt}]]>
+	    </if>
+	    )
+	      order by s.FROM_TIME asc
+    </select>
+    
+    <select id="getLastestUserIdDeviceIdListByCreateTime" resultMap="deviceMap">
+    	select distinct user_id,device_id
+		FROM ejl_health_blood_pressure
+		WHERE create_time between #{fromTime} and #{toTime}
+    </select> 
+    
+    <select id="getSortListByUserIdAndDeviceIdAndSpanAndCreateTime" parameterType="com.winterframework.efamily.entity.EjlHealthBloodPressureAlarmPram" resultMap="EjlHealthBloodPressureResult">
+    	select <include refid="ejlHealthBloodPressureColumns"/>
+		FROM ejl_health_blood_pressure
+		WHERE user_id=#{userId} and device_id=#{deviceId} 
+		and (1>1 
+		<if test="@Ognl@isNotEmpty(lowMin)">
+			or low<![CDATA[<]]>#{lowMin} 
+		</if>
+		<if test="@Ognl@isNotEmpty(lowMax)">
+			or low<![CDATA[>]]>#{lowMax} 
+		</if>
+		<if test="@Ognl@isNotEmpty(highMin)">
+			or high<![CDATA[<]]>#{highMin} 
+		</if>
+		<if test="@Ognl@isNotEmpty(highMax)">
+			or high<![CDATA[>]]>#{highMax} 
+		</if>
+			)
+		and create_time between #{fromTime} and #{toTime}
+		order by to_time asc
+    </select> 
+</mapper>

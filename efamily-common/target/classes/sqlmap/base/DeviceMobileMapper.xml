@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.DeviceMobile">
+	<resultMap id="DeviceMobileResult" type="com.winterframework.efamily.entity.DeviceMobile">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="deviceMobileColumns">
+	    <![CDATA[
+	        	id as id,
+	        	device_id as deviceId,
+	        	server_ip as serverIp,
+	        	network as network,
+	        	mcc as mcc,
+	        	mnc as mnc,
+	        	lac1 as lac1,
+	        	ci1 as ci1,
+	        	rssi1 as rssi1,
+	        	lac2 as lac2,
+	        	ci2 as ci2,
+	        	rssi2 as rssi2,
+	        	lac3 as lac3,
+	        	ci3 as ci3,
+	        	rssi3 as rssi3,
+	        	lac4 as lac4,
+	        	ci4 as ci4,
+	        	rssi4 as rssi4,
+	        	lac5 as lac5,
+	        	ci5 as ci5,
+	        	rssi5 as rssi5,
+	        	time as time,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	op_tag as opTag,
+	        	user_id as userId
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.DeviceMobile" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        device_mobile (
+	        	device_id ,
+	        	server_ip,
+	        	network,
+	        	mcc ,
+	        	mnc ,
+	        	lac1 ,
+	        	ci1 ,
+	        	rssi1 ,
+	        	lac2 ,
+	        	ci2 ,
+	        	rssi2 ,
+	        	lac3 ,
+	        	ci3 ,
+	        	rssi3 ,
+	        	lac4 ,
+	        	ci4 ,
+	        	rssi4 ,
+	        	lac5 ,
+	        	ci5 ,
+	        	rssi5 ,
+	        	time ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time,
+	        	user_id
+	        ) VALUES (
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{serverIp,javaType=string,jdbcType=VARCHAR} ,
+	        	#{network,javaType=string,jdbcType=VARCHAR} ,
+	        	#{mcc,javaType=string,jdbcType=VARCHAR} ,
+	        	#{mnc,javaType=string,jdbcType=VARCHAR} ,
+	        	#{lac1,javaType=string,jdbcType=VARCHAR} ,
+	        	#{ci1,javaType=string,jdbcType=VARCHAR} ,
+	        	#{rssi1,javaType=string,jdbcType=VARCHAR} ,
+	        	#{lac2,javaType=string,jdbcType=VARCHAR} ,
+	        	#{ci2,javaType=string,jdbcType=VARCHAR} ,
+	        	#{rssi2,javaType=string,jdbcType=VARCHAR} ,
+	        	#{lac3,javaType=string,jdbcType=VARCHAR} ,
+	        	#{ci3,javaType=string,jdbcType=VARCHAR} ,
+	        	#{rssi3,javaType=string,jdbcType=VARCHAR} ,
+	        	#{lac4,javaType=string,jdbcType=VARCHAR} ,
+	        	#{ci4,javaType=string,jdbcType=VARCHAR} ,
+	        	#{rssi4,javaType=string,jdbcType=VARCHAR} ,
+	        	#{lac5,javaType=string,jdbcType=VARCHAR} ,
+	        	#{ci5,javaType=string,jdbcType=VARCHAR} ,
+	        	#{rssi5,javaType=string,jdbcType=VARCHAR} ,
+	        	#{time,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP},
+	        	#{userId,javaType=long,jdbcType=DECIMAL}
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.DeviceMobile">
+	    <![CDATA[
+	        UPDATE device_mobile SET
+		        device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+		        server_ip= #{serverIp,javaType=string,jdbcType=VARCHAR} ,
+	        	network = #{network,javaType=string,jdbcType=VARCHAR} ,
+		        mcc = #{mcc,javaType=string,jdbcType=VARCHAR} ,
+		        mnc = #{mnc,javaType=string,jdbcType=VARCHAR} ,
+		        lac1 = #{lac1,javaType=string,jdbcType=VARCHAR} ,
+		        ci1 = #{ci1,javaType=string,jdbcType=VARCHAR} ,
+		        rssi1 = #{rssi1,javaType=string,jdbcType=VARCHAR} ,
+		        lac2 = #{lac2,javaType=string,jdbcType=VARCHAR} ,
+		        ci2 = #{ci2,javaType=string,jdbcType=VARCHAR} ,
+		        rssi2 = #{rssi2,javaType=string,jdbcType=VARCHAR} ,
+		        lac3 = #{lac3,javaType=string,jdbcType=VARCHAR} ,
+		        ci3 = #{ci3,javaType=string,jdbcType=VARCHAR} ,
+		        rssi3 = #{rssi3,javaType=string,jdbcType=VARCHAR} ,
+		        lac4 = #{lac4,javaType=string,jdbcType=VARCHAR} ,
+		        ci4 = #{ci4,javaType=string,jdbcType=VARCHAR} ,
+		        rssi4 = #{rssi4,javaType=string,jdbcType=VARCHAR} ,
+		        lac5 = #{lac5,javaType=string,jdbcType=VARCHAR} ,
+		        ci5 = #{ci5,javaType=string,jdbcType=VARCHAR} ,
+		        rssi5 = #{rssi5,javaType=string,jdbcType=VARCHAR} ,
+		        time = #{time,javaType=long,jdbcType=DECIMAL} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        op_tag = #{opTag,javaType=integer,jdbcType=INTEGER} ,
+		        user_id = #{userId,javaType=long,jdbcType=DECIMAL}
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from device_mobile where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="DeviceMobileResult" flushCache="false">
+			select <include refid="deviceMobileColumns" />
+		    <![CDATA[
+			    from device_mobile 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="DeviceMobileResult" flushCache="false">
+			select <include refid="deviceMobileColumns" />
+			    from device_mobile 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="deviceMobileDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceId)">
+				and device_id = #{deviceId}
+			</if>
+			<if test="@Ognl@isNotEmpty(serverIp)">
+				and server_ip = #{serverIp}
+			</if>
+			<if test="@Ognl@isNotEmpty(network)">
+				and network = #{network}
+			</if>
+	       <if test="@Ognl@isNotEmpty(mcc)">
+				and mcc = #{mcc}
+			</if>
+	       <if test="@Ognl@isNotEmpty(mnc)">
+				and mnc = #{mnc}
+			</if>
+	       <if test="@Ognl@isNotEmpty(lac1)">
+				and lac1 = #{lac1}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ci1)">
+				and ci1 = #{ci1}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rssi1)">
+				and rssi1 = #{rssi1}
+			</if>
+	       <if test="@Ognl@isNotEmpty(lac2)">
+				and lac2 = #{lac2}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ci2)">
+				and ci2 = #{ci2}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rssi2)">
+				and rssi2 = #{rssi2}
+			</if>
+	       <if test="@Ognl@isNotEmpty(lac3)">
+				and lac3 = #{lac3}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ci3)">
+				and ci3 = #{ci3}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rssi3)">
+				and rssi3 = #{rssi3}
+			</if>
+	       <if test="@Ognl@isNotEmpty(lac4)">
+				and lac4 = #{lac4}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ci4)">
+				and ci4 = #{ci4}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rssi4)">
+				and rssi4 = #{rssi4}
+			</if>
+	       <if test="@Ognl@isNotEmpty(lac5)">
+				and lac5 = #{lac5}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ci5)">
+				and ci5 = #{ci5}
+			</if>
+	       <if test="@Ognl@isNotEmpty(rssi5)">
+				and rssi5 = #{rssi5}
+			</if>
+	       <if test="@Ognl@isNotEmpty(time)">
+				and time = #{time}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(opTag)">
+				and op_tag = #{opTag}
+			</if>
+			<if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="DeviceMobileResult"  flushCache="false">
+    	select <include refid="deviceMobileColumns" />
+	    from device_mobile 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from device_mobile 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from device_mobile 
+		<include refid="deviceMobileDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="DeviceMobileResult">
+    	select <include refid="deviceMobileColumns" />
+	    from device_mobile 
+		<include refid="deviceMobileDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="DeviceMobileResult">
+    	select <include refid="deviceMobileColumns" />
+	    from device_mobile 
+		<include refid="deviceMobileDynamicWhere"/>
+    </select>
+
+	<delete id="deleteByDeviceId" parameterType="java.lang.Long"> 
+        delete from DEVICE_MOBILE where DEVICE_ID = #{deviceId}  
+	</delete>
+	<select id="getByDeviceId" parameterType="long" resultMap="DeviceMobileResult"
+		flushCache="false">
+		select
+		<include refid="deviceMobileColumns" /> 
+		from DEVICE_MOBILE where DEVICE_ID = #{deviceId}  
+	</select>
+	<select id="getByOpTag" parameterType="hashmap" resultMap="DeviceMobileResult" flushCache="false">
+		select <include refid="deviceMobileColumns" />
+	    from DEVICE_MOBILE 
+        where OP_TAG = #{opTag}
+        <if test="@Ognl@isNotEmpty(beginTime)">
+        	 and time<![CDATA[>=]]> #{beginTime}
+        </if>
+        <if test="@Ognl@isNotEmpty(endTime)">
+        	 and time<![CDATA[<=]]> #{endTime}
+        </if>
+        <if test="@Ognl@isNotEmpty(userId)">
+			and user_id=#{userId}
+		</if>
+		 <if test="@Ognl@isNotEmpty(deviceId)">
+			and device_id=#{deviceId}
+		</if>
+        order by DEVICE_ID,time
+	</select>
+	
+	<select id="getMaxMinTimeCell" resultType="hashmap">
+    	select from_unixtime(min(time)/1000) as minTime,from_unixtime(max(time)/1000) as maxTime
+		FROM
+			DEVICE_MOBILE
+		WHERE
+			op_tag = 0
+		AND time <![CDATA[>]]> #{time}
+    </select>
+    
+    <resultMap id="deviceMap" type="hashmap" >
+	  <result property="userId" column="user_id" javaType="long" jdbcType="DECIMAL"/>
+	  <result property="deviceId" column="device_id" javaType="long" jdbcType="DECIMAL"/>
+	</resultMap>
+    
+    <select id="getDeviceIdListByFlags" resultMap="deviceMap">
+    	select distinct user_id,device_id
+		FROM
+			DEVICE_MOBILE
+		WHERE
+			op_tag = 0
+		AND time BETWEEN #{timeFrom} and #{timeTo}
+		order by time
+    </select>
+</mapper>

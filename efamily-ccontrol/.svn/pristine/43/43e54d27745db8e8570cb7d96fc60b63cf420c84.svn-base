@@ -1,0 +1,16 @@
+package com.winterframework.efamily.server.notification;
+
+import java.rmi.ServerException;
+
+import com.winterframework.efamily.base.model.Notification;
+import com.winterframework.efamily.server.notification.exception.NotificationException;
+
+
+public interface INotificationService {
+	/**
+	 * @param notification
+	 * @return notyTaskId
+	 * @throws ServerException
+	 */
+	Long notify(Notification notification) throws NotificationException;
+}

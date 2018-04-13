@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlChartRoomUser">
+	<resultMap id="EjlUserResult" type="com.winterframework.efamily.entity.EjlUser">
+	</resultMap>
+	
+	<update id="updateStatusByUserIdAndChartId" parameterType="com.winterframework.efamily.entity.EjlChartRoomUser">
+        UPDATE EJL_CHART_ROOM_USER 
+            <set>
+                <if test="@Ognl@isNotEmpty(status)">
+	              STATUS = #{status,javaType=long,jdbcType=DECIMAL} 
+               </if>
+            </set>
+        WHERE 
+	       USER_ID = #{userId} 
+	       and CHART_ROOM_ID = #{chartRoomId} 
+	</update>
+	
+   <select id="getChartRoomUserByRoomIdAndStatus" resultMap="EjlUserResult">
+     SELECT  eu.* FROM ejl_user AS eu WHERE eu.id IN 
+    (SELECT user_id FROM ejl_chart_room_user WHERE chart_room_id = #{chartRoomId} AND STATUS = #{status})
+   </select>
+    
+</mapper>

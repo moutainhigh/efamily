@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlLocation">
+     <select id="getListAfterByDeviceIdAndTime" parameterType="hashmap" resultMap="EjlLocationResult"  flushCache="false">
+    	select DISTINCT time  as time,  location as location,time_stay   as timeStay
+	    from EJL_LOCATION
+        where device_id=#{deviceId}
+        and user_id=#{userId}
+        and  time_end > #{time} and status=1
+        order by TIME asc
+    </select>
+    
+    <select id="getListBetweenByDeviceIdAndTime" parameterType="hashmap" resultMap="EjlLocationResult"  flushCache="false">
+    	select DISTINCT time  as time,  location as location,time_stay   as timeStay
+	    from EJL_LOCATION
+        where device_id=#{deviceId} and status=1
+        and user_id=#{userId}
+         and time_end > #{time} <![CDATA[and TIME < #{endTime} ]]>
+        order by TIME asc
+    </select>
+</mapper>

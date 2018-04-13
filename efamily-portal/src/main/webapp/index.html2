@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Family</title>
+<meta name="viewport" content="width=device-width,initial-scale=0.2, minimum-scale=0.2, maximum-scale=1, user-scalable=yes">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Majestic Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<link href="static/css/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="static/css/style.css" rel='stylesheet' type='text/css' />
+<link href='http://fonts.useso.com/css?family=Titillium+Web:400,200,200italic,300,300italic,400italic,600,600italic,700,700italic,900' rel='stylesheet' type='text/css'>
+<style type="text/css">
+body,td,th {
+	font-family: "Titillium Web", sans-serif;
+	color: #FFF;
+}
+</style>
+<script src="static/js/jquery-1.11.0.min.js"></script>
+<!---- start-smoth-scrolling---->
+<script type="text/javascript" src="static/js/move-top.js"></script>
+<script type="text/javascript" src="static/js/easing.js"></script>
+<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+				});
+			});
+		</script>
+<!---- start-smoth-scrolling---->
+</head>
+<body>
+	<!----start-header---->
+	<div class="header" id="home">
+		<div class="container">
+		  <div class="logo">
+				<a href="index.html"><img src="static/images/logo-2.png" alt=""></a>
+		  </div>
+			<div class="navigation">
+			 <span class="menu"></span> 
+				<ul class="navig">
+					<li></li>
+					<li><a href="http://download.ejialian365.com/app/EHome_v0.47.apk"><img src="static/images/Android_32px_1094992_easyicon.net.png" width="32" height="40">安卓下载</a><span> </span></li>
+					<li></li>
+					<li><a href="http://install.diawi.com/iHrauP"><img src="static/images/OS_Apple_26.805194805195px_1188753_easyicon.net.png" width="26" height="40">  IOS  下载</a><span> </span></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+				 <!-- script-for-menu -->
+		 <script>
+				$("span.menu").click(function(){
+					$(" ul.navig").slideToggle("slow" , function(){
+					});
+				});
+		 </script>
+		 <!-- script-for-menu -->
+		</div>
+	</div>	
+	<!----end-header---->
+	<!--banner-starts-->
+	<div class="banner" id="home">
+		<div class="container"></div>
+	</div>
+	<!--banner-ends--> 
+	<!--FlexSlider-->
+	<link rel="stylesheet" href="static/css/flexslider.css" type="text/css" media="screen" />
+	<script defer src="static/js/jquery.flexslider.js"></script>
+	<script type="text/javascript">
+    $(function(){
+      SyntaxHighlighter.all();
+    });
+    $(window).load(function(){
+      $('.flexslider').flexslider({
+        animation: "slide",
+        start: function(slider){
+          $('body').removeClass('loading');
+        }
+      });
+      $('#curYear').html((new Date()).getFullYear());
+    });
+  </script><!--welcome-starts--><!--welcome-ends--> 
+	<!--offer-starts--><!--offer-ends--> 
+	<!--nature-starts--><!--nature-ends--> 
+	<!--field-starts--><!--field-end--> 
+	<!--footer-starts--> 
+	<div class="footer">
+		<span style="color:white;font-size:8px;padding-left:45%">©<span id='curYear' style="padding-right:10px"></span><span>粤ICP备15090793号-1</span><br>
+		</span>
+	</div>
+	<!--footer-ends--> 
+</body>
+</html>

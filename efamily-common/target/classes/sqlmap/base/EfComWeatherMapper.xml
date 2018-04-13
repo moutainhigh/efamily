@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfWeather">
+	<resultMap id="EfWeatherResult" type="com.winterframework.efamily.entity.EfWeather">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="efWeatherColumns">
+	    <![CDATA[
+	        	id as id,
+	        	city_code as cityCode,
+	        	solar_date as solarDate,
+	        	week as week,
+	        	weather as weather,
+	        	temperature as temperature,
+	        	humidity as humidity,
+	        	wind as wind,
+	        	dress as dress,
+	        	ganmao as ganmao,
+	        	pollution as pollution,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	renew_tag as renewTag,
+	        	city_name as cityName,
+	        	temperature_current as temperatureCurrent,
+	        	remark as remark
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EfWeather" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ef_weather (
+	        	city_code ,
+	        	solar_date ,
+	        	week ,
+	        	weather ,
+	        	temperature ,
+	        	humidity ,
+	        	wind ,
+	        	dress ,
+	        	ganmao ,
+	        	pollution ,
+	        	creator_id ,
+	        	create_time ,
+	        	renew_tag ,
+	        	city_name ,
+	        	temperature_current ,
+	        	remark 
+	        ) VALUES (
+	        	#{cityCode,javaType=integer,jdbcType=INTEGER} ,
+	        	#{solarDate,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{week,javaType=integer,jdbcType=INTEGER} ,
+	        	#{weather,javaType=string,jdbcType=VARCHAR} ,
+	        	#{temperature,javaType=string,jdbcType=VARCHAR} ,
+	        	#{humidity,javaType=string,jdbcType=VARCHAR} ,
+	        	#{wind,javaType=string,jdbcType=VARCHAR} ,
+	        	#{dress,javaType=string,jdbcType=VARCHAR} ,
+	        	#{ganmao,javaType=string,jdbcType=VARCHAR} ,
+	        	#{pollution,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{renewTag,javaType=integer,jdbcType=INTEGER} ,
+	        	#{cityName,javaType=string,jdbcType=VARCHAR} ,
+	        	#{temperatureCurrent,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EfWeather">
+	    <![CDATA[
+	        UPDATE ef_weather SET
+		        city_code = #{cityCode,javaType=integer,jdbcType=INTEGER} ,
+		        solar_date = #{solarDate,javaType=date,jdbcType=TIMESTAMP} ,
+		        week = #{week,javaType=integer,jdbcType=INTEGER} ,
+		        weather = #{weather,javaType=string,jdbcType=VARCHAR} ,
+		        temperature = #{temperature,javaType=string,jdbcType=VARCHAR} ,
+		        humidity = #{humidity,javaType=string,jdbcType=VARCHAR} ,
+		        wind = #{wind,javaType=string,jdbcType=VARCHAR} ,
+		        dress = #{dress,javaType=string,jdbcType=VARCHAR} ,
+		        ganmao = #{ganmao,javaType=string,jdbcType=VARCHAR} ,
+		        pollution = #{pollution,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        renew_tag = #{renewTag,javaType=integer,jdbcType=INTEGER} ,
+		        city_name = #{cityName,javaType=string,jdbcType=VARCHAR} ,
+		        temperature_current = #{temperatureCurrent,javaType=string,jdbcType=VARCHAR} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ef_weather where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfWeatherResult" flushCache="false">
+			select <include refid="efWeatherColumns" />
+		    <![CDATA[
+			    from ef_weather 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EfWeatherResult" flushCache="false">
+			select <include refid="efWeatherColumns" />
+			    from ef_weather 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="efWeatherDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cityCode)">
+				and city_code = #{cityCode}
+			</if>
+	       <if test="@Ognl@isNotEmpty(solarDate)">
+				and solar_date = #{solarDate}
+			</if>
+	       <if test="@Ognl@isNotEmpty(week)">
+				and week = #{week}
+			</if>
+	       <if test="@Ognl@isNotEmpty(weather)">
+				and weather = #{weather}
+			</if>
+	       <if test="@Ognl@isNotEmpty(temperature)">
+				and temperature = #{temperature}
+			</if>
+	       <if test="@Ognl@isNotEmpty(humidity)">
+				and humidity = #{humidity}
+			</if>
+	       <if test="@Ognl@isNotEmpty(wind)">
+				and wind = #{wind}
+			</if>
+	       <if test="@Ognl@isNotEmpty(dress)">
+				and dress = #{dress}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ganmao)">
+				and ganmao = #{ganmao}
+			</if>
+	       <if test="@Ognl@isNotEmpty(pollution)">
+				and pollution = #{pollution}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(renewTag)">
+				and renew_tag = #{renewTag}
+			</if>
+	       <if test="@Ognl@isNotEmpty(cityName)">
+				and city_name = #{cityName}
+			</if>
+	       <if test="@Ognl@isNotEmpty(temperatureCurrent)">
+				and temperature_current = #{temperatureCurrent}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EfWeatherResult"  flushCache="false">
+    	select <include refid="efWeatherColumns" />
+	    from ef_weather 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ef_weather 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ef_weather 
+		<include refid="efWeatherDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EfWeatherResult">
+    	select <include refid="efWeatherColumns" />
+	    from ef_weather 
+		<include refid="efWeatherDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EfWeatherResult">
+    	select <include refid="efWeatherColumns" />
+	    from ef_weather 
+		<include refid="efWeatherDynamicWhere"/>
+    </select>
+
+	    
+	    <delete id="deleteAll">
+	    <![CDATA[
+	        delete from ef_weather
+	    ]]>
+	    </delete>   
+	    
+	     <select id="getWeatherByCityName" parameterType="string" resultMap="EfWeatherResult" flushCache="false">
+			select <include refid="efWeatherColumns" /> from (
+		    <![CDATA[
+			    select * from ef_weather 
+		        where 
+		        city_name = #{cityName} and renew_tag='1' order by solar_date desc
+		    ]]>
+		    ) t limit 1
+		</select>	
+		
+		 <select id="getNewWeatherByCityName" parameterType="hashmap" resultMap="EfWeatherResult" flushCache="false">
+			select <include refid="efWeatherColumns" /> from (
+		    <![CDATA[
+			    select * from ef_weather 
+		        where 
+		        city_name = #{cityName} and solar_date<=#{solarDate} order by solar_date desc
+		    ]]>
+		    ) t limit 1
+		</select>	
+		
+		<select id="getFutherWeather" parameterType="hashmap" resultMap="EfWeatherResult" flushCache="false">
+			select <include refid="efWeatherColumns" /> from (
+		    <![CDATA[
+			    select * from ef_weather 
+		        where 
+		        city_name = #{cityName} and solar_date>#{beginDate} order by solar_date asc
+		    ]]>
+		    ) t limit #{limit}
+		</select>
+		
+
+	
+</mapper>

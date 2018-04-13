@@ -1,0 +1,75 @@
+-- -----------------表数据 更改-------------------------------------------------------------
+CREATE INDEX IX_LOCATION_USERID_DEVICEID ON EJL_LOCATION(user_id,device_id);
+CREATE INDEX IX_LOCATIONORIGIN_USERID_DEVICEID ON ef_location_origin(user_id,device_id);
+CREATE INDEX IX_USERBARRIER_USERID ON ejl_user_barrier(user_id);
+CREATE INDEX IX_LOCATIONWIFI_OPTAG ON EF_LOCATION_WIFI(op_tag);
+CREATE INDEX IX_LOCATIONGPS_OPTAG ON ef_location_gps(op_tag);
+CREATE INDEX IX_DEVICEMOBILE_OPTAG ON device_mobile(op_tag);
+CREATE INDEX IX_BATTERYRECORD_DEVICEID ON ejl_battery_record(device_id);
+CREATE INDEX IX_LOCATIONASSIST_LOCATIONID ON ef_location_assist(location_id);
+
+CREATE INDEX IX_LOCATIONSEMI_USERID_DEVICEID_TIME ON ef_location_semi(user_id,device_id,time);
+CREATE INDEX IX_LOCATION_SOURCEID ON EJL_LOCATION(source_id);
+create index IX_LOCATIONORIGIN_STATUS_FLAG ON ef_location_origin(status,flag);
+create index IX_LOCATIONSEMI_STATUS_FLAG ON ef_location_semi(status,flag);
+create index IX_QRCODE_IMEI ON ef_qrcode(imei);
+create index IX_LOCATIONSEMI_USERID_DEVICEID_STATUS_FLAG ON ef_location_semi(user_id,device_id,status,flag);
+create index IX_LOCATIONSEMI_TIME ON ef_location_semi(time);
+CREATE INDEX IX_LOCATIONWIFI_USERID_DEVICEID_TIME_OPTAG ON EF_LOCATION_WIFI(user_id,device_id,time,op_tag);
+CREATE INDEX IX_LOCATIONGPS_USERID_DEVICEID_TIME_OPTAG ON ef_location_gps(user_id,device_id,time,op_tag);
+CREATE INDEX IX_DEVICEMOBILE_USERID_DEVICEID_TIME_OPTAG ON device_mobile(user_id,device_id,time,op_tag);
+CREATE INDEX IX_API_URL ON EF_API(url);
+CREATE INDEX IX_APIACCESS_APIID_UKEY_TIME ON EF_API_ACCESS(api_id,ukey,time);
+CREATE INDEX IX_KEY_UKEY ON EF_KEY(ukey);
+CREATE INDEX IX_KEYAPI_UKEY ON EF_KEY_API(ukey);
+
+CREATE INDEX IX_LOCATIONWIFI_TIME_OPTAG ON EF_LOCATION_WIFI(op_tag,time);
+CREATE INDEX IX_LOCATIONGPS_TIME_OPTAG ON ef_location_gps(op_tag,time);
+CREATE INDEX IX_DEVICEMOBILE_TIME_OPTAG ON device_mobile(op_tag,time);
+CREATE INDEX IX_LOCATIONSEMI_USERID_DEVICEID_STATUS_FLAG_TIME ON ef_location_semi(user_id,device_id,status,flag,time);
+create index IX_LOCATIONSEMI_STATUS_FLAG_TIME ON ef_location_semi(status,flag,time);
+
+drop index IX_LOCATIONWIFI_OPTAG on EF_LOCATION_WIFI;
+drop index IX_LOCATIONGPS_OPTAG ON ef_location_gps;
+drop index IX_DEVICEMOBILE_OPTAG ON device_mobile;
+drop index IX_LOCATIONSEMI_USERID_DEVICEID_TIME on ef_location_semi;
+drop index IX_LOCATIONSEMI_STATUS_FLAG on ef_location_semi;
+drop index IX_LOCATIONSEMI_TIME on ef_location_semi;
+
+-- ----------2016-09-26------------------
+create index IX_HEALTH_HEART_RATE_CREATETIME ON ejl_health_heart_rate(create_time);
+create index IX_HEALTH_HEART_RATE_USERIDDEVICEID ON ejl_health_heart_rate(user_id,device_id);
+create index IX_HEALTH_HEART_RATE_TOTIME ON ejl_health_heart_rate(to_time);
+CREATE INDEX IX_BATTERYRECORD_DEVICEIDTIME ON ejl_battery_record(device_id,time);
+CREATE INDEX IX_USER_WEATHER_STATUS ON ef_user_weather(status);
+CREATE INDEX IX_HEALTH_STEP_COUNT_DEVICEID ON ejl_health_step_count(device_id);
+CREATE INDEX IX_MESSAGE_STATUS ON ejl_message(status);
+CREATE INDEX IX_MESSAGE_MARK_STATUS ON EJL_MESSAGE_MARK(status);
+CREATE INDEX IX_MESSAGE_MARK_RCVUSERIDCHARTYPE ON EJL_MESSAGE_MARK(receive_user_id,chat_type);
+CREATE INDEX IX_LOCATIONORIGIN_USERIDDEVICEIDSTATUSFLAGTIME ON ef_location_origin(user_id,device_id,status,flag,time);
+CREATE INDEX IX_HEALTH_HEART_RATE_DEVICEID ON ejl_health_heart_rate(device_id);
+CREATE INDEX IX_HEALTHSITTING_USERIDDEVICEIDSTARTTIME ON ejl_health_sitting(user_id,device_id,start_time);
+CREATE INDEX IX_HEALTHSLEEP_USERIDDEVICEIDFROMTIME ON ejl_health_sleep(user_id,device_id,from_time);
+CREATE INDEX IX_HEALTHSTEPCOUNT_USERIDDEVICEIDBEGINTIME ON ejl_health_step_count(user_id,device_id,begintime);
+CREATE INDEX IX_BATTERYRECORD_DEVICEIDTIME ON ejl_battery_record(device_id,time);
+
+CREATE INDEX IX_DEVICEALARM_USERIDDEVICEIDTYPE ON ef_device_alarm(user_id,device_id,type);
+CREATE INDEX IX_USER_FAMILYID ON ejl_user(family_id);
+CREATE INDEX IX_USERDEVICE_USERIDDEVICEID ON ejl_user_device(user_id,device_id);
+CREATE INDEX IX_DEVICE_CODE ON ejl_device(code);
+CREATE INDEX IX_FAMILYUSER_FAMILYID ON ejl_family_user(family_id);
+
+-- ------2016-11-19-------------
+create index IX_LOCATIONSEMI_USERID_DEVICEID_STATUS_FLAG_LNGLAT ON ef_location_semi(user_id,device_id,status,flag,longitude,latitude);
+CREATE INDEX IX_LOCATION_USERID_DEVICEID_STATUS ON EJL_LOCATION(user_id,device_id,status);
+CREATE INDEX IX_DEVICEADDRESSLIST_USERID ON EJL_DEVICE_ADDRESS_LIST(user_id);
+CREATE INDEX IX_FAMILYUSER_USERID_FAMILYID ON EJL_FAMILY_USER(user_id,family_id);
+CREATE INDEX IX_MESSAGEMARK_MESSAGEID ON EJL_MESSAGE_MARK(message_id);
+CREATE INDEX IX_USERCHARTROOM_USERID_CHATROOMID ON EJL_USER_CHART_ROOM(user_id,chat_room_id); --
+CREATE INDEX IX_USERFRIEND_USERID_FRIENDID ON EJL_USER_FRIEND(user_id,friend_id); --
+CREATE INDEX IX_VERIFYCODE_PHONENUMBER ON EJL_VERIFY_CODE(phone_number); --
+CREATE INDEX IX_DEVICEOPERATION_USERIDDEVICEID ON EF_DEVICE_OPERATION(user_id,device_id); --
+CREATE INDEX IX_DEVICESETTING_USERIDDEVICEID ON EF_DEVICE_SETTING(user_id,device_id); --
+CREATE INDEX IX_USERHEALTHSETTING_USERID ON EF_USER_HEALTH_SETTING(user_id); --
+CREATE INDEX IX_CHARTROOMUSER_CHARTROOMID ON EJL_CHART_ROOM_USER(chart_room_id); --
+CREATE INDEX IX_USERLOGINRECORD_USERID  ON EJL_USER_LOGIN_RECORD(user_id);

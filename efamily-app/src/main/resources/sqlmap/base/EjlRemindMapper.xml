@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlRemind">
+	<select id="queryAllDisposableRemindForTask" resultMap="EjlRemindResult"> 
+		select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND t
+	    where t.SEND_TYPE=1
+	    and t.SEND_PERIOD=1
+	    and t.IS_DELETED=0
+	    and t.SENT_STATUS=0
+	     <![CDATA[and t.SEND_TIME<=sysdate()]]>
+	</select>
+	
+	<select id="queryAllRepeatRemindForTask" resultMap="EjlRemindResult"> 
+		select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND t
+	    <![CDATA[
+	    where t.SEND_TYPE=1
+	    and t.SEND_PERIOD<>1
+	    and t.IS_DELETED=0
+	    and t.SEND_TIME_END>=sysdate()]]>
+	</select>
+	
+	<select id="queryAllDeviceRemindForTask" resultMap="EjlRemindResult"> 
+		select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND t
+	    <![CDATA[
+	    where t.SEND_TYPE=2
+	    and t.DEVICE_COMMOND<>4]]>
+	</select>
+	
+	<select id="queryAllRemindsForUser" resultMap="EjlRemindResult"> 
+		select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND t
+	    <![CDATA[
+	    where t.USER_ID = #{userId}
+	    and t.IS_DELETED=0
+	    order by SEND_TIME desc
+	    ]]>
+	</select>
+	
+	<select id="queryAllReceiveRemindsForUser" resultMap="EjlRemindResult"> 
+		select t1.ID as id,
+	        	t.NAME as name,
+	        	t.CREATE_TIME as createTime,
+	        	t.USER_ID as userId,
+	        	t.CONTENT as content,
+	        	t.SEND_TIME as sendTime,
+	        	t1.USER_ID as sendUserId,
+	        	t.SEND_METHOD as sendMethod,
+	        	t.SENT_STATUS as sentStatus,
+	        	t1.IS_DELETED as deleteStatus,
+	        	t.SEND_PERIOD as sendPeriod,
+	        	t.SEND_TIME_END as sendTimeEnd,
+	        	t.SEND_TYPE as sendType,
+	        	t1.REMIND_STATE as remindState,
+	        	t1.CREATE_TIME as receiveTime,
+	        	t.DURATION_TIME as durationTime,
+	        	t.DEVICE_COMMOND as deviceCommond
+	    from EJL_REMIND t,EJL_REMIND_RECORD t1
+	    <![CDATA[
+	    where t1.USER_ID = #{userId} and t1.REMIND_ID=t.ID
+	    and t1.IS_DELETED=0
+	    order by t1.CREATE_TIME desc
+	    ]]>
+	</select>
+	
+	<insert id="insertRemindRecord" parameterType="com.winterframework.efamily.entity.EjlRemind" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        EJL_REMIND_RECORD (
+	        	REMIND_ID ,
+	        	CREATE_TIME ,
+	        	USER_ID ,
+	        	IS_DELETED ,
+	        	REMIND_STATE
+	        ) VALUES (
+	        	#{remindId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deleteStatus,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remindState,javaType=long,jdbcType=DECIMAL} 
+	        )
+	    ]]>	
+	
+		</insert>
+		
+		<update id="updateRemindRecord" parameterType="com.winterframework.efamily.entity.EjlRemind">
+	        UPDATE EJL_REMIND_RECORD
+	        <set>
+	        	<if test="@Ognl@isNotEmpty(remindId)">
+		        REMIND_ID = #{remindId,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(userId)">
+		        USER_ID = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(deleteStatus)">
+		        IS_DELETED = #{deleteStatus,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(remindState)">
+		        REMIND_STATE = #{remindState,javaType=long,jdbcType=DECIMAL},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(id)">
+		        ID = #{id,javaType=long,jdbcType=DECIMAL}
+		        </if>
+		    </set>
+	        WHERE 
+		        ID = #{id} 
+		</update>
+		
+		
+		
+		<select id="getEjlRecordById" resultMap="EjlRemindResult"> 
+		select t1.ID as id,
+	        	t.NAME as name,
+	        	t.CREATE_TIME as createTime,
+	        	t.USER_ID as userId,
+	        	t.CONTENT as content,
+	        	t.SEND_TIME as sendTime,
+	        	t1.USER_ID as sendUserId,
+	        	t.SEND_METHOD as sendMethod,
+	        	t.SENT_STATUS as sentStatus,
+	        	t1.IS_DELETED as deleteStatus,
+	        	t.SEND_PERIOD as sendPeriod,
+	        	t.SEND_TIME_END as sendTimeEnd,
+	        	t.SEND_TYPE as sendType,
+	        	t1.REMIND_STATE as remindState,
+	        	t1.CREATE_TIME as receiveTime,
+	        	t.DURATION_TIME as durationTime,
+	        	t.DEVICE_COMMOND as deviceCommond
+	    from EJL_REMIND t,EJL_REMIND_RECORD t1
+	    <![CDATA[
+	    where t1.ID = #{id} and t1.REMIND_ID=t.ID
+	    ]]>
+	</select>
+	
+	
+</mapper>

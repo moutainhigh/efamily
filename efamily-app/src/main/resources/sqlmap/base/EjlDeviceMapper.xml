@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlDevice">
+
+
+		<select id="getByFamilyAndDevice" parameterType="com.winterframework.efamily.entity.EjlDevice" resultMap="EjlDeviceResult" flushCache="false">
+					select 
+					    ed.ID as id,
+			        	ed.NAME as name,
+			        	ed.TYPE as type,
+			        	ed.STATUS as status,
+			        	ed.CODE as code,
+			        	ed.CREATE_TIME as createTime,
+			        	ed.USER_ID as userId,
+			        	ed.FAMILY_ID as familyId
+			        	
+				    <![CDATA[
+		                from ejl_device ed,ejl_family_user efu 
+				        where 
+				        ed.family_id=efu.family_id and ed.id=#{id} and efu.family_id=#{familyId} and efu.user_id=#{userId} and efu.status=0
+				    ]]>
+		</select>	
+	    <select id="getEjlDeviceByParm" parameterType="com.winterframework.efamily.entity.EjlDevice" resultMap="EjlDeviceResult" flushCache="false">
+				select 
+				<include refid="ejlDeviceColumns" />
+	            from ejl_device 
+		        <include refid="ejlDeviceDynamicWhere"/>    
+	    </select>	
+	    
+	    <select id="getBaseDeviceParamMapBy" parameterType="java.lang.Long" resultType="java.util.HashMap" flushCache="false">
+				select 
+				convert(ed.volume,char(20))         as volume,
+	        	convert(ed.brightness,char(20))     as brightness,
+	        	convert(ed.quiet_mode,char(20))     as quiet_mode,
+	        	convert(ed.shake,char(20))          as shake,
+	        	convert(ed.phone_number,char(20))   as phone_number,
+	        	convert(eq.sim_status,char(10))      as simStatus
+	            from ejl_device ed,ef_qrcode eq 
+		        where ed.code=eq.imei and ed.id=#{id} 
+	    </select>	
+	    
+</mapper>

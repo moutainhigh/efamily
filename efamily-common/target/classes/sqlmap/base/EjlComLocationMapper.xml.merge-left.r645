@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlLocation">
+	<resultMap id="EjlLocationResult" type="com.winterframework.efamily.entity.EjlLocation">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlLocationColumns">
+	    
+	        	id as id,
+	        	user_id as userId,
+	        	location as location,
+	        	device_id as deviceId,
+	        	type as type,
+	        	time as time,
+	        	source as source,
+	        	remark as remark,
+	        	STATUS as status,
+	        	source_id as sourceId,
+	        	time_stay as timeStay,
+	        	city as city,
+	        	address as address,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	radius as radius
+	        	
+	
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlLocation" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_location (
+	        	user_id ,
+	        	location ,
+	        	device_id ,
+	        	type ,
+	        	time ,
+	        	source ,
+	        	remark ,
+	        	status ,
+	        	source_id,
+	        	time_stay,
+	        	city,
+	        	address,
+	        	creator_id ,
+	        	create_time,
+	        	radius
+	        ) VALUES (
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{location,javaType=string,jdbcType=VARCHAR} ,
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{type,javaType=integer,jdbcType=INTEGER} ,
+	        	#{time,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{source,javaType=integer,jdbcType=INTEGER} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER},
+	        	#{sourceId,javaType=long,jdbcType=INTEGER} ,
+	        	#{timeStay,javaType=integer,jdbcType=INTEGER} ,
+				#{city,javaType=string,jdbcType=VARCHAR} ,
+	        	#{address,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{radius,javaType=long,jdbcType=DECIMAL} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlLocation">
+	    <![CDATA[
+	        UPDATE ejl_location SET
+		        user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		        location = #{location,javaType=string,jdbcType=VARCHAR} ,
+		        device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+		        type = #{type,javaType=integer,jdbcType=INTEGER} ,
+		        time = #{time,javaType=date,jdbcType=TIMESTAMP} ,
+		        source = #{source,javaType=integer,jdbcType=INTEGER} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        source_id = #{sourceId,javaType=long,jdbcType=INTEGER} ,
+		        time_stay = #{timeStay,javaType=integer,jdbcType=INTEGER} ,
+				city = #{city,javaType=string,jdbcType=VARCHAR} ,
+		        address = #{address,javaType=string,jdbcType=VARCHAR} ,
+		        status =  #{status,javaType=integer,jdbcType=INTEGER},
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP},
+		        radius = #{radius,javaType=long,jdbcType=DECIMAL}
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_location where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlLocationResult" flushCache="false">
+			select <include refid="ejlLocationColumns" />
+		    <![CDATA[
+			    from ejl_location 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlLocationResult" flushCache="false">
+			select <include refid="ejlLocationColumns" />
+			    from ejl_location 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="ejlLocationDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(location)">
+				and location = #{location}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceId)">
+				and device_id = #{deviceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(type)">
+				and type = #{type}
+			</if>
+	       <if test="@Ognl@isNotEmpty(time)">
+				and time = #{time}
+			</if>
+	       <if test="@Ognl@isNotEmpty(source)">
+				and source = #{source}
+			</if>
+			<if test="@Ognl@isNotEmpty(city)">
+				and city = #{city}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+			<if test="@Ognl@isNotEmpty(radius)">
+				and radius = #{radius}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlLocationResult"  flushCache="false">
+    	select <include refid="ejlLocationColumns" />
+	    from ejl_location 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_location 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_location 
+		<include refid="ejlLocationDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlLocationResult">
+    	select <include refid="ejlLocationColumns" />
+	    from ejl_location 
+		<include refid="ejlLocationDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlLocationResult">
+    	select <include refid="ejlLocationColumns" />
+	    from ejl_location 
+		<include refid="ejlLocationDynamicWhere"/>
+    </select>
+    <update id="updateStatus" parameterType="hashmap" >
+	    <![CDATA[
+	        UPDATE ejl_location SET
+		        status =  #{status}
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+	</update>
+
+	<select id="getUserLatestLocation" parameterType="hashmap" resultMap="EjlLocationResult"  flushCache="false">
+    	SELECT * FROM(
+    	select <include refid="ejlLocationColumns" />
+	    from EJL_LOCATION 
+        where user_id=#{userId} and device_id=#{watchId}
+        	and status=#{status} and time>DATE_ADD(#{time},INTERVAL -1*time_stay SECOND)
+		order by TIME desc 
+        )a limit 1
+    </select>	
+    
+    <select id="getDeviceLocationLatest" parameterType="String" resultMap="EjlLocationResult"  flushCache="false">
+	    	SELECT * FROM(
+	    	select <include refid="ejlLocationColumns" />
+		    from EJL_LOCATION 
+	        where  device_id in ( select id from ejl_device where code=#{imei} ) and status=1 order by TIME desc 
+            ) a limit 1
+		    
+    </select>
+    <select id="getBySourceId" parameterType="long" resultMap="EjlLocationResult" flushCache="false">
+		select <include refid="ejlLocationColumns" />
+	    from ejl_location 
+        where 
+        	source_id = #{sourceId}
+	</select>	
+	
+</mapper>

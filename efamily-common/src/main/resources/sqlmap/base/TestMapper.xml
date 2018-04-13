@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.Test">
+	<resultMap id="TestResult"
+		type="com.winterframework.efamily.entity.Test">
+	</resultMap> 
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="testColumns"> 
+		ID as id
+	</sql>
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" parameterType="com.winterframework.efamily.entity.Test"
+		useGeneratedKeys="false" keyProperty="id" flushCache="true">
+        INSERT INTO
+        Test (
+        	ID 
+        ) VALUES (
+        	#{id,javaType=long,jdbcType=DECIMAL} 
+        ) 
+	</insert>
+	<update id="update" parameterType="com.winterframework.efamily.entity.Test">
+        UPDATE Test
+        <set>
+	        id = #{id,javaType=long,jdbcType=DECIMAL}  
+        </set>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	<delete id="delete" parameterType="java.lang.Long"> 
+        delete from Test where
+	       ID = #{id}  
+	</delete> 
+	<select id="getById" parameterType="long" resultMap="TestResult"
+		flushCache="false">
+		select
+		<include refid="testColumns" /> 
+		from Test where ID = #{id}  
+	</select>
+</mapper>

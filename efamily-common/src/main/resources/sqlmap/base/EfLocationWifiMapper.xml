@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfLocationWifi">
+	<resultMap id="EfLocationWifiResult" type="com.winterframework.efamily.entity.EfLocationWifi">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="efLocationWifiColumns">
+	    <![CDATA[
+	        	id as id,
+	        	user_id as userId,
+	        	device_id as deviceId,
+	        	mac1 as mac1,
+	        	mac2 as mac2,
+	        	mac3 as mac3,
+	        	mac4 as mac4,
+	        	mac5 as mac5,
+	        	mac_name1 as macName1,
+	        	mac_name2 as macName2,
+	        	mac_name3 as macName3,
+	        	mac_name4 as macName4,
+	        	mac_name5 as macName5,
+	        	signal1 as signal1,
+	        	signal2 as signal2,
+	        	signal3 as signal3,
+	        	signal4 as signal4,
+	        	signal5 as signal5,
+	        	time as time,
+	        	create_time as createTime,
+	        	op_tag as opTag,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EfLocationWifi" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ef_location_wifi (
+	        	user_id ,
+	        	device_id ,
+	        	mac1 ,
+	        	mac2 ,
+	        	mac3 ,
+	        	mac4 ,
+	        	mac5 ,
+	        	mac_name1 ,
+	        	mac_name2 ,
+	        	mac_name3 ,
+	        	mac_name4 ,
+	        	mac_name5 ,
+	        	signal1 ,
+	        	signal2 ,
+	        	signal3 ,
+	        	signal4 ,
+	        	signal5 ,
+	        	time ,
+	        	create_time ,
+	        	remark ,
+	        	creator_id  
+	        ) VALUES (
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{mac1,javaType=string,jdbcType=VARCHAR} ,
+	        	#{mac2,javaType=string,jdbcType=VARCHAR} ,
+	        	#{mac3,javaType=string,jdbcType=VARCHAR} ,
+	        	#{mac4,javaType=string,jdbcType=VARCHAR} ,
+	        	#{mac5,javaType=string,jdbcType=VARCHAR} ,
+	        	#{macName1,javaType=string,jdbcType=VARCHAR} ,
+	        	#{macName2,javaType=string,jdbcType=VARCHAR} ,
+	        	#{macName3,javaType=string,jdbcType=VARCHAR} ,
+	        	#{macName4,javaType=string,jdbcType=VARCHAR} ,
+	        	#{macName5,javaType=string,jdbcType=VARCHAR} ,
+	        	#{signal1,javaType=integer,jdbcType=INTEGER} ,
+	        	#{signal2,javaType=integer,jdbcType=INTEGER} ,
+	        	#{signal3,javaType=integer,jdbcType=INTEGER} ,
+	        	#{signal4,javaType=integer,jdbcType=INTEGER} ,
+	        	#{signal5,javaType=integer,jdbcType=INTEGER} ,
+	        	#{time,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EfLocationWifi">
+	    <![CDATA[
+	        UPDATE ef_location_wifi SET
+		        op_tag = #{opTag,javaType=integer,jdbcType=INTEGER} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ef_location_wifi where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfLocationWifiResult" flushCache="false">
+			select <include refid="efLocationWifiColumns" />
+		    <![CDATA[
+			    from ef_location_wifi 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EfLocationWifiResult" flushCache="false">
+			select <include refid="efLocationWifiColumns" />
+			    from ef_location_wifi 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="efLocationWifiDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceId)">
+				and device_id = #{deviceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(mac1)">
+				and mac1 = #{mac1}
+			</if>
+	       <if test="@Ognl@isNotEmpty(mac2)">
+				and mac2 = #{mac2}
+			</if>
+	       <if test="@Ognl@isNotEmpty(mac3)">
+				and mac3 = #{mac3}
+			</if>
+	       <if test="@Ognl@isNotEmpty(mac4)">
+				and mac4 = #{mac4}
+			</if>
+	       <if test="@Ognl@isNotEmpty(mac5)">
+				and mac5 = #{mac5}
+			</if>
+	       <if test="@Ognl@isNotEmpty(macName1)">
+				and mac_name1 = #{macName1}
+			</if>
+	       <if test="@Ognl@isNotEmpty(macName2)">
+				and mac_name2 = #{macName2}
+			</if>
+	       <if test="@Ognl@isNotEmpty(macName3)">
+				and mac_name3 = #{macName3}
+			</if>
+	       <if test="@Ognl@isNotEmpty(macName4)">
+				and mac_name4 = #{macName4}
+			</if>
+	       <if test="@Ognl@isNotEmpty(macName5)">
+				and mac_name5 = #{macName5}
+			</if>
+	       <if test="@Ognl@isNotEmpty(signal1)">
+				and signal1 = #{signal1}
+			</if>
+	       <if test="@Ognl@isNotEmpty(signal2)">
+				and signal2 = #{signal2}
+			</if>
+	       <if test="@Ognl@isNotEmpty(signal3)">
+				and signal3 = #{signal3}
+			</if>
+	       <if test="@Ognl@isNotEmpty(signal4)">
+				and signal4 = #{signal4}
+			</if>
+	       <if test="@Ognl@isNotEmpty(signal5)">
+				and signal5 = #{signal5}
+			</if>
+	       <if test="@Ognl@isNotEmpty(time)">
+				and time = #{time}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(opTag)">
+				and op_tag = #{opTag}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EfLocationWifiResult"  flushCache="false">
+    	select <include refid="efLocationWifiColumns" />
+	    from ef_location_wifi 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ef_location_wifi 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ef_location_wifi 
+		<include refid="efLocationWifiDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EfLocationWifiResult">
+    	select <include refid="efLocationWifiColumns" />
+	    from ef_location_wifi 
+		<include refid="efLocationWifiDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EfLocationWifiResult">
+    	select <include refid="efLocationWifiColumns" />
+	    from ef_location_wifi 
+		<include refid="efLocationWifiDynamicWhere"/>
+    </select>
+
+	<select id="getByOpTag" parameterType="long" resultMap="EfLocationWifiResult" flushCache="false">
+		select <include refid="efLocationWifiColumns" />
+	    from EF_LOCATION_WIFI 
+        where OP_TAG = #{opTag}
+        order by DEVICE_ID,time limit 500
+	</select>  
+	
+</mapper>

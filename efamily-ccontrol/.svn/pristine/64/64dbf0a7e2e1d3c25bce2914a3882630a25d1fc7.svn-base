@@ -1,0 +1,7 @@
+#application configuration
+#image server upload url
+imageserver.url = http://192.168.1.111
+filePath=/opt/nginx/html/
+server.url.connect=http://{0}:6060/
+server.notification.url=http://192.168.1.33:6088/
+server.notification.path=notification/notify

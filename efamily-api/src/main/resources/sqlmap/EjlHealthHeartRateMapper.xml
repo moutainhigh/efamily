@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlHealthHeartRate">
+    <select id="getLastUserHeartRate" resultMap="EjlHealthHeartRateResult"  flushCache="false">
+    	select 
+    	        s.ID as id,
+	        	s.USER_ID as userId,
+	        	s.create_time as createTime,
+	        	s.RATE as rate,
+	        	s.TIME_SPAN as timeSpan,
+	        	s.DEVICE_id as deviceId,
+	        	s.from_time as fromTime,
+	        	s.to_time as toTime
+	   <![CDATA[ from EJL_HEALTH_HEART_RATE s where s.DEVICE_ID=#{deviceId} and s.USER_ID=#{userId} and from_time >#{time}]]>
+	      order by s.TO_TIME desc
+	      limit 1
+    </select>
+    
+    <select id="getHealthHeartRateByTime" resultMap="EjlHealthHeartRateResult"  flushCache="false">
+    select DISTINCT from_time as fromTime,to_time as toTime,RATE as rate
+    from ejl_health_heart_rate 
+   	<include refid="ejlHealthHeartRateDynamicWhere"/>
+   	order by fromTime asc    
+    </select>
+</mapper>

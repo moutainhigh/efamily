@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.OrgUserFamilyDisease">
+	<resultMap id="OrgUserFamilyDiseaseResult" type="com.winterframework.efamily.entity.OrgUserFamilyDisease">
+	</resultMap>
+	
+	<resultMap id="OrgDiseaseBaseInfoResult" type="com.winterframework.efamily.entity.OrgUserFamilyDiseaseBaseInfo">
+	</resultMap>
+	
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orgUserFamilyDiseaseColumns">
+	    <![CDATA[
+	        	id as id,
+	        	org_id as orgId,
+	        	org_user_id as orgUserId,
+	        	status as status,
+	        	relation as relation,
+	        	disease as disease,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.OrgUserFamilyDisease" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        org_employee_family_disease (
+	        	org_id ,
+	        	org_user_id ,
+	        	status ,
+	        	relation ,
+	        	disease ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time
+	        ) VALUES (
+	        	#{orgId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{orgUserId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{relation,javaType=string,jdbcType=VARCHAR} ,
+	        	#{disease,javaType=string,jdbcType=VARCHAR} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.OrgUserFamilyDisease">
+	        UPDATE org_employee_family_disease SET
+			        <if test="@Ognl@isNotEmpty(orgId)">
+					org_id = #{orgId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(orgUserId)">
+					org_user_id = #{orgUserId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(status)">
+					status = #{status,javaType=integer,jdbcType=INTEGER} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(relation)">
+					relation = #{relation,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(disease)">
+					disease = #{disease,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(remark)">
+					remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updatorId)">
+					updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+				    </if>
+			        <if test="@Ognl@isNotEmpty(updateTime)">
+					update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+				    </if>
+	        WHERE 
+		        id = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from org_employee_family_disease where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="OrgUserFamilyDiseaseResult" flushCache="false">
+			select <include refid="orgUserFamilyDiseaseColumns" />
+		    <![CDATA[
+			    from org_employee_family_disease 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="OrgUserFamilyDiseaseResult" flushCache="false">
+			select <include refid="orgUserFamilyDiseaseColumns" />
+			    from org_employee_family_disease 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="orgUserFamilyDiseaseDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(orgId)">
+				and org_id = #{orgId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(orgUserId)">
+				and org_user_id = #{orgUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(relation)">
+				and relation = #{relation}
+			</if>
+	       <if test="@Ognl@isNotEmpty(disease)">
+				and disease = #{disease}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="OrgUserFamilyDiseaseResult"  flushCache="false">
+    	select <include refid="orgUserFamilyDiseaseColumns" />
+	    from org_employee_family_disease 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from org_employee_family_disease 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from org_employee_family_disease 
+		<include refid="orgUserFamilyDiseaseDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="OrgUserFamilyDiseaseResult">
+    	select <include refid="orgUserFamilyDiseaseColumns" />
+	    from org_employee_family_disease 
+		<include refid="orgUserFamilyDiseaseDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="OrgUserFamilyDiseaseResult">
+    	select <include refid="orgUserFamilyDiseaseColumns" />
+	    from org_employee_family_disease 
+		<include refid="orgUserFamilyDiseaseDynamicWhere"/>
+    </select>
+    
+    <select id="getOrgDiseaseBaseInfo" resultMap="OrgDiseaseBaseInfoResult">
+    	select 
+          	    id as diseaseId,
+	        	org_id as orgId,
+	        	org_user_id as orgUserId,
+	        	status as status,
+	        	relation as relation,
+	        	disease as disease
+	    from org_employee_family_disease 
+		where
+		org_id=#{orgId} and org_user_id=#{orgUserId} and status=1
+		order by id asc
+    </select>
+
+
+
+	
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlUser"> 	
+	<resultMap id="userMonitorResult" type="com.winterframework.efamily.dto.manage.UserMonitor">
+	</resultMap>
+	<resultMap id="userStrucResult" type="com.winterframework.efamily.dto.manage.UserStruc">
+	</resultMap>
+	
+	<select id="getStatistics" resultMap="userMonitorResult" flushCache="false">
+		   select type,status,count(1) as count 
+		   from ejl_user 
+		   where type in(1,2) 
+		   GROUP BY type,status
+	</select>
+	<select id="getUserList" resultMap="userStrucResult" flushCache="false">
+		   SELECT
+				u.nick_name AS nickName,
+				sex AS sex,
+				STATUS AS status,
+				date_format(r.lastLoginTime,'%Y-%m-%d %H:%i') AS lastLoginTime,
+				date_format(r.lastLogoutTime,'%Y-%m-%d %H:%i') AS lastLogoutTime
+			FROM
+				ejl_user u
+			LEFT JOIN (
+				SELECT
+					user_id,
+					max(login_time) AS lastLoginTime,
+					max(logout_time) AS lastLogoutTime
+				FROM
+					ejl_user_login_record
+				GROUP BY
+					user_id
+			) r ON u.id = r.user_id
+			where u.type in(1,2)
+	</select>
+</mapper>

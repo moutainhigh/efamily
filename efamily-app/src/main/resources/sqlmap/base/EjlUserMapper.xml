@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlUser">
+	<resultMap id="HealthyProfileStrucResult" type="com.winterframework.efamily.dto.HealthyProfileStruc">
+	</resultMap>
+	
+	<resultMap id="HealthlyUserRequestResult" type="com.winterframework.efamily.dto.HealthlyUserRequest">
+	</resultMap>
+	
+	<resultMap id="FriendListResult" type="com.winterframework.efamily.dto.FriendListResponse">
+	</resultMap>
+	
+	<resultMap id="UserStrucResult" type="com.winterframework.efamily.dto.UserStruc">
+	</resultMap>
+	
+	<resultMap id="ChatRoomUserNotifyResult" type="com.winterframework.efamily.dto.ChatRoomUserNotify">
+	</resultMap>
+
+	<resultMap id="UserDeviceInfoResult" type="com.winterframework.efamily.dto.UserDeviceInfo">
+	</resultMap>	
+	
+	<resultMap id="ChatGroupListResult" type="com.winterframework.efamily.dto.ChatGroupListResponse">
+	  <collection property="chatGroupUserIcons" javaType="ArrayList" column="id" ofType="java.lang.String" select="selectChatGroupMemberInfo"/> 
+	</resultMap>
+	
+	<resultMap id="ChatGroupMemberInfoResult" type="com.winterframework.efamily.dto.ChatGroupMemberInfo">
+	</resultMap>
+	
+	<resultMap id="FamilyAttentionUserStrucResult" type="com.winterframework.efamily.dto.FamilyAttentionUserStruc">
+	</resultMap>
+    
+    
+    	<update id="clearPhoneForUnconfirmUser" parameterType="hashmap">
+	        UPDATE ejl_user SET
+		        phone = '',
+		        updator_id = #{updatorId},
+	        	update_time = now()
+	        WHERE 
+		        family_id = #{familyId} 
+		        and 
+		        type=3
+	    </update>
+    
+    <select id="getEjlUserByAttribute" resultMap="EjlUserResult">
+    	select <include refid="ejlUserColumns" />
+	    from EJL_USER 
+		<include refid="ejlUserDynamicWhere"/>
+    </select>
+    <select id="getChatRoomUserByRoomId" parameterType="long" resultMap="EjlUserResult">
+    	select <include refid="ejlUserColumns" />
+        from ejl_user eu 
+        where eu.id in 
+        (select eucr.user_id from ejl_user_chart_room eucr where eucr.chat_room_id = #{id} and eucr.status =0 ) 
+    </select>
+    
+        <select id="getUserByPhone" parameterType="string" resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+		    <![CDATA[
+			    from EJL_USER 
+		        where 
+		        phone = #{phone} 
+		        limit 1
+		    ]]>
+		</select>
+		
+		<select id="getUserByAddressBookPhone" parameterType="list" resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+		    from EJL_USER 
+	        where phone in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}				
+			</foreach>
+			and type=1	
+		</select>
+		
+		<select id="getUserByUserId" parameterType="long" resultMap="EjlUserResult" flushCache="false">
+			select <include refid="ejlUserColumns" />
+		    <![CDATA[
+			    from EJL_USER 
+		        where 
+		        id = #{userId} 
+		    ]]>
+		</select>
+		
+		<select id="getUserByThirdPartyToken" parameterType="hashmap" resultMap="EjlUserResult" flushCache="false">
+					select <include refid="ejlUserColumns" />
+			        from EJL_USER 
+		            where 
+		            id = ( select user_id from ejl_third_party_login where token=#{thirdPartyToken} and type=#{type} and status=1 )
+		</select>
+		
+		
+	<select id="getEjlUsersByFamilyId" resultMap="HealthyProfileStrucResult"  flushCache="false">
+    	select t.nick_name as userName,t.id as userId, t.HEAD_IMG as avantarURL,t.STEP_GOAL as stepsGrade
+	    from (select eu.* from EJL_USER eu,EJL_FAMILY_USER efu where eu.ID=efu.USER_ID and efu.FAMILY_ID=#{familyId} and efu.STATUS=0 and efu.type=2) as t
+    </select>
+    
+    <select id="getHealthlyUserByUserId" parameterType="long" resultMap="HealthlyUserRequestResult"  flushCache="false">
+	    SELECT
+			eu.id AS userId,
+			eu.head_img AS icon,
+			eu.nick_name AS NAME,
+			ed.type AS deviceType,
+			ed.id AS deviceId,
+			ed.CODE AS CODE,
+			eu.family_id AS familyId,
+			ef.NAME AS familyName
+		FROM
+			ejl_user eu,
+			ejl_user_device eud,
+			ejl_device ed,
+			ejl_family ef
+		WHERE	eu.id = eud.user_id
+		AND eud.STATUS = 1
+		AND ed.id = eud.device_id
+		AND eu.family_id = ef.id
+		AND eu.id IN (
+				SELECT
+					t1.user_id
+				FROM
+					ejl_family_user t1
+				WHERE t1.family_id IN (
+						SELECT
+							family_id
+						FROM
+							ejl_family_user
+						WHERE
+							user_id = #{userId} and status=0) 
+					and t1.status=0)
+		union 
+		SELECT
+			eu.id AS userId,
+			eu.head_img AS icon,
+			eu.nick_name AS NAME,
+			ed.type AS deviceType,
+			ed.id AS deviceId,
+			ed.CODE AS CODE,
+			eu.family_id AS familyId,
+			ef.NAME AS familyName
+		FROM
+			ejl_user eu,
+			ejl_user_device eud,
+			ejl_device ed,
+			ejl_family ef
+		WHERE eu.id = eud.user_id
+		AND eud.STATUS = 1
+		AND ed.id = eud.device_id
+		AND eu.family_id = ef.id
+		AND eu.id IN (
+						SELECT
+							t2.attention_id
+						FROM
+							ejl_attention_user t2
+						WHERE
+							t2.user_id = #{userId} 
+						and t2.status=2)
+    </select>
+    
+    
+    
+    
+    <select id="getModeleTypeByDeviceId" parameterType="long" resultMap="UserDeviceInfoResult"  flushCache="false">
+    	SELECT t2.glevel,t3.number as customerId from ejl_device t1,ef_qrcode t2,ef_customer t3 WHERE t1.code = t2.imei and t2.customer_number=t3.number  and t1.id=#{deviceId} limit 1;
+    </select>
+    
+    <select id="getUserByMoreUserId" parameterType="list" resultMap="ChatRoomUserNotifyResult" flushCache="false">
+			select 
+			id as userId,
+			IFNULL(nick_name,"") as userName,
+			head_img as icon,
+			sex as sex
+		    from EJL_USER 
+	        where id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+				#{item}				
+			</foreach>
+			and type=1	
+	</select>
+    
+    <select id="getEjlFriendListByUserId" resultMap="FriendListResult"  flushCache="false">
+    	select 
+    	        t.ID as userId,
+	        	t.NICK_NAME as nickName,
+	        	t.PHONE as phoneNumber,
+	        	t.HEAD_IMG as headImgUrl,
+	        	t.TYPE as userType,
+	        	IFNULL(t.REMARK_NAME,"") as remarkName
+
+	    from (
+	    select eu.*,euf.REMARK_NAME from EJL_USER eu,EJL_USER_FRIEND euf where eu.ID=euf.FRIEND_ID and euf.USER_ID=#{id} and euf.STATUS=0 
+	    <if test="@Ognl@isNotEmpty(type)">
+		       and eu.type= #{type} 
+		</if>
+	    ) as t
+    </select>
+     <select id="getEjlFamilyListByUserId" resultMap="FriendListResult"  flushCache="false">
+    	     SELECT  t.ID AS userId,
+	        	t.NICK_NAME AS nickName,
+	        	t.PHONE AS phoneNumber,
+	        	t.HEAD_IMG AS headImgUrl,
+	        	t.TYPE AS userType,
+	        	IFNULL((SELECT remark_name FROM ejl_user_friend WHERE user_id=#{id} AND friend_id=t.id), "") AS remarkName
+      FROM ejl_user t WHERE id IN(
+      SELECT user_id FROM ejl_family_user  WHERE family_id IN
+        (
+          SELECT family_id FROM ejl_user WHERE id=#{id} 
+        ) 
+        AND user_id!=#{id} and status=0 
+        <if test="@Ognl@isNotEmpty(type)">
+		       and TYPE = #{type} 
+		</if>
+      )    
+      </select>
+     
+    <select id="getEjlFamilyListByFamilyIdAndType" parameterType="com.winterframework.efamily.entity.EjlUser" resultMap="UserStrucResult"  flushCache="false">
+    	  select  
+    	  t.ID as userId, 
+    	  t.NICK_NAME as nickName, 
+    	  t.USER_NAME as userName,
+    	  t.PHONE as phoneNumber, 
+    	  t.HEAD_IMG as headImgUrl, 
+    	  t.type AS userType,
+    	  IFNULL(t.deviceType,"") as deviceType ,
+    	  IFNULL((SELECT remark_name FROM ejl_user_friend WHERE user_id=#{id} AND friend_id=t.id), "") AS remarkName,
+    	 (CASE t.type WHEN 1 THEN "" WHEN 2 THEN t.device_id ELSE t.device_id END) AS deviceId
+    	  from (
+            select eu.*,eud.device_id,
+            eud.status AS deviceStatus,ed.type as deviceType
+            from EJL_USER eu 
+            left join EJL_USER_DEVICE eud on eu.id=eud.user_id AND eud.status=1
+            left join EJL_DEVICE ed on ed.id=eud.device_id
+            left join EJL_DEVICE_PARM_CONFIG edpc on eud.device_id=edpc.device_id and edpc.param_key='battery' 
+            where eu.family_id=#{familyId} 
+              <if test="@Ognl@isNotEmpty(type)">
+			   and eu.type = ${type}
+		      </if>
+          )  as t 
+    </select>
+    <select id="getDeviceList" parameterType="com.winterframework.efamily.entity.EjlUser" resultMap="UserDeviceInfoResult"  flushCache="false">
+    	  select  
+    	  t.ID as userId, 
+    	  t.phone_number as phoneNumber,
+    	  t.code as deviceCode,
+    	  1 as relationType,
+    	  t.family_id as familyId,
+    	  t.runningMode as runningMode,
+    	  (select name from ejl_family where id=t.family_id) as familyName,
+    	  ifnull(t.NICK_NAME,"") as nickName, 
+    	  ifnull(t.deviceType,"") as deviceType ,
+    	  ifnull(t.HEAD_IMG,"") as headImgUrl, 
+    	 (CASE t.type WHEN 1 THEN "" WHEN 2 THEN t.device_id ELSE t.device_id END) AS deviceId,
+         (CASE t.type WHEN 1 THEN "" WHEN 2 THEN IFNULL(t.batteryTime,"") ELSE IFNULL(t.batteryTime,"") END) AS batteryTime,
+         (CASE t.type WHEN 1 THEN "" WHEN 2 THEN IFNULL(t.param_value,"") ELSE IFNULL(t.param_value,"") END) AS battery,
+         t.onLineStatus as onLineStatus,
+         t.qrcodeResourceId as qrcodeResourceId
+    	  from (
+            select eu.*,ed.phone_number,ed.code,eud.device_id,UNIX_TIMESTAMP(edpc.update_time)*1000 as batteryTime,edpc.param_value,eud.status AS deviceStatus,ed.type as deviceType,ed.online_status as onLineStatus,ed.running_mode as runningMode,ed.qrcode_resource_id as qrcodeResourceId
+            from EJL_DEVICE ed 
+			left join EJL_USER_DEVICE eud on ed.id=eud.device_id
+            left join EJL_USER eu on eu.id=eud.user_id 
+            left join EJL_DEVICE_PARM_CONFIG edpc on eud.device_id=edpc.device_id and edpc.param_key='battery' 
+            where eu.family_id=#{familyId} AND eud.status=1
+          )  as t 
+    </select>
+    
+    
+       <select id="getAttentionDeviceList" parameterType="com.winterframework.efamily.entity.EjlUser" resultMap="UserDeviceInfoResult"  flushCache="false">
+             select  
+    	  t.ID as userId, 
+    	  t.phone_number as phoneNumber,
+    	  t.code as deviceCode,
+    	  2 as relationType,
+    	  t.family_id as familyId,
+    	  t.runningMode as runningMode,
+    	  (select name from ejl_family where id=t.family_id) as familyName,
+    	  ifnull(t.NICK_NAME,"") as nickName, 
+    	  ifnull(t.deviceType,"") as deviceType ,
+    	  ifnull(t.HEAD_IMG,"") as headImgUrl, 
+    	 (CASE t.type WHEN 1 THEN "" WHEN 2 THEN t.device_id ELSE t.device_id END) AS deviceId,
+         (CASE t.type WHEN 1 THEN "" WHEN 2 THEN IFNULL(t.batteryTime,"") ELSE IFNULL(t.batteryTime,"") END) AS batteryTime,
+         (CASE t.type WHEN 1 THEN "" WHEN 2 THEN IFNULL(t.param_value,"") ELSE IFNULL(t.param_value,"") END) AS battery,
+         t.onLineStatus as onLineStatus,
+         t.qrcodeResourceId as qrcodeResourceId
+    	  from (
+            select eu.*,ed.phone_number,ed.code,eud.device_id,UNIX_TIMESTAMP(edpc.update_time)*1000 as batteryTime,edpc.param_value,eud.status AS deviceStatus,ed.type as deviceType,ed.online_status as onLineStatus,ed.running_mode as runningMode,ed.qrcode_resource_id as qrcodeResourceId
+            from EJL_DEVICE ed 
+			left join EJL_USER_DEVICE eud on ed.id=eud.device_id
+            left join EJL_USER eu on eu.id=eud.user_id 
+            left join EJL_DEVICE_PARM_CONFIG edpc on eud.device_id=edpc.device_id and edpc.param_key='battery'
+            where eu.id in (select attention_id from ejl_attention_user where user_id =#{id} and status=2 ) AND eud.status=1
+          )  as t 
+		     
+	   </select>
+    
+    
+    <select id="getFamilyCountByUserId" parameterType="long" resultType="long" flushCache="false">
+			select count(*)
+		    <![CDATA[
+			     from (select eu.* from EJL_USER eu,EJL_FAMILY_USER efu where eu.ID=efu.USER_ID and eu.ID=#{userId} and efu.STATUS=0) as t
+		    ]]>
+	</select>
+	<!-- save_address_book: 0 save, 1 not save -->
+    <select id="getGroupChatListByUserId" parameterType="long" resultMap="ChatGroupListResult" flushCache="false">
+			 select ucr.chat_room_id as id,ucr.chat_room_id as chatGroupId,ucr.chat_room_top as chatRoomTop,ucr.message_notify as messageNotify,(select ecr.name from ejl_chart_room ecr where ecr.id=ucr.chat_room_id ) as chatRoomName from ejl_user_chart_room ucr where ucr.user_id=#{id} and ucr.status=0 and save_address_book = 0 
+	</select>
+	<select id="selectChatGroupMemberInfo" parameterType="long" resultType="java.lang.String" flushCache="false">
+		   select u.head_img as chatGroupUserIcon from ejl_user u where u.id 
+		   in((select cru.user_id from ejl_chart_room_user cru where cru.chart_room_id=#{id} and cru.status=0))
+	</select>
+	<select id="getDeviceAndAppUserByFamilyId" parameterType="hashmap" resultMap="FamilyAttentionUserStrucResult">
+	    	select 
+               eu.NICK_NAME as nickName,
+               (select euf.remark_name from ejl_user_friend euf where euf.user_id=#{userId} and euf.friend_id=eu.id) as remarkName,
+               eu.HEAD_IMG as headImgUrl,
+               eu.id as userId,
+               eu.type as type,
+               efu.is_forbit_speak as isForbitSpeak
+	        from ejl_user eu ,ejl_family_user efu
+	        where eu.id = efu.user_id 
+			and efu.family_id=#{familyId} 
+			and efu.status=0
+	        and eu.type in (1,2) 
+    </select>
+	
+	<select id="getDeviceAttentionUserByFamilyId" parameterType="hashmap" resultMap="FamilyAttentionUserStrucResult" flushCache="false">
+			select 
+               eu.NICK_NAME as nickName,
+               (select euf.remark_name from ejl_user_friend euf where euf.user_id=#{userId} and euf.friend_id=eu.id) as remarkName,
+               eu.HEAD_IMG as headImgUrl,
+               eu.id as userId,
+               eu.type as type,
+               eau.is_forbit_speak as isForbitSpeak
+		    <![CDATA[
+			    from EJL_USER eu, ejl_attention_user eau
+		        where eu.id=eau.user_id and eau.attention_id in (select user_id from ejl_family_user where family_id=#{familyId} and status=0 and type=2) 
+		        and eau.status=2
+		        group by user_id
+		    ]]>
+	</select>
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.FmlResource">
+	 <select id="getResourceByAssistantTypeAndStatus" parameterType="com.winterframework.efamily.entity.EfResourceAssist"  resultMap="ResourceResult">
+       	  select
+		  <include refid="ResourceColumns" /> 
+		  from EF_RESOURCE 
+		  where 
+		  ID in (select resource_id from ef_resource_assist where type=#{type} and status=#{status})
+     </select>
+</mapper>

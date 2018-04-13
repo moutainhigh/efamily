@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlMessageMark">
+	<resultMap id="EjlMessageMarkResult" type="com.winterframework.efamily.entity.EjlMessageMark">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlMessageMarkColumns">
+	    <![CDATA[
+	        	id as id,
+	        	message_id as messageId,
+	        	send_user_id as sendUserId,
+	        	receive_user_id as receiveUserId,
+	        	send_time as sendTime,
+	        	send_status as sendStatus,
+	        	content as content,
+	        	content_type as contentType,
+	        	content_time as contentTime,
+	        	chat_type as chatType,
+	        	chat_room_id as chatRoomId,
+	        	status as status,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlMessageMark" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_message_mark (
+	        	message_id ,
+	        	send_user_id ,
+	        	receive_user_id ,
+	        	send_time ,
+	        	send_status ,
+	        	content ,
+	        	content_type ,
+	        	content_time ,
+	        	chat_type ,
+	        	chat_room_id ,
+	        	status ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time  
+	        ) VALUES (
+	        	#{messageId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{sendUserId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{receiveUserId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{sendTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{sendStatus,javaType=long,jdbcType=DECIMAL} ,
+	        	#{content,javaType=string,jdbcType=VARCHAR} ,
+	        	#{contentType,javaType=long,jdbcType=DECIMAL} ,
+	        	#{contentTime,javaType=long,jdbcType=DECIMAL} ,
+	        	#{chatType,javaType=long,jdbcType=DECIMAL} ,
+	        	#{chatRoomId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{status,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlMessageMark">
+	    <![CDATA[
+	        UPDATE ejl_message_mark SET
+		        message_id = #{messageId,javaType=long,jdbcType=DECIMAL} ,
+		        send_user_id = #{sendUserId,javaType=long,jdbcType=DECIMAL} ,
+		        receive_user_id = #{receiveUserId,javaType=long,jdbcType=DECIMAL} ,
+		        send_time = #{sendTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        send_status = #{sendStatus,javaType=long,jdbcType=DECIMAL} ,
+		        content = #{content,javaType=string,jdbcType=VARCHAR} ,
+		        content_type = #{contentType,javaType=long,jdbcType=DECIMAL} ,
+		        content_time = #{contentTime,javaType=long,jdbcType=DECIMAL} ,
+		        chat_type = #{chatType,javaType=long,jdbcType=DECIMAL} ,
+		        chat_room_id = #{chatRoomId,javaType=long,jdbcType=DECIMAL} ,
+		        status = #{status,javaType=long,jdbcType=DECIMAL} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_message_mark where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlMessageMarkResult" flushCache="false">
+			select <include refid="ejlMessageMarkColumns" />
+		    <![CDATA[
+			    from ejl_message_mark 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlMessageMarkResult" flushCache="false">
+			select <include refid="ejlMessageMarkColumns" />
+			    from ejl_message_mark 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="ejlMessageMarkDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(messageId)">
+				and message_id = #{messageId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sendUserId)">
+				and send_user_id = #{sendUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(receiveUserId)">
+				and receive_user_id = #{receiveUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sendTime)">
+				and send_time = #{sendTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sendStatus)">
+				and send_status = #{sendStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(content)">
+				and content = #{content}
+			</if>
+	       <if test="@Ognl@isNotEmpty(contentType)">
+				and content_type = #{contentType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(contentTime)">
+				and content_time = #{contentTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(chatType)">
+				and chat_type = #{chatType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(chatRoomId)">
+				and chat_room_id = #{chatRoomId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlMessageMarkResult"  flushCache="false">
+    	select <include refid="ejlMessageMarkColumns" />
+	    from ejl_message_mark 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_message_mark 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_message_mark 
+		<include refid="ejlMessageMarkDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlMessageMarkResult">
+    	select <include refid="ejlMessageMarkColumns" />
+	    from ejl_message_mark 
+		<include refid="ejlMessageMarkDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlMessageMarkResult">
+    	select <include refid="ejlMessageMarkColumns" />
+	    from ejl_message_mark 
+		<include refid="ejlMessageMarkDynamicWhere"/>
+    </select>
+
+
+	
+</mapper>

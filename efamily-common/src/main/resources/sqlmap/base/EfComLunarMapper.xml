@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfLunar">
+	<resultMap id="EfLunarResult" type="com.winterframework.efamily.entity.EfLunar">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="efLunarColumns">
+	    <![CDATA[
+	        	id as id,
+	        	solar_date as solarDate,
+	        	lunar_date as lunarDate,
+	        	week as week,
+	        	term as term,
+	        	zodiac as zodiac,
+	        	ganzhi as ganzhi,
+	        	suit as suit,
+	        	avoid as avoid,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	remark as remark
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EfLunar" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ef_lunar (
+	        	solar_date ,
+	        	lunar_date ,
+	        	week ,
+	        	term ,
+	        	zodiac ,
+	        	ganzhi ,
+	        	suit ,
+	        	avoid ,
+	        	creator_id ,
+	        	create_time ,
+	        	remark 
+	        ) VALUES (
+	        	#{solarDate,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{lunarDate,javaType=string,jdbcType=VARCHAR} ,
+	        	#{week,javaType=integer,jdbcType=INTEGER} ,
+	        	#{term,javaType=string,jdbcType=VARCHAR} ,
+	        	#{zodiac,javaType=string,jdbcType=VARCHAR} ,
+	        	#{ganzhi,javaType=string,jdbcType=VARCHAR} ,
+	        	#{suit,javaType=string,jdbcType=VARCHAR} ,
+	        	#{avoid,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EfLunar">
+	    <![CDATA[
+	        UPDATE ef_lunar SET
+		        solar_date = #{solarDate,javaType=date,jdbcType=TIMESTAMP} ,
+		        lunar_date = #{lunarDate,javaType=string,jdbcType=VARCHAR} ,
+		        week = #{week,javaType=integer,jdbcType=INTEGER} ,
+		        term = #{term,javaType=string,jdbcType=VARCHAR} ,
+		        zodiac = #{zodiac,javaType=string,jdbcType=VARCHAR} ,
+		        ganzhi = #{ganzhi,javaType=string,jdbcType=VARCHAR} ,
+		        suit = #{suit,javaType=string,jdbcType=VARCHAR} ,
+		        avoid = #{avoid,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ef_lunar where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfLunarResult" flushCache="false">
+			select <include refid="efLunarColumns" />
+		    <![CDATA[
+			    from ef_lunar 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EfLunarResult" flushCache="false">
+			select <include refid="efLunarColumns" />
+			    from ef_lunar 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="efLunarDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(solarDate)">
+				and solar_date = #{solarDate}
+			</if>
+	       <if test="@Ognl@isNotEmpty(lunarDate)">
+				and lunar_date = #{lunarDate}
+			</if>
+	       <if test="@Ognl@isNotEmpty(week)">
+				and week = #{week}
+			</if>
+	       <if test="@Ognl@isNotEmpty(term)">
+				and term = #{term}
+			</if>
+	       <if test="@Ognl@isNotEmpty(zodiac)">
+				and zodiac = #{zodiac}
+			</if>
+	       <if test="@Ognl@isNotEmpty(ganzhi)">
+				and ganzhi = #{ganzhi}
+			</if>
+	       <if test="@Ognl@isNotEmpty(suit)">
+				and suit = #{suit}
+			</if>
+	       <if test="@Ognl@isNotEmpty(avoid)">
+				and avoid = #{avoid}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EfLunarResult"  flushCache="false">
+    	select <include refid="efLunarColumns" />
+	    from ef_lunar 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ef_lunar 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ef_lunar 
+		<include refid="efLunarDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EfLunarResult">
+    	select <include refid="efLunarColumns" />
+	    from ef_lunar 
+		<include refid="efLunarDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EfLunarResult">
+    	select <include refid="efLunarColumns" />
+	    from ef_lunar 
+		<include refid="efLunarDynamicWhere"/>
+    </select>
+
+    <delete id="deleteByDate" parameterType="date">
+	    <![CDATA[
+	        delete from ef_lunar where
+		        solar_date = #{date} 
+	    ]]>
+    </delete>
+    <select id="getEfLunarByDate" parameterType="date" resultMap="EfLunarResult" flushCache="false">
+		select <include refid="efLunarColumns" />
+	    <![CDATA[
+		    from ef_lunar 
+	        where 
+	        solar_date = #{date} 
+	    ]]>
+	</select>	
+	
+</mapper>

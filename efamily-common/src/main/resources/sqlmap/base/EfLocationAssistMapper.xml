@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfLocationAssist">
+	<resultMap id="EfLocationAssistResult" type="com.winterframework.efamily.entity.EfLocationAssist">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfLocationAssistColumns">
+       	id as id,
+       	location_id as locationId,
+       	speed as speed,
+       	acceleration as acceleration,
+       	direction as direction,
+       	slope_degree as slopeDegree,
+       	move_mode as moveMode,
+       	remark as remark,
+       	creator_id as creatorId,
+       	create_time as createTime,
+       	updator_id as updatorId,
+       	update_time as updateTime
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EfLocationAssist" 
+			useGeneratedKeys="true" keyProperty="id" flushCache="true"> 
+	        INSERT INTO
+	        ef_location_assist (
+		       	location_id,
+		       	speed,
+		       	acceleration,
+		       	direction,
+		       	slope_degree,
+		       	move_mode,
+		       	remark,
+		       	creator_id,
+		       	create_time
+	        ) VALUES (
+	        	#{locationId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{speed,javaType=double,jdbcType=DECIMAL} ,
+	        	#{acceleration,javaType=double,jdbcType=DECIMAL} ,
+	        	#{direction,javaType=string,jdbcType=VARCHAR} ,
+	        	#{slopeDegree,javaType=integer,jdbcType=INTEGER} ,
+	        	#{moveMode,javaType=integer,jdbcType=INTEGER} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}
+	        )
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EfLocationAssist">
+	        UPDATE ef_location_assist SET
+		        location_id = #{locationId,javaType=long,jdbcType=DECIMAL} ,
+		        speed = #{speed,javaType=double,jdbcType=DECIMAL} ,
+		        acceleration= #{acceleration,javaType=double,jdbcType=DECIMAL} ,
+		        direction = #{direction,javaType=string,jdbcType=VARCHAR} ,
+		        slope_degree = #{slopeDegree,javaType=integer,jdbcType=INTEGER} ,
+		        move_mode = #{moveMode,javaType=integer,jdbcType=INTEGER} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP}
+	        WHERE 
+		        id = #{id}
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	        delete from ef_location_assist where id = #{id} 
+	   </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfLocationAssistResult" flushCache="false">
+			select <include refid="EfLocationAssistColumns" />
+		      from ef_location_assist 
+	         where 
+	        	id = #{id} 
+		</select>
+		<select id="getByLocationId" parameterType="long" resultMap="EfLocationAssistResult" flushCache="false">
+			select <include refid="EfLocationAssistColumns" />
+		      from ef_location_assist 
+	         where 
+	        	location_id = #{locationId} limit 1
+		</select>
+</mapper>

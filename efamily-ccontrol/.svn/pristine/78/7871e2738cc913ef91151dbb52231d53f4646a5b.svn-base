@@ -1,0 +1,5 @@
+#application configuration
+#image server upload url
+imageserver.url = http://192.168.1.111
+filePath=/opt/nginx/html/
+server.url.connect=http://{0}:6060/

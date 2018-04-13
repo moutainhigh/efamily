@@ -1,0 +1,41 @@
+package com.winterframework.efamily.server.enums;
+
+public class TestPusher {
+	public static final String param_set="1";
+	public static final String param_get="2";
+	public static final String chat_set="3";
+	public static final String chat_get="4";
+	public static final String chat_push="5";
+	public static final String ctt_set="6";
+	public static final String ctt_get="7";
+	public static final String sigl_get="8";
+	public static final String location_get="9";
+	public static final String heart_get="10";
+	public static final String battery_get="11";
+	public static final String walk_remote="12";
+	public static final String walk_get="13";
+	public static final String remind_set="14";
+	public static final String remind_get="15";
+	public static final String remind_add="16";
+	public static final String remind_edit="17";
+	public static final String remind_del="18";
+	public static final String software_get="19";
+	public static final String power_onff="20";
+	public static final String lbs_get="21";
+	public static final String power_onff_set="22";
+	public static final String power_onff_get="23";
+	public static final String time_set="24";
+	public static final String time_get="25";
+	public static final String satellite_get="26";
+	public static final String weather_init="27";
+	public static final String weather_set="28";
+	public static final String weather_push="29";
+	public static final String lunar_init="30";
+	public static final String lunar_set="31";
+	public static final String lunar_push="32";
+	public static final String bind_push="33";
+	public static final String sigl_max_get="34";
+	public static final String wifi_get="35";
+	public static final String monitor="36";
+	public static final String sleep_get="37";
+}

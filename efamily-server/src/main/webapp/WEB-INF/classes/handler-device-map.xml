@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-2.0.xsd " 
+	default-autowire="byName" default-lazy-init="false">
+	
+	<!--根据command类型取得相应的处理类 -->
+	<bean id="deviceHandlerMap" class="java.util.HashMap" lazy-init="true">  
+    	<constructor-arg>  
+        	<map> 
+        		<!-- 设备硬件信息-->
+	        	<entry key="20000" value-ref="deviceHardwareHandler"/>
+        		<!-- 设备心跳连网-->
+	        	<entry key="20001" value-ref="deviceHeartBeatHandler"/>
+	        	<!-- 设备打招呼（新）-->
+	        	<entry key="20009" value-ref="deviceHelloNewHandler"/>
+				<!-- 设备软件查询-->
+	        	<entry key="20100" value-ref="deviceSoftwareQueryHandler"/>
+	        	<!-- 设备首次开机后向服务器打招呼-->
+	        	<entry key="20101" value-ref="deviceHelloHandler"/>
+	        	<!-- 设备绑定确认-->
+	        	<entry key="20102" value-ref="deviceBindHandler"/>
+	        	<!-- 设备绑定响应-->
+	        	<entry key="20103" value-ref="deviceBindPushHandler"/>
+	        	<!-- 设备关机-->
+	        	<entry key="20104" value-ref="devicePowerOnffHandler"/>
+	        	<!-- 设备移动信息查询-->
+	        	<entry key="20109" value-ref="deviceMobileQueryHandler"/>
+	        	<!-- 设备移动信息查询-->
+	        	<entry key="20108" value-ref="deviceMobileUploadHandler"/>
+	        	<!-- 设备自动开关机设置查询-->
+	        	<entry key="20142" value-ref="devicePowerAutoQueryHandler"/>
+	        	<!-- 设备时间查询-->
+	        	<entry key="20152" value-ref="deviceTimeQueryHandler"/>
+	        	<!-- 设备时间拉取-->
+	        	<entry key="20153" value-ref="deviceTimeHandler"/>
+	        	<!-- 设备信号数据查询-->
+	        	<entry key="20186" value-ref="deviceSignalQueryHandler"/>
+	        	<!-- 设备信号数据上传-->
+	        	<entry key="20187" value-ref="deviceSignalUploadHandler"/>
+	        	<!-- 资源上传-->
+	        	<entry key="20201" value-ref="resourceUploadHandler"/>
+	        	<!-- 资源下载-->
+	        	<entry key="20202" value-ref="resourceDownloadHandler"/>
+	        	<!-- 参数获取-->
+	        	<entry key="20204" value-ref="deviceParamGetHandler"/>
+	        	<!-- 设备通讯录查询-->
+	        	<entry key="20321" value-ref="deviceContactsQueryHandler"/>
+				<!-- 设备聊天设置查询-->
+	        	<entry key="20502" value-ref="deviceChatQueryHandler"/>
+	        	<!-- 设备聊天发送-->
+	        	<entry key="20503" value-ref="deviceChatHandler"/>
+				<!-- 设备定位星信噪比查询-->
+	        	<entry key="20624" value-ref="deviceLocationSatelliteQueryHandler"/>
+	        	<!-- 设备定位数据查询-->
+	        	<entry key="20625" value-ref="deviceLocationQueryHandler"/>
+	        	<!-- 设备定位星信噪比上传  不要求上传 -->
+	        	<!-- <entry key="20643" value-ref="deviceLocationSatelliteUploadHandler"/> -->
+	        	<!-- 设备定位异常数据上传-->
+	        	<entry key="20644" value-ref="deviceLocationExceptionUploadHandler"/>
+	        	<!-- 设备定位数据上传-->
+	        	<entry key="20645" value-ref="deviceLocationUploadHandler"/>
+	        	<!-- 设备定位wifi数据上传-->
+	        	<entry key="20646" value-ref="deviceLocationWifiUploadHandler"/>
+	        	<!-- 设备定位wifi数据查询-->
+	        	<entry key="20647" value-ref="deviceLocationWifiQueryHandler"/>	        	
+	        	<!-- 设备心率数据查询-->
+	        	<entry key="20725" value-ref="deviceHeartQueryHandler"/>
+	        	<!-- 设备心率数据上传-->
+	        	<entry key="20744" value-ref="deviceHeartUploadHandler"/>
+	        	<!-- 心率测量 -->
+	        	<entry key="20826" value-ref="deviceHeartStartHandler"/>
+	        	<!-- 心率测量完成 -->
+	        	<entry key="20835" value-ref="deviceHeartFinishHandler"/>
+	        	<!-- test push-->
+	        	<entry key="299999" value-ref="deviceTestPushHandler"/>
+	        	<!--电池数据查询 -->
+	        	<entry key="20196" value-ref="deviceBatteryQueryHandler"/>
+	        	<!-- 电池数据上传 -->
+	        	<entry key="20197" value-ref="deviceBatteryUploadHandler"/>
+	        	<!-- 提醒设置查询 -->
+	        	<entry key="20402" value-ref="deviceRemindQueryHandler"/>
+	        	<!-- 计步数据查询 -->
+	        	<entry key="20825" value-ref="deviceStepQueryHandler"/>
+	        	<!-- 计步数据上传 -->
+	        	<entry key="20844" value-ref="deviceStepUploadHandler"/>
+	        	<!-- 久坐数据上传 -->
+	        	<entry key="20845" value-ref="deviceSittingUploadHandler"/>
+	        	<!-- 久坐数据查询 -->
+	        	<entry key="20829" value-ref="deviceSittingQueryHandler"/>	        	
+	        	<!-- 计步远程操作 -->
+	        	<entry key="20824" value-ref="deviceStepRemoteHandler"/>
+	        	<!-- 获取用户基本信息 -->
+	        	<entry key="20205" value-ref="deviceUserBaseInfoHandler"  />
+	        	<!-- 设备推送用户监控信息 -->
+	        	<entry key="28962" value-ref="deviceMonitorUploadHandler"  />
+	        	<!-- 睡眠查询 -->
+	        	<entry key="20925" value-ref="deviceSleepQueryHandler"/>
+	        	<!-- 睡眠上传 -->
+	        	<entry key="20926" value-ref="deviceSleepUploadHandler"/>
+	        	
+	        	<!-- 血压上传 -->
+	        	<entry key="20851" value-ref="deviceBloodPressureUploadHandler"/>
+	        	<!-- 血压数据查询-->
+	        	<entry key="20852" value-ref="deviceBloodPressureQueryHandler"/>
+	        	<!-- 睡眠开始 -->
+	        	<entry key="20828" value-ref="deviceSleepStartHandler"/>
+	        	
+	        	<!-- 提醒发送 -->
+	        	<entry key="20406" value-ref="deviceRemindSendStatusUploadHandler"/>
+	        	<!-- 设备解绑 -->	        	
+	        	<entry key="29901" value-ref="watchDeviceManageHandler"  />
+	        	<!-- 设备关键操作 -->	        	
+	        	<entry key="28999" value-ref="deviceOperationHandler"  /> 
+	        	<!-- 农历查询  服务器推送-->
+	        	<entry key="29134" value-ref="deviceLunarQueryHandler"  /> 
+	        	<!-- 农历查询 设备主动获取 -->
+	        	<entry key="28974" value-ref="deviceGetLunarQueryHandler"  /> 
+	        	<!-- 久坐通知 -->
+	        	<entry key="20830" value-ref="deviceSitSwitchNoticeHandler"  /> 
+			</map>  
+    	</constructor-arg>  
+	</bean>
+</beans>

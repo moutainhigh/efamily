@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlHealthSleep">
+	<resultMap id="EjlHealthSleepResult" type="com.winterframework.efamily.entity.EjlHealthSleep">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlHealthSleepColumns">
+	    <![CDATA[
+	        	id as id,
+	        	user_id as userId,
+	        	device_id as deviceId,
+	        	from_time as fromTime,
+	        	to_time as toTime,
+	        	deepStruc as deepStruc,
+	        	wakeStruc as wakeStruc,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlHealthSleep" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ejl_health_sleep (
+	        	user_id ,
+	        	device_id ,
+	        	from_time ,
+	        	to_time ,
+	        	deepStruc ,
+	        	wakeStruc ,
+	        	creator_id ,
+	        	create_time  
+	        ) VALUES (
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{fromTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{toTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{deepStruc,javaType=string,jdbcType=VARCHAR} ,
+	        	#{wakeStruc,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlHealthSleep">
+	    <![CDATA[
+	        UPDATE ejl_health_sleep SET
+		        user_id = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		        device_id = #{deviceId,javaType=long,jdbcType=DECIMAL} ,
+		        from_time = #{fromTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        to_time = #{toTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        deepStruc = #{deepStruc,javaType=string,jdbcType=VARCHAR} ,
+		        wakeStruc = #{wakeStruc,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ejl_health_sleep where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlHealthSleepResult" flushCache="false">
+			select <include refid="ejlHealthSleepColumns" />
+		    <![CDATA[
+			    from ejl_health_sleep 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlHealthSleepResult" flushCache="false">
+			select <include refid="ejlHealthSleepColumns" />
+			    from ejl_health_sleep 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="ejlHealthSleepDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceId)">
+				and device_id = #{deviceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(fromTime)">
+				and from_time >= #{fromTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(toTime)">
+				 <![CDATA[and from_time <= #{toTime}]]>
+			</if>
+	       <if test="@Ognl@isNotEmpty(deepStruc)">
+				and deepStruc = #{deepStruc}
+			</if>
+	       <if test="@Ognl@isNotEmpty(wakeStruc)">
+				and wakeStruc = #{wakeStruc}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlHealthSleepResult"  flushCache="false">
+    	select <include refid="ejlHealthSleepColumns" />
+	    from ejl_health_sleep 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ejl_health_sleep 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ejl_health_sleep 
+		<include refid="ejlHealthSleepDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlHealthSleepResult">
+    	select <include refid="ejlHealthSleepColumns" />
+	    from ejl_health_sleep 
+		<include refid="ejlHealthSleepDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EjlHealthSleepResult">
+    	select <include refid="ejlHealthSleepColumns" />
+	    from ejl_health_sleep 
+		<include refid="ejlHealthSleepDynamicWhere"/>
+		order by from_time
+    </select>
+
+	<select id="getLastSleepByAttribute" resultMap="EjlHealthSleepResult">
+    	select <include refid="ejlHealthSleepColumns" />
+	    from ejl_health_sleep 
+		<include refid="ejlHealthSleepDynamicWhere"/>
+		order by from_time desc limit 1
+    </select>
+</mapper>

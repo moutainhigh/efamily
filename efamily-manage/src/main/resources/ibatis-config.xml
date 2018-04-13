@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+  "http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+<configuration>
+	<typeHandlers>
+		<typeHandler javaType="boolean" jdbcType="VARCHAR"
+			handler="com.winterframework.orm.dal.ibatis3.type.YesNoTypeHandler" />
+		<typeHandler handler="org.apache.ibatis.type.DateTypeHandler"
+			javaType="java.util.Date" jdbcType="TIMESTAMP" />
+	</typeHandlers>
+
+	<plugins>
+
+		<plugin interceptor="com.winterframework.orm.page.plugin.OffsetLimitInterceptor">
+			<property name="dialectClass"
+				value="com.winterframework.orm.dialect.OracleDialect" />
+		</plugin>
+	</plugins>
+	<mappers>
+		<mapper resource="sqlmap/base/EjlComFeedbackMapper.xml" />
+		<mapper resource="sqlmap/base/EjlHelpMapper.xml" />
+		<mapper resource="sqlmap/base/ComDeviceParmConfigMapper.xml" />
+		<mapper resource="sqlmap/base/EjlComUserDeviceMapper.xml" />
+		<mapper resource="sqlmap/base/EjlComPublicDataMapper.xml" />
+		<mapper resource="sqlmap/base/EjlComUserMapper.xml" />
+		<mapper resource="sqlmap/base/EjlUserMapper.xml" />
+		<mapper resource="sqlmap/base/EjlComDeviceMapper.xml" />
+		<mapper resource="sqlmap/base/QrcodeMapper.xml" />
+		<mapper resource="sqlmap/base/StatisticComUserConnectMapper.xml" />
+		
+		<mapper resource="sqlmap/base/EfComCustomerMapper.xml" />
+	</mappers>
+
+</configuration>

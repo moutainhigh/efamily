@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfModule">
+	<resultMap id="EfModuleResult" type="com.winterframework.efamily.entity.EfModule">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="efModuleColumns">
+	    <![CDATA[
+	        	id as id,
+	        	name as name,
+	        	number as number,
+	        	status as status,
+	        	remark as remark,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EfModule" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ef_module (
+	        	name ,
+	        	number,
+	        	status ,
+	        	remark ,
+	        	creator_id ,
+	        	create_time 
+	        ) VALUES (
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{number,javaType=integer,jdbcType=INTEGER} ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP}
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EfModule">
+	    <![CDATA[
+	        UPDATE ef_module SET
+		        name = #{name,javaType=string,jdbcType=VARCHAR} ,
+		        number = #{number,javaType=integer,jdbcType=INTEGER} ,
+		        status = #{status,javaType=integer,jdbcType=INTEGER} ,
+		        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+		        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ef_module where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfModuleResult" flushCache="false">
+			select <include refid="efModuleColumns" />
+		    <![CDATA[
+			    from ef_module 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EfModuleResult" flushCache="false">
+			select <include refid="efModuleColumns" />
+			    from ef_module 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="efModuleDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(name)">
+				and name = #{name}
+			</if>
+			<if test="@Ognl@isNotEmpty(number)">
+				and number = #{number}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EfModuleResult"  flushCache="false">
+    	select <include refid="efModuleColumns" />
+	    from ef_module 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ef_module 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ef_module 
+		<include refid="efModuleDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EfModuleResult">
+    	select <include refid="efModuleColumns" />
+	    from ef_module 
+		<include refid="efModuleDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EfModuleResult">
+    	select <include refid="efModuleColumns" />
+	    from ef_module 
+		<include refid="efModuleDynamicWhere"/>
+    </select>
+    
+    <select id="getEfModuleListByDevice" resultMap="EfModuleResult">
+    	select t.id as id,
+	        	t.number as number
+	    from ef_module t,ef_device_module t1,ef_qrcode t2,ef_customer t3,ejl_device t4
+		where t4.`code`=t2.imei
+		and t2.customer_number=t3.number
+		and t1.customer_number=t3.number
+		and t1.glevel = t2.glevel
+		and t1.module_id = t.id
+		and t.status=0
+		and t4.id=#{deviceId}
+		order by t.number
+    </select>
+
+	<select id="getEfModuleList" resultMap="EfModuleResult">
+	select t.id as id,
+	        	t.number as number,t1.customer_number as customerId,t1.glevel as glevel
+	        	from ef_module t,ef_device_module t1
+	        	where t.status=0 and t.id=t1.module_id
+	
+	</select>
+	
+</mapper>

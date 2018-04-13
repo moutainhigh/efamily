@@ -1,0 +1,177 @@
+<section class="E_box">
+    <header class="E_Head">
+        <div class="EH_top">
+            <input type="text" placeholder="会员姓名/手机号/身份">
+            <img src="img/icon_search_nor.png" alt="">
+        </div>
+    </header>
+    <article class="E_content">
+        <div class="RL_box">
+            <div class="E_btnL">已绑定</div>
+            <div class="E_btnR">未绑定</div>
+        </div>
+        <div class="E_lis">
+            <table class="E_lisTable">
+                <tr class="E_lisHead">
+                    <td>设备类型</td>
+                    <td>设备名称</td>
+                    <td>剩余电量</td>
+                    <td>使用状态</td>
+                    <td>设备编号</td>
+                    <td>绑定时间</td>
+                    <td>操作</td>
+                    <td>使用者</td>
+                </tr>
+<!--
+                <tr class="E_lisShow">
+                    <td>
+                        <input type="checkbox">手表
+                    </td>
+                    <td>林先生的手表</td>
+                    <td>10%</td>
+                    <td>已绑定</td>
+                    <td>32424158</td>
+                    <td>
+                        <span>2016-09-14</span>
+                        <span>15:46</span>
+                    </td>
+                    <td class="E_conimg">
+                        <span class="E_check">查看</span>
+                        <span class="E_unbind">解绑</span>
+                        <span class="E_edit">编辑</span>
+                        
+                        <span class="E_bind">绑定</span>
+                    </td>
+                    <td>林正和</td>
+                </tr>
+-->
+
+            </table>
+        </div>
+    </article>
+</section>
+<div class="persionDetil pe1">
+    <div class="per_box">
+        <div class="P_part1"><img src="img/icon_qx.png" alt=""></div>
+        <div class="P_part2">
+            <span>手表查看</span>
+            <button id="P_edi">编辑</button>
+        </div>
+        <div class="P_partBox">
+            <div class="P_part3">手表基本属性
+                <span>更新时间:</span>
+                <span>2016-09-01</span>
+                <span>13:20</span>
+            </div>
+            <div class="P_part4">
+                <div class="P4_l">手表设备码：<span>340599900001</span></div>
+                <div class="P4_r">手表名称：<span>测试手表</span></div>
+            </div>
+            <div class="P_part5">手表电量<span>20%</span></div>
+            <div class="P_part6">
+                <div class="P6_l">使用状态:<span>已绑定</span></div>
+                <div class="P6_r">绑定人名称：<span>张学友</span></div>
+            </div>
+            <div class="P_part7">所属养老院：<span>南山养老院</span></div>
+            <div class="P_part8">手表sim卡设置</div>
+            <div class="P_part9">sim卡号码：<span>19365781547</span></div>
+            <div class="P_part10">手表定位开关（默认关闭）：
+                <input type="checkbox" value="">开启
+            </div>
+            <div class="P_part11">手表二维码</div>
+            <div class="P_part12"><img src="img/login_logo.png" alt=""></div>
+        </div>
+    </div>
+</div>
+<div class="persionDetil pe2">
+    <div class="per_box">
+        <div class="P_part1"><img src="img/icon_qx.png" alt=""></div>
+        <div class="P_part2">
+            <span>手表查看</span>
+            <button id="P_save">保存</button>
+        </div>
+        <div class="P_partBox">
+            <div class="P_part3">手表基本属性
+                <span>更新时间:</span>
+                <span>2016-09-01</span>
+                <span>13:20</span>
+            </div>
+            <div class="P_part4">
+                <div class="P4_l">手表设备码：<span>340599900001</span></div>
+                <div class="P4_r">手表名称：
+                    <input type="text" value="测试手表">
+                </div>
+            </div>
+            <div class="P_part5">手表电量<span>20%</span></div>
+            <div class="P_part6">
+                <div class="P6_l">使用状态:<span class="P_bd">已绑定</span>
+                    <button id="P_jcBtn">解除手表绑定</button>
+                </div>
+                <div class="P6_r">绑定人名称：
+                    <input type="text" value="张学友">
+                </div>
+            </div>
+            <div class="P_part7">所属养老院：
+                <input type="text" value="南山养老院">
+            </div>
+            <div class="P_part8">手表sim卡设置</div>
+            <div class="P_part9">sim卡号码：
+                <input type="text" value="13700009999">
+            </div>
+            <div class="P_part10">手表定位开关（默认关闭）：
+                <input type="checkbox" value="">开启
+            </div>
+            <div class="P_part11">手表二维码</div>
+            <div class="P_part12"><img src="img/login_logo.png" alt=""></div>
+        </div>
+    </div>
+</div>
+<div class="add_watchBox">
+    <div class="add_watch">
+        <div class="add_top">
+            新增设备<img class="add_qx" src="img/icon_qx.png" alt="">
+        </div>
+        <div class="add_bottom">
+            <p class="add_first">
+                <span>绑定人：</span>
+                <input type="text" placeholder="">
+            </p>
+            <p>
+                <span>设备名称：</span>
+                <input type="text" placeholder="请输入设备名称">
+            </p>
+            <p>
+                <span>设备编号：</span>
+                <input type="text" placeholder="请输入设备编号">
+                <i>设备编号可在设备包装或者设备里查看</i>
+            </p>
+            <p>
+                <span>监护人手机号：</span>
+                <input type="text" placeholder="请输入监护人手机号">
+            </p>
+            <p>
+                <span>绑定人手机号：</span>
+                <input type="text" placeholder="请输入绑定人手机号">
+                <i>绑定人手机号即SIM卡号码</i>
+            </p>
+            <p class="add_btnBox">
+                <button class="add_btnL">确定</button>
+                <button class="add_btnR">取消</button>
+            </p>
+        </div>
+    </div>
+</div>
+<!--
+<div class="del_vipBox">
+    <div class="del_vip">
+        <div class="del_top">删除会员<img src="img/icon_qx.png" alt=""></div>
+        <div class="del_bottom">
+            <div class="del_ifDelWor">确认要删除会员<span>张三</span>吗？</div>
+            <div class="del_btnBox">
+                <button class="del_btnL">确定</button>
+                <button class="del_btnR">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+-->

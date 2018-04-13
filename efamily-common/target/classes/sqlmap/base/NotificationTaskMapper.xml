@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.NotificationTask">
+	<resultMap id="EfNotificationTaskResult" type="com.winterframework.efamily.entity.NotificationTask">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="NotificationTaskColumns">
+	    <![CDATA[
+	        	id as id,
+	        	noty_type as notyType,
+	        	message_id as messageId,
+	        	user_id as userId,
+	        	device_id as deviceId,
+	        	status as status,
+	        	creator_id as creatorId,
+	        	create_time as createTime,
+	        	updator_id as updatorId,
+	        	update_time as updateTime,
+	        	remark as remark
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.NotificationTask" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        ef_notification_task (
+	        	noty_type ,
+	        	message_id ,
+	        	user_id ,
+	        	device_id ,
+	        	status ,
+	        	creator_id ,
+	        	create_time ,
+	        	remark 
+	        ) VALUES (
+	        	#{notyType,javaType=integer,jdbcType=DECIMAL},
+	        	#{messageId,javaType=long,jdbcType=DECIMAL}  ,
+	        	#{userId,javaType=long,jdbcType=DECIMAL}  ,
+	        	#{deviceId,javaType=long,jdbcType=DECIMAL}  ,
+	        	#{status,javaType=integer,jdbcType=INTEGER} ,
+	        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+	        	#{createTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{remark,javaType=string,jdbcType=VARCHAR} 
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.NotificationTask">
+	    <![CDATA[
+	        UPDATE ef_notification_task SET
+		        status = #{status,javaType=integer,jdbcType=INTEGER},
+		        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL}  ,
+	        	update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP}
+	        WHERE 
+		        id = #{id} 
+	    ]]>
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from ef_notification_task where
+		        id = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EfNotificationTaskResult" flushCache="false">
+			select <include refid="NotificationTaskColumns" />
+		    <![CDATA[
+			    from ef_notification_task 
+		        where 
+		        id = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EfNotificationTaskResult" flushCache="false">
+			select <include refid="NotificationTaskColumns" />
+			    from ef_notification_task 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+                #{item}
+                </foreach>					
+		</select>	
+
+	<sql id="efNotificationTaskDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and id = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(notyType)">
+				and noty_type = #{notyType}
+			</if>
+	       <if test="@Ognl@isNotEmpty(messageId)">
+				and message_id = #{messageId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and user_id = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(deviceId)">
+				and device_id = #{deviceId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(status)">
+				and status = #{status}
+			</if>
+	       <if test="@Ognl@isNotEmpty(creatorId)">
+				and creator_id = #{creatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(createTime)">
+				and create_time = #{createTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updatorId)">
+				and updator_id = #{updatorId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(updateTime)">
+				and update_time = #{updateTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(remark)">
+				and remark = #{remark}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EfNotificationTaskResult"  flushCache="false">
+    	select <include refid="NotificationTaskColumns" />
+	    from ef_notification_task 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from ef_notification_task 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from ef_notification_task 
+		<include refid="efNotificationTaskDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EfNotificationTaskResult">
+    	select <include refid="NotificationTaskColumns" />
+	    from ef_notification_task 
+		<include refid="efNotificationTaskDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+	<select id="getObjByAttribute" resultMap="EfNotificationTaskResult">
+    	select <include refid="NotificationTaskColumns" />
+	    from ef_notification_task 
+		<include refid="efNotificationTaskDynamicWhere"/>
+    </select>
+
+
+	
+</mapper>

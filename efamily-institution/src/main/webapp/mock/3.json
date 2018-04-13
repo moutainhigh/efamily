@@ -1,0 +1,44 @@
+{
+    "time": "1475138488421",
+    "resultCode": "0",
+    "userHealthInfo": {
+        "bloodSugarInfo": [{
+            "value": 50,
+            "fromTime": 1474945200000,
+            "toTime": 1474945500000,
+            "flag": 1
+        }, {
+            "value": 55,
+            "fromTime": 1474941600000,
+            "toTime": 1474941900000,
+            "flag": 2
+        }, {
+            "value": 59,
+            "fromTime": 1474948800000,
+            "toTime": 1474949100000,
+            "flag": 2
+        }],
+        "heartRateInfo": [{
+            "value": 80,
+            "fromTime": 1474945200000,
+            "toTime": 1474945500000,
+            "flag": 2
+        }, {
+            "value": 70,
+            "fromTime": 1474941600000,
+            "toTime": 1474941900000,
+            "flag": 1
+        }, {
+            "value": 60,
+            "fromTime": 1474948800000,
+            "toTime": 1474949100000,
+            "flag": 1
+        }],
+        "bloodPressureInfo": [{
+            "value": 99,
+            "fromTime": 1474948800000,
+            "toTime": 1474949100000,
+            "flag": 2
+        }]
+    }
+}

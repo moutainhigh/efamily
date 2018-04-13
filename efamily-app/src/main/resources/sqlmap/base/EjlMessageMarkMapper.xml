@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlMessageMark">
+	
+		<resultMap id="MessageCountInfoResult" type="com.winterframework.efamily.dto.MessageCountInfo">
+	    </resultMap>
+
+		<resultMap id="MessageNoReadInfoResponseResult" type="com.winterframework.efamily.dto.MessageNoReadInfoResponse">
+	    </resultMap>
+	    	
+	<select id="getTowMessageIdInternalCount" resultType="Long">
+        select 
+    	count(emm.ID) as messageCount
+	    from EJL_MESSAGE_MARK as emm
+	    where
+        emm.chat_type=#{chatType}
+        and
+        emm.chat_room_id=#{chatRoomId} 
+	    <if test="messageId >0">
+	    <![CDATA[
+	        and 
+	        emm.message_id>#{messageId}			    
+	     ]]>
+	    </if>
+        
+    </select>
+        	
+	<select id="getLashMessageByChatObj" resultMap="MessageNoReadInfoResponseResult">
+    	select 
+    	        emm.ID as id,
+	        	emm.MESSAGE_ID as messageId,
+	        	emm.CREATE_TIME as createTime,
+	        	emm.SEND_USER_ID as sendUserId,
+	        	emm.RECEIVE_USER_ID as receiveUserId,
+	        	emm.SEND_TIME as sendTime,
+	        	emm.SEND_STATUS as sendStatus,
+	        	emm.STATUS as status,
+	        	em.CONTENT as content,
+	        	emm.CONTENT_TIME as contentTime,
+	        	emm.chat_type as chatType,
+	        	emm.chat_room_id as chatRoomId,
+	        	emm.CONTENT_TYPE as contentType
+	        	
+	    from EJL_MESSAGE_MARK as emm ,EJL_MESSAGE as em
+	    where
+	    emm.message_id=em.id
+	    and 
+	    emm.receive_user_id=#{receiveUserId} 
+	    and   
+        emm.message_id in
+        (
+	         SELECT MAX(message_id) 
+	         FROM ejl_message_mark emm2 
+	         WHERE emm2.receive_user_id=#{receiveUserId}
+	         and emm2.status= #{status}
+             GROUP BY emm2.chat_room_id,emm2.chat_type
+         )
+		
+    </select>
+	
+	<select id="getMessageByChatObj" resultMap="MessageNoReadInfoResponseResult">
+    	select 
+    	        emm.ID as id,
+	        	emm.MESSAGE_ID as messageId,
+	        	emm.CREATE_TIME as createTime,
+	        	emm.SEND_USER_ID as sendUserId,
+	        	emm.RECEIVE_USER_ID as receiveUserId,
+	        	emm.SEND_TIME as sendTime,
+	        	emm.SEND_STATUS as sendStatus,
+	        	em.CONTENT as content,
+	        	emm.CONTENT_TIME as contentTime,
+	        	emm.chat_type as chatType,
+	        	emm.chat_room_id as chatRoomId,
+	        	emm.CONTENT_TYPE as contentType,
+	        	emm.STATUS as status ,
+	        	em.app_send_time as appSendTime
+	        	
+	    from EJL_MESSAGE_MARK as emm ,EJL_MESSAGE as em
+	    where
+	    emm.message_id=em.id
+	    and
+	    emm.chat_type=#{chatType}
+	    and
+	    emm.chat_room_id=#{chatRoomId}
+	    and
+	    emm.STATUS !=3
+	    and
+	    emm.RECEIVE_USER_ID=#{receiveUserId}
+	    and
+	    <![CDATA[
+	    emm.MESSAGE_ID < #{page}
+		]]>
+		order by id desc
+		limit #{pageSize} 
+    </select>
+    
+    <select id="getP2PNoReadMessageCount" resultMap="MessageCountInfoResult">
+    	select 
+    	        count(emm.ID) as messageCount,
+	        	emm.SEND_USER_ID as sendUserId,
+	        	emm.RECEIVE_USER_ID as receiveUserId,
+	        	emm.chat_type as chatType,
+	        	emm.chat_room_id as chatRoomId 	
+	    from EJL_MESSAGE_MARK as emm
+	    where
+	    emm.STATUS = #{status}
+	    and
+        emm.receive_user_id=#{receiveUserId} 
+        and
+        emm.chat_type=#{chatType}
+		group by emm.send_user_id
+    </select>
+    
+    <select id="getNoReadMessageCount" resultMap="MessageCountInfoResult">
+    	select 
+    	        count(emm.ID) as messageCount,
+	        	emm.SEND_USER_ID as sendUserId,
+	        	emm.RECEIVE_USER_ID as receiveUserId,
+	        	emm.chat_type as chatType,
+	        	emm.chat_room_id as chatRoomId
+	        	
+	    from EJL_MESSAGE_MARK as emm
+	    where
+	    emm.STATUS = #{status}
+	    and
+        emm.receive_user_id=#{receiveUserId} 
+	    and 
+	    emm.chat_type in(1,3,4)
+		group by emm.chat_room_id,emm.chat_type 
+    </select>
+    
+    <update id="updateMessageMarkStatus" parameterType="com.winterframework.efamily.entity.EjlMessageMark">
+	    
+	        UPDATE EJL_MESSAGE_MARK emm SET
+		        emm.STATUS = #{status,javaType=long,jdbcType=DECIMAL} 
+	        WHERE 
+			    emm.chat_room_id=#{chatRoomId}
+			    and
+			    emm.chat_type=#{chatType}
+			    and
+			    emm.receive_user_id=#{receiveUserId}
+			    <if test="messageId >1">
+			    <![CDATA[
+			        and 
+			        emm.message_id<#{messageId}			    
+			     ]]>
+			    </if>
+	</update>
+		
+</mapper>

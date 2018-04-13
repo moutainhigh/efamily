@@ -1,0 +1,77 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>APP下载</title>
+        <meta name="description" content="亿家联,家庭,智能硬件,社交,老人,聊天,手表,健康,定位,轨迹,智能穿戴">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../css/main.css">
+    </head>
+    <body style="background-color:#58e302;align:center"> 
+        <section class="bottom-section">
+            <div>
+                <div class="wrapper"  align="center">
+                    <div class="bottom-ss">
+                        <div class="s1">健康平安由此开启</div>
+                        <div class="s2">扫二维码下载APP</div>
+                        <div class="s3">
+                            <a href="https://appsto.re/cn/F98i-.i" class="ios"><i></i></a>
+                            <a href="http://download.ejialian365.com/app/efamily_v0.57.apk" class="android"><i></i></a>
+                        </div>
+                        <div class="s4">
+                            <img src="../img/qr-ios-lar.png" width="156" height="156" alt="">
+                            <img src="../img/qr-android-lar.png"  width="156" height="156" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> 
+        <script src="js/vendor/jquery-1.11.3.min.js"></script> 
+       <!-- <script src="js/main.js"></script> -->
+        <!--[if IE 6]>
+        <script src="js/DD_belatedPNG_0.0.8a-min.js"></script>
+        <script>
+            window.DD_belatedPNG.fix('*');
+        </script>
+        <![endif]-->
+        
+        <script type="text/javascript">
+        function doWaypoint() {}
+        function destroyWaypoint() {}
+        function attachClass(className) {
+            $(document.documentElement).removeClass(function (index, oldClass) {
+                var old = oldClass.match(/\w+-view/g);
+                if (old) {
+                    old = old.join(' ');
+                }
+                return old;
+            }).addClass(className).removeClass('loading');
+
+        }
+        function detectDevice() {
+            var width = $(window).width(),
+                index,
+                DEVICE = ['desktop-view', 'mobile-view', 'mobile-view'];
+            if (width > 1024) {
+                index = 0;
+                doWaypoint && doWaypoint()
+            } else if (width > 768) {
+                index = 1;
+                destroyWaypoint && destroyWaypoint();
+            } else {
+                index = 2;
+                destroyWaypoint && destroyWaypoint();
+            }
+            attachClass(DEVICE[index]);
+        }
+        function deviceMonitor() {
+            $(window).bind('resize', function () {
+                detectDevice();
+            });
+            detectDevice();
+        }
+        deviceMonitor();
+        </script>
+    </body>
+</html>

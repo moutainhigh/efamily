@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EjlRemind">
+	<resultMap id="EjlRemindResult" type="com.winterframework.efamily.entity.EjlRemind">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="ejlRemindColumns">
+	    <![CDATA[
+	        	ID as id,
+	        	NAME as name,
+	        	create_Time as gmtCreated,
+	        	USER_ID as userId,
+	        	CONTENT as content,
+	        	SEND_TIME as sendTime,
+	        	SEND_USER_ID as sendUserId,
+	        	SEND_METHOD as sendMethod,
+	        	SENT_STATUS as sentStatus,
+	        	IS_DELETED as deleteStatus,
+	        	SEND_PERIOD as sendPeriod,
+	        	SEND_TIME_END as sendTimeEnd,
+	        	SEND_TYPE as sendType,
+	        	REMIND_STATE as remindState,
+	        	RECEIVE_TIME as receiveTime,
+	        	DURATION_TIME as durationTime,
+	        	DEVICE_COMMOND as deviceCommond
+	        	
+	    ]]>
+	</sql>
+		<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+		<insert id="insert" parameterType="com.winterframework.efamily.entity.EjlRemind" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        EJL_REMIND (
+	        	NAME ,
+	        	create_Time ,
+	        	USER_ID ,
+	        	CONTENT ,
+	        	SEND_TIME ,
+	        	SEND_USER_ID ,
+	        	SEND_METHOD ,
+	        	SENT_STATUS ,
+	        	IS_DELETED ,
+	        	SEND_PERIOD,
+	        	SEND_TIME_END,
+	        	SEND_TYPE,
+	        	REMIND_STATE,
+	        	RECEIVE_TIME,
+	        	DURATION_TIME,
+	        	DEVICE_COMMOND
+	        ) VALUES (
+	        	#{name,javaType=string,jdbcType=VARCHAR} ,
+	        	#{gmtCreated,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{content,javaType=string,jdbcType=VARCHAR} ,
+	        	#{sendTime,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{sendUserId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{sendMethod,javaType=long,jdbcType=DECIMAL} ,
+	        	#{sentStatus,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deleteStatus,javaType=long,jdbcType=DECIMAL} ,
+	        	#{sendPeriod,javaType=long,jdbcType=DECIMAL} ,
+	        	#{sendTimeEnd,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{sendType,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remindState,javaType=long,jdbcType=DECIMAL} ,
+	        	#{receiveTime,javaType=date,jdbcType=TIMESTAMP},
+	        	#{durationTime,javaType=long,jdbcType=DECIMAL},
+	        	#{deviceCommond,javaType=long,jdbcType=DECIMAL}
+	        )
+	    ]]>	
+	
+		</insert>
+	    
+		<update id="update" parameterType="com.winterframework.efamily.entity.EjlRemind">
+	        UPDATE EJL_REMIND 
+	        <set>
+	        	<if test="@Ognl@isNotEmpty(name)">
+		        NAME = #{name,javaType=string,jdbcType=VARCHAR} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(userId)">
+		        USER_ID = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(content)">
+		        CONTENT = #{content,javaType=string,jdbcType=VARCHAR} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(sendTime)">
+		        SEND_TIME = #{sendTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(sendUserId)">
+		        SEND_USER_ID = #{sendUserId,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(sendMethod)">
+		        SEND_METHOD = #{sendMethod,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		         <if test="@Ognl@isNotEmpty(sentStatus)">
+		        SENT_STATUS = #{sentStatus,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(deleteStatus)">
+		        IS_DELETED = #{deleteStatus,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(sendPeriod)">
+		        SEND_PERIOD = #{sendPeriod,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(sendTimeEnd)">
+		        SEND_TIME_END = #{sendTimeEnd,javaType=date,jdbcType=TIMESTAMP} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(sendType)">
+		        SEND_TYPE = #{sendType,javaType=long,jdbcType=DECIMAL},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(remindState)">
+		        REMIND_STATE = #{remindState,javaType=long,jdbcType=DECIMAL},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(receiveTime)">
+		        RECEIVE_TIME = #{receiveTime,javaType=date,jdbcType=TIMESTAMP} ,
+		        </if>
+		         <if test="@Ognl@isNotEmpty(durationTime)">
+		        DURATION_TIME = #{durationTime,javaType=long,jdbcType=DECIMAL},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(deviceCommond)">
+		        DEVICE_COMMOND = #{deviceCommond,javaType=long,jdbcType=DECIMAL},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(id)">
+		        ID = #{id,javaType=long,jdbcType=DECIMAL}
+		        </if>
+		    </set>
+	        WHERE 
+		        ID = #{id} 
+		</update>
+	   <delete id="delete" parameterType="java.lang.Long">
+	    <![CDATA[
+	        delete from EJL_REMIND where
+		        ID = #{id} 
+	    ]]>
+	    </delete>   
+	    <select id="getById" parameterType="long" resultMap="EjlRemindResult" flushCache="false">
+			select <include refid="ejlRemindColumns" />
+		    <![CDATA[
+			    from EJL_REMIND 
+		        where 
+		        ID = #{id} 
+		    ]]>
+		</select>	
+		<select id="getByIds" parameterType="list"  resultMap="EjlRemindResult" flushCache="false">
+			select <include refid="ejlRemindColumns" />
+			    from EJL_REMIND 
+		        where id in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+#{item}				</foreach>					
+		</select>	
+
+	<sql id="ejlRemindDynamicWhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+	       <if test="@Ognl@isNotEmpty(id)">
+				and ID = #{id}
+			</if>
+	       <if test="@Ognl@isNotEmpty(name)">
+				and NAME = #{name}
+			</if>
+	       <if test="@Ognl@isNotEmpty(gmtCreated)">
+				and create_time = #{gmtCreated}
+			</if>
+	       <if test="@Ognl@isNotEmpty(userId)">
+				and USER_ID = #{userId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(content)">
+				and CONTENT = #{content}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sendTime)">
+				and SEND_TIME = #{sendTime}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sendUserId)">
+				and SEND_USER_ID = #{sendUserId}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sendMethod)">
+				and SEND_METHOD = #{sendMethod}
+			</if>
+	       <if test="@Ognl@isNotEmpty(sentStatus)">
+				and SENT_STATUS = #{sentStatus}
+			</if>
+	       <if test="@Ognl@isNotEmpty(isDeleted)">
+				and IS_DELETED = #{isDeleted}
+			</if>
+		</where>
+	</sql>
+	
+	<select id="getAll" resultMap="EjlRemindResult"  flushCache="false">
+    	select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+	<select id="getCount" resultType="long">
+        select count(*) from EJL_REMIND 
+    </select>
+    <select id="getCountByPage" resultType="long">
+        select count(*) from EJL_REMIND 
+		<include refid="ejlRemindDynamicWhere"/>    
+    </select>
+    
+    <!--
+    	分页查询已经使用Dialect进行分页,也可以不使用Dialect直接编写分页
+    	因为分页查询将传 offset,pageSize,lastRows 三个参数,不同的数据库可以根于此三个参数属性应用不同的分页实现
+    -->
+    <select id="getByPage" resultMap="EjlRemindResult">
+    	select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND 
+		<include refid="ejlRemindDynamicWhere"/>
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>
+
+	<select id="queryAllDisposableRemindForTask" resultMap="EjlRemindResult"> 
+		select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND t
+	    where t.SEND_TYPE=1
+	    and t.SEND_PERIOD=1
+	    and t.IS_DELETED=0
+	    and t.SENT_STATUS=0
+	     <![CDATA[and t.SEND_TIME<=sysdate()]]>
+	</select>
+	
+	<select id="queryAllRepeatRemindForTask" resultMap="EjlRemindResult"> 
+		select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND t
+	    <![CDATA[
+	    where t.SEND_TYPE=1
+	    and t.SEND_PERIOD<>1
+	    and t.IS_DELETED=0
+	    and t.SEND_TIME_END>=sysdate()]]>
+	</select>
+	
+	<select id="queryAllDeviceRemindForTask" resultMap="EjlRemindResult"> 
+		select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND t
+	    <![CDATA[
+	    where t.SEND_TYPE=2
+	    and t.DEVICE_COMMOND<>4]]>
+	</select>
+	
+	<select id="queryAllRemindsForUser" resultMap="EjlRemindResult"> 
+		select <include refid="ejlRemindColumns" />
+	    from EJL_REMIND t
+	    <![CDATA[
+	    where t.USER_ID = #{userId}
+	    and t.IS_DELETED=0
+	    order by SEND_TIME desc
+	    ]]>
+	</select>
+	
+	<select id="queryAllReceiveRemindsForUser" resultMap="EjlRemindResult"> 
+		select t1.ID as id,
+	        	t.NAME as name,
+	        	t.create_Time as gmtCreated,
+	        	t.USER_ID as userId,
+	        	t.CONTENT as content,
+	        	t.SEND_TIME as sendTime,
+	        	t1.USER_ID as sendUserId,
+	        	t.SEND_METHOD as sendMethod,
+	        	t.SENT_STATUS as sentStatus,
+	        	t1.IS_DELETED as deleteStatus,
+	        	t.SEND_PERIOD as sendPeriod,
+	        	t.SEND_TIME_END as sendTimeEnd,
+	        	t.SEND_TYPE as sendType,
+	        	t1.REMIND_STATE as remindState,
+	        	t1.create_time as receiveTime,
+	        	t.DURATION_TIME as durationTime,
+	        	t.DEVICE_COMMOND as deviceCommond
+	    from EJL_REMIND t,EJL_REMIND_RECORD t1
+	    <![CDATA[
+	    where t1.USER_ID = #{userId} and t1.REMIND_ID=t.ID
+	    and t1.IS_DELETED=0
+	    order by t1.create_time desc
+	    ]]>
+	</select>
+	
+	<insert id="insertRemindRecord" parameterType="com.winterframework.efamily.entity.EjlRemind" 
+			useGeneratedKeys="true" keyProperty="id" 
+		 flushCache="true">
+	    <![CDATA[
+	        INSERT INTO
+	        EJL_REMIND_RECORD (
+	        	REMIND_ID ,
+	        	create_time ,
+	        	USER_ID ,
+	        	IS_DELETED ,
+	        	REMIND_STATE
+	        ) VALUES (
+	        	#{remindId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{gmtCreated,javaType=date,jdbcType=TIMESTAMP} ,
+	        	#{userId,javaType=long,jdbcType=DECIMAL} ,
+	        	#{deleteStatus,javaType=long,jdbcType=DECIMAL} ,
+	        	#{remindState,javaType=long,jdbcType=DECIMAL} 
+	        )
+	    ]]>	
+	
+		</insert>
+		
+		
+		
+		<update id="updateRemindRecord" parameterType="com.winterframework.efamily.entity.EjlRemind">
+	        UPDATE EJL_REMIND_RECORD
+	        <set>
+	        	<if test="@Ognl@isNotEmpty(remindId)">
+		        REMIND_ID = #{remindId,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(userId)">
+		        USER_ID = #{userId,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(deleteStatus)">
+		        IS_DELETED = #{deleteStatus,javaType=long,jdbcType=DECIMAL} ,
+		        </if>
+		        <if test="@Ognl@isNotEmpty(remindState)">
+		        REMIND_STATE = #{remindState,javaType=long,jdbcType=DECIMAL},
+		        </if>
+		        <if test="@Ognl@isNotEmpty(id)">
+		        ID = #{id,javaType=long,jdbcType=DECIMAL}
+		        </if>
+		    </set>
+	        WHERE 
+		        ID = #{id} 
+		</update>
+		
+		
+		
+		<select id="getEjlRecordById" resultMap="EjlRemindResult"> 
+		select t1.ID as id,
+	        	t.NAME as name,
+	        	t.create_time as gmtCreated,
+	        	t.USER_ID as userId,
+	        	t.CONTENT as content,
+	        	t.SEND_TIME as sendTime,
+	        	t1.USER_ID as sendUserId,
+	        	t.SEND_METHOD as sendMethod,
+	        	t.SENT_STATUS as sentStatus,
+	        	t1.IS_DELETED as deleteStatus,
+	        	t.SEND_PERIOD as sendPeriod,
+	        	t.SEND_TIME_END as sendTimeEnd,
+	        	t.SEND_TYPE as sendType,
+	        	t1.REMIND_STATE as remindState,
+	        	t1.create_time as receiveTime,
+	        	t.DURATION_TIME as durationTime,
+	        	t.DEVICE_COMMOND as deviceCommond
+	    from EJL_REMIND t,EJL_REMIND_RECORD t1
+	    <![CDATA[
+	    where t1.ID = #{id} and t1.REMIND_ID=t.ID
+	    ]]>
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="com.winterframework.efamily.entity.EfPlatformDeviceSetting">
+	<resultMap id="EfPlatformDeviceSettingResult" type="com.winterframework.efamily.entity.EfPlatformDeviceSetting">
+	</resultMap>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="EfPlatformDeviceSettingColumns">
+       	id as id,
+       	device_type as deviceType,
+       	connect as connect,
+       	common as common,
+       	frequency as frequency,
+       	health as health,
+       	remark as remark,
+       	creator_id as creatorId,
+       	create_time as createTime,
+       	updator_id as updatorId,
+       	update_time as updateTime
+	</sql>
+	<!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+	<insert id="insert" parameterType="com.winterframework.efamily.entity.EfPlatformDeviceSetting" 
+		useGeneratedKeys="true" keyProperty="id" 
+	 flushCache="true">
+        INSERT INTO
+        ef_platform_device_setting (
+        	device_type ,
+        	connect ,
+        	common ,
+        	frequency ,
+        	health ,
+        	remark ,
+        	creator_id ,
+        	create_time  
+        ) VALUES (
+        	#{deviceType,javaType=integer,jdbcType=INTEGER} ,
+        	#{connect,javaType=string,jdbcType=VARCHAR} ,
+        	#{common,javaType=string,jdbcType=VARCHAR} ,
+        	#{frequency,javaType=string,jdbcType=VARCHAR} ,
+        	#{health,javaType=string,jdbcType=VARCHAR} ,
+        	#{remark,javaType=string,jdbcType=VARCHAR} ,
+        	#{creatorId,javaType=long,jdbcType=DECIMAL}  ,
+        	#{createTime,javaType=date,jdbcType=TIMESTAMP}  
+        )
+	</insert>
+    
+	<update id="update" parameterType="com.winterframework.efamily.entity.EfPlatformDeviceSetting">
+        UPDATE ef_platform_device_setting SET
+	        device_type = #{deviceType,javaType=integer,jdbcType=INTEGER} ,
+	        connect = #{connect,javaType=string,jdbcType=VARCHAR} ,
+	        common = #{common,javaType=string,jdbcType=VARCHAR} ,
+	        frequency = #{frequency,javaType=string,jdbcType=VARCHAR} ,
+	        health = #{health,javaType=string,jdbcType=VARCHAR} ,
+	        remark = #{remark,javaType=string,jdbcType=VARCHAR} ,
+	        updator_id = #{updatorId,javaType=long,jdbcType=DECIMAL} ,
+	        update_time = #{updateTime,javaType=date,jdbcType=TIMESTAMP} 
+        WHERE 
+	        id = #{id} 
+	</update>
+   <delete id="delete" parameterType="java.lang.Long">
+        delete from ef_platform_device_setting where
+	        id = #{id} 
+    </delete>   
+    <select id="getById" parameterType="long" resultMap="EfPlatformDeviceSettingResult" flushCache="false">
+		select <include refid="EfPlatformDeviceSettingColumns" />
+		    from ef_platform_device_setting 
+	        where 
+	        id = #{id} 
+	</select>	
+	<select id="getByIds" parameterType="list"  resultMap="EfPlatformDeviceSettingResult" flushCache="false">
+		select <include refid="EfPlatformDeviceSettingColumns" />
+		    from ef_platform_device_setting 
+	        where id in
+			<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+               #{item}
+               </foreach>					
+	</select>	
+ 
+	<select id="getAll" resultMap="EfPlatformDeviceSettingResult"  flushCache="false">
+    	select <include refid="EfPlatformDeviceSettingColumns" />
+	    from ef_platform_device_setting 
+
+		<if test="@Ognl@isNotEmpty(sortColumns)">
+			ORDER BY ${sortColumns}
+		</if>
+    </select>	
+    <select id="getByDeviceType" parameterType="integer" resultMap="EfPlatformDeviceSettingResult" flushCache="false">
+		select <include refid="EfPlatformDeviceSettingColumns" />
+		    from ef_platform_device_setting 
+	        where 
+	        device_type = #{deviceType} 
+	</select>	
+    
+</mapper>
